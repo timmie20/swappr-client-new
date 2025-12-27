@@ -2,12 +2,10 @@ import QuestionnairePage from "@/features/questionnaire/questionnaire-page";
 import React from "react";
 
 type PageProps = {
-  params: Promise<{ slug: string }>;
   searchParams: Promise<{ brandId?: string }>;
 };
 
-export default async function Page({ params, searchParams }: PageProps) {
-  const { slug } = await params;
+export default async function Page({ searchParams }: PageProps) {
   const { brandId } = await searchParams;
 
   if (!brandId) {

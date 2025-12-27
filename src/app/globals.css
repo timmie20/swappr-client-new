@@ -141,3 +141,7 @@
     @apply bg-background text-foreground font-switzer;
   }
 }
+
+.active-state {
+  @apply data-[state=on]:border-tertiary data-[state=on]:border-2 data-[state=on]:border-l-2;
+}
