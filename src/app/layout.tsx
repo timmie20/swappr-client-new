@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 // import Navbar from "@/components/shared/Navbar";
 import { ClerkProvider, QueryProvider } from "@/providers";
+import Navbar from "@/components/shared/nav-bar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -134,8 +135,8 @@ export default function RootLayout({
           className={`${switzer.variable} ${inter.variable} font-sans antialiased`}
         >
           <QueryProvider>
-            {/* <Navbar /> */}
-            <main className="mx-auto h-dvh max-w-212.5 px-4 pb-4 sm:px-0 sm:pb-0">
+            <Navbar />
+            <main className="mx-auto h-dvh max-w-212.5 px-4 pb-4 sm:pb-0 lg:p-0">
               {children}
             </main>
           </QueryProvider>

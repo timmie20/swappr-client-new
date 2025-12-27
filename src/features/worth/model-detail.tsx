@@ -24,7 +24,7 @@ export function ModelDetail({ slug }: ModelDetailProps) {
   };
 
   return (
-    <div className="mx-auto mt-6 max-w-163.75 space-y-5 md:space-y-10">
+    <div className="mx-auto max-w-163.75 space-y-5">
       <div className="bg-yellow-light/10 mx-auto flex h-fit w-full max-w-163.75 items-center gap-2 rounded-lg py-2">
         <Image
           src="../assets/icons/Vector.svg"
@@ -66,7 +66,12 @@ export function ModelDetail({ slug }: ModelDetailProps) {
         </div>
       </div>
 
-      <Link href={`/check-worth/form`}>
+      <Link
+        href={{
+          pathname: `/check-worth/${slug}/questionnaire`,
+          query: { brandId: model.brand?.id },
+        }}
+      >
         <Button size="lg" className="w-full sm:w-fit">
           Check your phones worth{" "}
         </Button>
