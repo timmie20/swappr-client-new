@@ -30,11 +30,11 @@ export const modelEndpoints = {
    */
   async getByBrand(
     brandId: string,
-    params?: PaginationParams
+    params?: PaginationParams,
   ): Promise<PaginatedResponse<Model, "models">> {
     const { data } = await api.get<PaginatedResponse<Model, "models">>(
-      `/models/by-brand?brand_id=${brandId}`,
-      { params }
+      `/models/brand/${brandId}`,
+      { params },
     );
     return data;
   },

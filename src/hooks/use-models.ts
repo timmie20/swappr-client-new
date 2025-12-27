@@ -7,9 +7,11 @@
 import { modelEndpoints } from "@/endpoints";
 import {
   useQuery,
+  useSuspenseQuery,
   useMutation,
   useQueryClient,
   type UseQueryOptions,
+  type UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 import type {
   Model,
@@ -32,7 +34,7 @@ export function useModels(
   options?: Omit<
     UseQueryOptions<PaginatedResponse<Model>>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) {
   return useQuery({
     queryKey: queryKeys.models.list(params),
@@ -50,7 +52,7 @@ export function useModelsByBrand(
   options?: Omit<
     UseQueryOptions<PaginatedResponse<Model, "models">>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) {
   return useQuery({
     queryKey: queryKeys.models.byBrand(brandId, params),
@@ -61,11 +63,29 @@ export function useModelsByBrand(
 }
 
 /**
+ * Fetch models by brand ID with Suspense support
+ */
+export function useModelsByBrandSuspense(
+  brandId: string,
+  params?: PaginationParams,
+  options?: Omit<
+    UseSuspenseQueryOptions<PaginatedResponse<Model, "models">>,
+    "queryKey" | "queryFn"
+  >,
+) {
+  return useSuspenseQuery({
+    queryKey: queryKeys.models.byBrand(brandId, params),
+    queryFn: () => modelEndpoints.getByBrand(brandId, params),
+    ...options,
+  });
+}
+
+/**
  * Fetch a single model by ID
  */
 export function useModel(
   id: string,
-  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: queryKeys.models.detail(id),
@@ -80,7 +100,7 @@ export function useModel(
  */
 export function useModelBySlug(
   slug: string,
-  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: queryKeys.models.detail(slug),

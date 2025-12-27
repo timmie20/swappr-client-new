@@ -89,16 +89,8 @@ export type UpdateModelDto = Partial<CreateModelDto>;
 
 export interface Variation {
   id: string;
-  modelId: string;
-  model?: Model;
-  name: string;
-  slug: string;
-  description?: string;
-  attributes?: Record<string, unknown>; // e.g., { storage: "128GB", color: "Black" }
-  basePrice?: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  storage_capacity: number;
+  price: number;
 }
 
 export interface CreateVariationDto {

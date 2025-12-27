@@ -15,12 +15,12 @@ const switzer = localFont({
   src: [
     {
       path: "../../public/fonts/Switzer-Variable.ttf",
-      weight: "500",
+      weight: "100 900",
       style: "normal",
     },
     {
       path: "../../public/fonts/Switzer-VariableItalic.ttf",
-      weight: "400",
+      weight: "100 900",
       style: "italic",
     },
   ],
@@ -29,7 +29,7 @@ const switzer = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://swappr.com"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://swappr.com",
   ),
   title: {
     template: "%s | Swappr",
