@@ -110,6 +110,20 @@ export function useModelBySlug(
   });
 }
 
+/**
+ * Fetch a single model by slug with Suspense support
+ */
+export function useModelBySlugSuspense(
+  slug: string,
+  options?: Omit<UseSuspenseQueryOptions<Model>, "queryKey" | "queryFn">,
+) {
+  return useSuspenseQuery({
+    queryKey: queryKeys.models.detail(slug),
+    queryFn: () => modelEndpoints.getBySlug(slug),
+    ...options,
+  });
+}
+
 // ============================================
 // Mutation Hooks (Data Modifications)
 // ============================================

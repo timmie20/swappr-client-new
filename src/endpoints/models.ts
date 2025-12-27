@@ -12,6 +12,7 @@ import type {
   PaginatedResponse,
   PaginationParams,
   ApiResponse,
+  ApiResponser,
 } from "@/types/api";
 
 export const modelEndpoints = {
@@ -51,8 +52,10 @@ export const modelEndpoints = {
    * Get a single model by slug
    */
   async getBySlug(slug: string): Promise<Model> {
-    const { data } = await api.get<ApiResponse<Model>>(`/models/slug/${slug}`);
-    return data.data;
+    const { data } = await api.get<ApiResponser<{ model: Model }>>(
+      `/models/slug/${slug}`,
+    );
+    return data.model;
   },
 
   /**

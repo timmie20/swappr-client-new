@@ -11,7 +11,9 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { formatStorageCapacity, formatNaira } from "@/lib/format";
+import { generateModelSlug } from "@/lib/utils";
 import { Model } from "@/types/api";
+import Link from "next/link";
 import React from "react";
 
 export default function ModelCard({ model }: { model: Model }) {
@@ -25,6 +27,11 @@ export default function ModelCard({ model }: { model: Model }) {
 
   const basePrice = lowestVariation?.price;
 
+  // Generate slug from brand and model name, or use existing slug
+  const slug =
+    model.slug ||
+    generateModelSlug(model.brand?.brand_name || "", model.model_name);
+
   return (
     <Card className="text-base">
       <CardHeader className="">
@@ -34,9 +41,7 @@ export default function ModelCard({ model }: { model: Model }) {
         <CardTitle className="font-switzer text-lg font-bold">
           {model.model_name}
         </CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
+        <CardDescription className="truncate">{model.desc}</CardDescription>
         {basePrice && (
           <CardDescription className="text-muted-foreground text-sm">
             Starting from{" "}
@@ -61,7 +66,9 @@ export default function ModelCard({ model }: { model: Model }) {
       </CardContent>
       <CardFooter>
         <CardAction className="w-full">
-          <Button className="w-full">Check worth</Button>
+          <Button className="w-full" asChild>
+            <Link href={`/check-worth/${slug}`}>Check worth</Link>
+          </Button>
         </CardAction>
       </CardFooter>
     </Card>

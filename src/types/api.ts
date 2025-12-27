@@ -31,6 +31,10 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export type ApiResponser<TData extends Record<string, any> = {}> = {
+  message: string;
+} & TData;
+
 // ============================================
 // Brand Types
 // ============================================
@@ -61,6 +65,7 @@ export type UpdateBrandDto = Partial<CreateBrandDto>;
 export interface Model {
   id: string;
   model_name: string;
+  slug?: string;
   desc: string;
   variations?: Variation[];
   brand?: {

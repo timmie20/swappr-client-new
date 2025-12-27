@@ -5,7 +5,6 @@ import type { Brand } from "@/lib/api/types";
 
 const getBrands = async (): Promise<{ brands: Brand[] }> => {
   const headers = await getAuthHeaders();
-  // If no auth token, make request without auth headers
   const response = await apiClient.instance.get<Promise<{ brands: Brand[] }>>(
     "/brands",
     {
