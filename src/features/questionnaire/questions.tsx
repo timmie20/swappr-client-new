@@ -13,6 +13,8 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import ProgressBar from "./components/progress-bar";
+import Link from "next/link";
+import { IconArrowBackUp } from "@tabler/icons-react";
 
 export default function Questions({ questions }: QuestionsProps) {
   const initializeQuestions = useQuestionStore((s) => s.initializeQuestions);
@@ -35,23 +37,31 @@ export default function Questions({ questions }: QuestionsProps) {
 
   return (
     <>
-      <Breadcrumb className="my-6">
-        <BreadcrumbList>
-          <BreadcrumbItem className="text-xs">
-            Question {currentStep}
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem className="text-xs">
-            {questions.length} total
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbPage className="text-xs capitalize">
-            {currentQuestion.slug.replace(/-/g, " ")}
-          </BreadcrumbPage>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <div className="my-6 flex flex-row-reverse items-center justify-between gap-4">
+        <Breadcrumb className="shrink-0">
+          <BreadcrumbList>
+            <BreadcrumbItem className="text-xs sm:text-sm">
+              Question {currentStep}
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem className="text-xs sm:text-sm">
+              {questions.length} total
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbPage className="truncate text-xs capitalize sm:text-sm">
+              {currentQuestion.slug.replace(/-/g, " ")}
+            </BreadcrumbPage>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="relative pb-7">
+        <Link href="/check-worth" className="text-gray-500">
+          <Button variant="outline" className="text-sm">
+            <IconArrowBackUp stroke={2} /> Models
+          </Button>
+        </Link>
+      </div>
+
+      <div className="relative space-y-4">
         <ProgressBar />
         <QuestionRenderer />
         <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-50 block h-20 bg-linear-to-t from-white to-transparent blur-sm min-[460px]:hidden" />
