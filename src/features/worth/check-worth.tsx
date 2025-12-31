@@ -18,7 +18,7 @@ type CheckWorthProps = {
 };
 
 export default function CheckWorth({ brands }: CheckWorthProps) {
-  const [brandId, setBrandId] = useState<string>(brands[0].id);
+  const [brandId, setBrandId] = useState<string>("");
 
   return (
     <div className="py-12 sm:px-6">
