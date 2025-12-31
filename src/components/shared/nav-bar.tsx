@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export default function Navbar() {
   return (
     <nav className="mx-auto max-w-212.5 bg-white">
@@ -10,19 +11,26 @@ export default function Navbar() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="default"
-              className="text-small text-tertiary/52 font-switzer rounded-full font-medium"
+            <Link
+              href="/auth/sign-in
+            "
             >
-              Login
-            </Button>
-            <Button
-              size="default"
-              className="font-switzer rounded-full font-medium"
-            >
-              Sign Up
-            </Button>
+              <Button
+                variant="ghost"
+                size="default"
+                className="text-small text-tertiary/52 font-switzer cursor-pointer rounded-full font-medium"
+              >
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/sign-up">
+              <Button
+                size="default"
+                className="font-switzer cursor-pointer rounded-full font-medium"
+              >
+                Sign Up
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

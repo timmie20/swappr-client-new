@@ -5,7 +5,7 @@ export default function Page() {
   // Once a user authenticates with the OAuth provider, they will be redirected to that route
   return (
     <>
-      <AuthenticateWithRedirectCallback continueSignUpUrl="/auth/sign-in/callback" />
+      <AuthenticateWithRedirectCallback continueSignUpUrl="/auth/sign-up/callback" />
 
       {/* Required for sign-up flows
       Clerk's bot sign-up protection is enabled by default */}
