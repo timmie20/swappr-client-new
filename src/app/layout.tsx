@@ -6,6 +6,7 @@ import "./globals.css";
 // import Navbar from "@/components/shared/Navbar";
 import { ClerkProvider, QueryProvider } from "@/providers";
 import Navbar from "@/components/shared/nav-bar";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -136,6 +137,7 @@ export default function RootLayout({
         >
           <QueryProvider>
             <main>{children}</main>
+            <Toaster position="top-center" />
           </QueryProvider>
         </body>
       </html>

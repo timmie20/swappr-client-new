@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { GoogleSignUpButton } from "./google-oauth";
 import { Separator } from "@/components/ui/separator";
+import { useCreateAccount } from "@/hooks/use-auth";
+import { CreateAccount } from "@/types";
+import { useRouter } from "next/navigation";
 
 const signUpSchema = z
   .object({
@@ -33,6 +36,9 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export default function SignUpForm() {
+  const createAccount = useCreateAccount();
+  const router = useRouter();
+
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -45,8 +51,19 @@ export default function SignUpForm() {
   });
 
   function onSubmit(values: SignUpFormValues) {
-    console.log("Form submitted successfully:", values);
-    // This only logs if validation passes
+    const payload: CreateAccount = {
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email_address: values.email,
+      password: values.password,
+    };
+
+    createAccount.mutate(payload, {
+      onSuccess: () => {
+        form.reset();
+        router.push("/auth/sign-in");
+      },
+    });
   }
 
   return (
@@ -111,10 +128,10 @@ export default function SignUpForm() {
           <Button
             type="submit"
             className="w-full"
-            // disabled={form.formState.isSubmitting}
+            disabled={createAccount.isPending}
             size="lg"
           >
-            Creating account
+            {createAccount.isPending ? "Please wait..." : "Create account"}
           </Button>
         </Field>
       </form>

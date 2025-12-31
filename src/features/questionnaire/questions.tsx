@@ -15,6 +15,7 @@ import {
 import ProgressBar from "./components/progress-bar";
 import Link from "next/link";
 import { IconArrowBackUp } from "@tabler/icons-react";
+import GoRack from "@/components/route-back-btn";
 
 export default function Questions({ questions }: QuestionsProps) {
   const initializeQuestions = useQuestionStore((s) => s.initializeQuestions);
@@ -37,8 +38,9 @@ export default function Questions({ questions }: QuestionsProps) {
 
   return (
     <>
-      <div className="my-6 flex flex-row-reverse items-center justify-between gap-4">
+      <div className="my-6 flex items-center gap-4">
         <Breadcrumb className="shrink-0">
+          <GoRack />
           <BreadcrumbList>
             <BreadcrumbItem className="text-xs sm:text-sm">
               Question {currentStep}
@@ -53,12 +55,6 @@ export default function Questions({ questions }: QuestionsProps) {
             </BreadcrumbPage>
           </BreadcrumbList>
         </Breadcrumb>
-
-        <Link href="/check-worth" className="text-gray-500">
-          <Button variant="outline" className="text-sm">
-            <IconArrowBackUp stroke={2} /> Models
-          </Button>
-        </Link>
       </div>
 
       <div className="relative space-y-4">

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Link from "next/link";
 import SignUpForm from "./sign-up-form";
+import { InteractiveGridPattern } from "../interactive-grid";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -26,6 +27,12 @@ export default function SignUpViewPage() {
         <div className="relative z-20 flex items-center text-lg font-medium">
           SWAPPR
         </div>
+        <InteractiveGridPattern
+          className={cn(
+            "mask-[radial-gradient(400px_circle_at_center,white,transparent)]",
+            "inset-x-0 inset-y-[0%] h-full skew-y-12",
+          )}
+        />
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
@@ -43,6 +50,15 @@ export default function SignUpViewPage() {
       <div className="flex h-full items-center justify-center p-4 lg:p-8">
         <div className="flex w-full max-w-md flex-col items-center justify-center space-y-6">
           <SignUpForm />
+          <p className="text-muted-foreground text-center text-sm">
+            Already have an account?{" "}
+            <Link
+              href="/auth/sign-in"
+              className="hover:text-primary font-medium underline underline-offset-4"
+            >
+              Sign in
+            </Link>
+          </p>
           <p className="text-muted-foreground px-8 text-center text-sm">
             By clicking continue, you agree to our{" "}
             <Link

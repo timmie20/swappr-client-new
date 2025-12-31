@@ -2,12 +2,12 @@
 
 import { useModelBySlugSuspense } from "@/hooks";
 import { Button } from "@/components/ui/button";
-
 import { formatStorageCapacity } from "@/lib/format";
 import Link from "next/link";
 import Image from "next/image";
 import WorthOverviewCard from "./component/worth-overview";
 import { useState } from "react";
+import GoRack from "@/components/route-back-btn";
 
 type ModelDetailProps = {
   slug: string;
@@ -24,24 +24,26 @@ export function ModelDetail({ slug }: ModelDetailProps) {
   };
 
   return (
-    <div className="mx-auto max-w-163.75 space-y-5">
-      <div className="bg-yellow-light/10 mx-auto flex h-fit w-full max-w-163.75 items-center gap-2 rounded-lg py-2">
+    <div className="mx-auto max-w-170 pb-5">
+      <GoRack />
+
+      <div className="bg-yellow-light/10 mx-auto mb-4 flex h-fit w-full items-center gap-2 rounded-lg py-2 pr-2">
         <Image
           src="../assets/icons/Vector.svg"
           alt="Warning icon"
           width={16}
           height={16}
-          className="ml-4"
+          className="ml-2"
         />
         <span className="text-xs font-medium text-[#9C7E1C]">
           We&apos;re going to ask you a couple of questions to estimate how much
-          your phone&apos;s worth. This&apos;ll only take 3mins :)
+          your phone&apos;s worth. This&apos;ll only take 3minutes :)
         </span>
       </div>
 
       <WorthOverviewCard model={model} selected={selectedVariationId} />
 
-      <div className="space-y-4">
+      <div className="mt-4 space-y-2">
         <p className="text-small">{model.desc}</p>
         <h3 className="text-tertiary/48 text-xl">
           Available storage for this model
@@ -51,7 +53,7 @@ export function ModelDetail({ slug }: ModelDetailProps) {
           will automatically adjust based on your selection.
         </p>
 
-        <div className="flex flex-wrap gap-3 overflow-hidden px-1 py-2">
+        <div className="mb-4 flex flex-wrap gap-3 overflow-hidden px-1 py-2 sm:px-0">
           {model.variations?.map((variation) => (
             <Button
               key={variation.id}

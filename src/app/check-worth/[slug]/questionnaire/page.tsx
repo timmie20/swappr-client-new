@@ -1,3 +1,4 @@
+import PageContainer from "@/components/layout/page-container";
 import QuestionnairePage from "@/features/questionnaire/questionnaire-page";
 import React from "react";
 
@@ -16,5 +17,9 @@ export default async function Page({ searchParams }: PageProps) {
     );
   }
 
-  return <QuestionnairePage brandId={brandId} />;
+  return (
+    <PageContainer>
+      <QuestionnairePage brandId={brandId} />
+    </PageContainer>
+  );
 }

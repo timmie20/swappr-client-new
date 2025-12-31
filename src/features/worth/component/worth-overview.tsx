@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatNaira } from "@/lib/format";
 import { Model } from "@/types/api";
 import Image from "next/image";
