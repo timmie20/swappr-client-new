@@ -24,7 +24,7 @@ export function UserNav({ user }: { user: UserResource }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-56"
+        className="w-58"
         align="end"
         sideOffset={10}
         forceMount

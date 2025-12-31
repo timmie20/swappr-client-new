@@ -6,7 +6,7 @@ import { useUser } from "@clerk/nextjs";
 export default function Navbar() {
   const { user } = useUser();
   return (
-    <nav className="mx-auto max-w-212.5 bg-white">
+    <nav className="fixed top-0 right-0 left-0 z-50 mx-auto max-w-212.5 bg-white">
       <div className="w-full px-4 sm:px-4 lg:px-0">
         <div className="flex h-16 items-center justify-between">
           <div className="shrink-0">
