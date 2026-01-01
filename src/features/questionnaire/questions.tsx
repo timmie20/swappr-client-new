@@ -13,8 +13,6 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import ProgressBar from "./components/progress-bar";
-import Link from "next/link";
-import { IconArrowBackUp } from "@tabler/icons-react";
 import GoRack from "@/components/route-back-btn";
 
 export default function Questions({ questions }: QuestionsProps) {
@@ -62,7 +60,7 @@ export default function Questions({ questions }: QuestionsProps) {
         <QuestionRenderer />
         <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-50 block h-20 bg-linear-to-t from-white to-transparent blur-sm min-[460px]:hidden" />
       </div>
-      <div className="mt-6 flex justify-center">
+      <div className="mt-6 flex justify-center pb-7 sm:pb-0">
         <motion.div
           className="h-16 w-62.5 cursor-pointer rounded-full text-white"
           whileTap={{ scale: 0.8 }}

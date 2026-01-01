@@ -56,6 +56,7 @@ export default function SignUpForm() {
       last_name: values.lastName,
       email_address: values.email,
       password: values.password,
+      role: "member",
     };
 
     createAccount.mutate(payload, {

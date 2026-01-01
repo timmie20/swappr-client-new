@@ -24,7 +24,7 @@ export function ModelDetail({ slug }: ModelDetailProps) {
   };
 
   return (
-    <div className="mx-auto max-w-170 pb-5">
+    <div className="mx-auto max-w-170 pb-6">
       <GoRack />
 
       <div className="bg-yellow-light/10 mx-auto mb-4 flex h-fit w-full items-center gap-2 rounded-lg py-2 pr-2">
@@ -43,7 +43,7 @@ export function ModelDetail({ slug }: ModelDetailProps) {
 
       <WorthOverviewCard model={model} selected={selectedVariationId} />
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-6 space-y-2">
         <p className="text-small">{model.desc}</p>
         <h3 className="text-tertiary/48 text-xl">
           Available storage for this model
