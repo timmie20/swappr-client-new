@@ -23,7 +23,7 @@ export default function AppleIcon() {
         fontFamily="none"
         fontWeight="none"
         fontSize="none"
-        textAnchor="none"
+        textAnchor="end"
         style={{ mixBlendMode: "normal" }}
       >
         <g transform="scale(4,4)">

@@ -32,7 +32,7 @@ export function useVariations(
   options?: Omit<
     UseQueryOptions<PaginatedResponse<Variation>>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) {
   return useQuery({
     queryKey: queryKeys.variations.list(params),
@@ -50,7 +50,7 @@ export function useVariationsByModel(
   options?: Omit<
     UseQueryOptions<PaginatedResponse<Variation>>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) {
   return useQuery({
     queryKey: queryKeys.variations.byModel(modelId, params),
@@ -65,7 +65,7 @@ export function useVariationsByModel(
  */
 export function useVariation(
   id: string,
-  options?: Omit<UseQueryOptions<Variation>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<Variation>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: queryKeys.variations.detail(id),
@@ -80,7 +80,7 @@ export function useVariation(
  */
 export function useVariationBySlug(
   slug: string,
-  options?: Omit<UseQueryOptions<Variation>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<Variation>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: queryKeys.variations.detail(slug),
@@ -97,23 +97,23 @@ export function useVariationBySlug(
 /**
  * Create a new variation (admin only)
  */
-export function useCreateVariation() {
-  const queryClient = useQueryClient();
+// export function useCreateVariation() {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (dto: CreateVariationDto) => variationEndpoints.create(dto),
-    onSuccess: (data: Variation) => {
-      // Invalidate all variation lists
-      queryClient.invalidateQueries({ queryKey: queryKeys.variations.lists() });
-      // Also invalidate model's variations
-      if (data.modelId) {
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.variations.byModel(data.modelId),
-        });
-      }
-    },
-  });
-}
+//   return useMutation({
+//     mutationFn: (dto: CreateVariationDto) => variationEndpoints.create(dto),
+//     onSuccess: (data: Variation) => {
+//       // Invalidate all variation lists
+//       queryClient.invalidateQueries({ queryKey: queryKeys.variations.lists() });
+//       // Also invalidate model's variations
+//       if (data.modelId) {
+//         queryClient.invalidateQueries({
+//           queryKey: queryKeys.variations.byModel(data.modelId),
+//         });
+//       }
+//     },
+//   });
+// }
 
 /**
  * Update a variation (admin only)

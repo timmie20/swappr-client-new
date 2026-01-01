@@ -1,8 +1,9 @@
 import React, { type Dispatch, type SetStateAction } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { DamagesType } from "@/types";
 import { IconCheck } from "@tabler/icons-react";
+
+export type DamagesType = Record<string, boolean>;
 
 export default function Selector({
   component,
@@ -31,7 +32,7 @@ export default function Selector({
       <motion.button
         layout
         className={cn(
-          "border-input bg-gray-light flex h-13 cursor-pointer items-center gap-2 border px-4 text-[15px] font-medium text-slate-500 sm:h-[54px] sm:text-lg",
+          "border-input bg-gray-light text-small flex h-13 cursor-pointer items-center gap-2 border px-4 font-medium text-slate-500 sm:h-13.5 sm:text-lg",
           isSelected
             ? "border-tertiary text-tertiary border-2"
             : "hover:bg-accent hover:text-accent-foreground",

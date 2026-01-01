@@ -32,6 +32,7 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-object-type
 export type ApiResponser<TData extends Record<string, any> = {}> = {
   message: string;
 } & TData;
@@ -104,6 +105,7 @@ export interface CreateVariationDto {
   name: string;
   slug: string;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attributes?: Record<string, any>;
   basePrice?: number;
   isActive?: boolean;

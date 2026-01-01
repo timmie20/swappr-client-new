@@ -17,15 +17,15 @@ export default function DamagesSelector() {
   const filter = false; // Filter functionality is disabled
 
   const options =
-    currentQuestion?.options?.reduce(
+    currentQuestion?.options?.reduce<Record<string, boolean>>(
       (acc, option) => ({
         ...acc,
-        [option.label]: false,
+        [option.text]: false,
       }),
       {},
     ) || {};
 
-  const [values, setValues] = useState(options);
+  const [values, setValues] = useState<Record<string, boolean>>(options);
 
   const [ref, { height }] = useMeasure();
 
