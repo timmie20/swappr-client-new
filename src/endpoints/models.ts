@@ -17,11 +17,11 @@ import type {
 
 export const modelEndpoints = {
   /**
-   * Get all models (paginated)
+   * Get all models (paginated, optionally filtered by brandId)
    */
   async getAll(params?: PaginationParams): Promise<PaginatedResponse<Model>> {
     const { data } = await api.get<PaginatedResponse<Model>>("/models", {
-      params,
+      params: params,
     });
     return data;
   },

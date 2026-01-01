@@ -14,7 +14,6 @@ import { formatStorageCapacity, formatNaira } from "@/lib/format";
 import { generateModelSlug } from "@/lib/utils";
 import { Model } from "@/types/api";
 import Link from "next/link";
-import React from "react";
 
 export default function ModelCard({ model }: { model: Model }) {
   // Find the variation with the lowest storage capacity

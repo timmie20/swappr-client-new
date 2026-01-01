@@ -1,29 +1,16 @@
 "use client";
 
-import { useModelsByBrandSuspense } from "@/hooks";
-import { Model } from "@/types/api";
+import { Model, PaginatedResponse } from "@/types/api";
 import ModelCard from "./model-card";
 
 type ModelsListProps = {
-  brandId: string;
+  models: PaginatedResponse<Model, "models">;
 };
 
-export default function ModelsList({ brandId }: ModelsListProps) {
-  const { data: modelsData } = useModelsByBrandSuspense(brandId);
-
-  const models: Model[] = modelsData?.models || [];
-
-  if (models.length === 0) {
-    return (
-      <div className="my-10 text-center text-gray-500">
-        No models available for this brand
-      </div>
-    );
-  }
-
+export default function ModelsList({ models }: ModelsListProps) {
   return (
     <div className="my-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
-      {models.map((model) => (
+      {models?.models?.map((model) => (
         <ModelCard key={model.id} model={model} />
       ))}
     </div>

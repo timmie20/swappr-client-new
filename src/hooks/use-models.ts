@@ -15,7 +15,6 @@ import {
 } from "@tanstack/react-query";
 import type {
   Model,
-  CreateModelDto,
   UpdateModelDto,
   PaginationParams,
   PaginatedResponse,
@@ -27,18 +26,38 @@ import { queryKeys } from "@/lib/api/query-keys";
 // ============================================
 
 /**
- * Fetch all models with pagination
+ * Fetch all models with pagination (with Suspense support)
  */
-export function useModels(
+export function useModelsSuspense<K extends string = "data">(
   params?: PaginationParams,
   options?: Omit<
-    UseQueryOptions<PaginatedResponse<Model>>,
+    UseSuspenseQueryOptions<PaginatedResponse<Model, K>>,
     "queryKey" | "queryFn"
   >,
 ) {
-  return useQuery({
+  return useSuspenseQuery<PaginatedResponse<Model, K>>({
     queryKey: queryKeys.models.list(params),
-    queryFn: () => modelEndpoints.getAll(params),
+    queryFn: () =>
+      modelEndpoints.getAll(params) as Promise<PaginatedResponse<Model, K>>,
+    ...options,
+  });
+}
+
+/**
+ * Fetch all models with pagination
+ */
+export function useModels<K extends string = "data">(
+  params?: PaginationParams,
+  options?: Omit<
+    UseQueryOptions<PaginatedResponse<Model, K>>,
+    "queryKey" | "queryFn"
+  > & { initialData?: PaginatedResponse<Model, K> },
+) {
+  return useQuery<PaginatedResponse<Model, K>>({
+    queryKey: queryKeys.models.list(params),
+    queryFn: () =>
+      modelEndpoints.getAll(params) as Promise<PaginatedResponse<Model, K>>,
+    ...(options?.initialData ? { initialData: options.initialData } : {}),
     ...options,
   });
 }

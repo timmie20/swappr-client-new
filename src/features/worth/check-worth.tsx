@@ -7,10 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Brand } from "@/lib/api/types";
-import { Suspense, useState } from "react";
+import type { Brand } from "@/types/api";
+import { useState, Suspense } from "react";
 import Heading from "@/components/shared/heading";
-import ModelsList from "./component/models-list";
+import ModelsSection from "./component/models-section";
 import ModelsListSkeleton from "@/components/skeletons/model-list-skeleton";
 
 type CheckWorthProps = {
@@ -47,15 +47,9 @@ export default function CheckWorth({ brands }: CheckWorthProps) {
         </Select>
       </div>
 
-      {brandId ? (
-        <Suspense key={brandId} fallback={<ModelsListSkeleton />}>
-          <ModelsList brandId={brandId} />
-        </Suspense>
-      ) : (
-        <div className="my-10 text-center text-gray-400">
-          Select a brand to view available models
-        </div>
-      )}
+      <Suspense fallback={<ModelsListSkeleton />}>
+        <ModelsSection brandId={brandId} />
+      </Suspense>
     </div>
   );
 }

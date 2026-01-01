@@ -10,6 +10,7 @@
 // ============================================
 
 export interface PaginationParams {
+  brand_id?: string;
   page?: number;
   limit?: number;
   search?: string;
