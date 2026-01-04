@@ -3,11 +3,15 @@
 import { useModelBySlugSuspense } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { formatStorageCapacity } from "@/lib/format";
-import Link from "next/link";
+import {
+  saveQuestionnaireContext,
+  getQuestionnaireContext,
+} from "@/lib/cookies";
 import Image from "next/image";
 import WorthOverviewCard from "./component/worth-overview";
 import { useState } from "react";
 import GoRack from "@/components/route-back-btn";
+import { useRouter } from "next/navigation";
 
 type ModelDetailProps = {
   slug: string;
@@ -15,12 +19,48 @@ type ModelDetailProps = {
 
 export function ModelDetail({ slug }: ModelDetailProps) {
   const { data: model } = useModelBySlugSuspense(slug);
+  const router = useRouter();
+
+  // Check if there's a saved variation in cookies, otherwise use first variation
+  const getSavedOrDefaultVariation = () => {
+    const context = getQuestionnaireContext();
+
+    // If we have saved context and it matches this model, use saved variation
+    if (context && context.modelId === model.id) {
+      // Verify the saved variation exists in this model
+      const variationExists = model.variations?.some(
+        (v) => v.id === context.variationId,
+      );
+      if (variationExists) {
+        return context.variationId;
+      }
+    }
+
+    // Default to first variation
+    return model.variations?.[0]?.id || null;
+  };
+
   const [selectedVariationId, setSelectedVariationId] = useState<string | null>(
-    model.variations?.[0]?.id || null,
+    () => getSavedOrDefaultVariation(),
   );
 
   const handleSelect = (id: string) => {
     setSelectedVariationId(id);
+  };
+
+  const handleCheckWorth = () => {
+    if (!selectedVariationId) {
+      // Show error or prevent navigation
+      return;
+    }
+
+    // Save model and variation to cookies before navigating
+    saveQuestionnaireContext(model.id, selectedVariationId);
+
+    // Navigate to questionnaire
+    router.push(
+      `/check-worth/${slug}/questionnaire?brandId=${model.brand?.id}`,
+    );
   };
 
   return (
@@ -68,16 +108,14 @@ export function ModelDetail({ slug }: ModelDetailProps) {
         </div>
       </div>
 
-      <Link
-        href={{
-          pathname: `/check-worth/${slug}/questionnaire`,
-          query: { brandId: model.brand?.id },
-        }}
+      <Button
+        size="lg"
+        className="w-full sm:w-fit"
+        onClick={handleCheckWorth}
+        disabled={!selectedVariationId}
       >
-        <Button size="lg" className="w-full sm:w-fit">
-          Check your phones worth{" "}
-        </Button>
-      </Link>
+        Check your phones worth{" "}
+      </Button>
     </div>
   );
 }
