@@ -8,15 +8,6 @@ import { getQuestionnaireContext } from "./cookies";
 import { QuestionAnswer } from "@/store/question-store";
 import type { SubmitAnswersDto } from "@/types/api";
 
-export interface ValuationPayload {
-  model_id: string;
-  variation_id: string;
-  answers: Array<{
-    question_id: string;
-    option_id: string;
-  }>;
-}
-
 /**
  * Build the complete valuation payload from cookies and store answers
  * @param answers - Array of question answers from Zustand store

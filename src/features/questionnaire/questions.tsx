@@ -23,8 +23,21 @@ import { useRouter } from "next/navigation";
 import { valuationEndpoints } from "@/endpoints/valuation";
 import { clearQuestionnaireContext } from "@/lib/cookies";
 
+/**
+ * Extract error message from unknown error type
+ * @param error - Error object of unknown type
+ * @param defaultMessage - Default message if extraction fails
+ * @returns User-friendly error message
+ */
+function getErrorMessage(error: unknown, defaultMessage: string): string {
+  if (error && typeof error === "object" && "message" in error) {
+    return (error as { message: string }).message;
+  }
+  return defaultMessage;
+}
+
 export default function Questions({ questions }: QuestionsProps) {
-  const router = useRouter(); // Uncomment when implementing navigation after submission
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initializeQuestions = useQuestionStore((s) => s.initializeQuestions);
@@ -105,10 +118,10 @@ export default function Questions({ questions }: QuestionsProps) {
       }
     } catch (error) {
       console.error("Submission error:", error);
-      const errorMessage =
-        error && typeof error === "object" && "message" in error
-          ? (error as { message: string }).message
-          : "Failed to submit valuation. Please try again.";
+      const errorMessage = getErrorMessage(
+        error,
+        "Failed to submit valuation. Please try again.",
+      );
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
