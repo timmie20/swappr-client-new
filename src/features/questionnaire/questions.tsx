@@ -20,6 +20,8 @@ import {
 } from "@/lib/questionnaire-submission";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { valuationEndpoints } from "@/endpoints/valuation";
+import { clearQuestionnaireContext } from "@/lib/cookies";
 
 export default function Questions({ questions }: QuestionsProps) {
   const router = useRouter(); // Uncomment when implementing navigation after submission
@@ -83,30 +85,31 @@ export default function Questions({ questions }: QuestionsProps) {
         return;
       }
 
-      // TODO: Submit to API
+      // Submit to API
       console.log("Submitting valuation payload:", payload);
+      const response = await valuationEndpoints.calculateValue(payload!);
 
-      // Example API call (uncomment when ready):
-      // const response = await fetch('/api/valuations', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(payload),
-      // });
-      //
-      // if (!response.ok) throw new Error('Submission failed');
-      //
-      // const result = await response.json();
-
-      // Clear answers after successful submission
+      // Clear answers and context after successful submission
       clearAnswers();
+      clearQuestionnaireContext();
 
       toast.success("Valuation submitted successfully!");
 
-      // Navigate to results page (adjust URL as needed)
-      // router.push(`/valuation-result/${result.id}`);
+      // Navigate to results page with valuation ID
+      if (response.data?.valuation_id) {
+        router.push(`/valuation-result/${response.data.valuation_id}`);
+      } else {
+        // Fallback if no valuation_id is returned
+        console.warn("No valuation_id returned from API");
+        router.push("/");
+      }
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error("Failed to submit valuation. Please try again.");
+      const errorMessage =
+        error && typeof error === "object" && "message" in error
+          ? (error as { message: string }).message
+          : "Failed to submit valuation. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

@@ -6,6 +6,7 @@
 
 import { getQuestionnaireContext } from "./cookies";
 import { QuestionAnswer } from "@/store/question-store";
+import type { SubmitAnswersDto } from "@/types/api";
 
 export interface ValuationPayload {
   model_id: string;
@@ -23,7 +24,7 @@ export interface ValuationPayload {
  */
 export function buildValuationPayload(
   answers: QuestionAnswer[],
-): ValuationPayload | null {
+): SubmitAnswersDto | null {
   // Get model and variation from cookies
   const context = getQuestionnaireContext();
 
@@ -32,15 +33,15 @@ export function buildValuationPayload(
     return null;
   }
 
-  // Transform answers to API format
+  // Transform answers to API format (camelCase with value field)
   const formattedAnswers = answers.map((answer) => ({
-    question_id: answer.questionId,
-    option_id: answer.optionId,
+    questionId: answer.questionId,
+    value: answer.optionId,
   }));
 
   return {
-    model_id: context.modelId,
-    variation_id: context.variationId,
+    modelId: context.modelId,
+    variationId: context.variationId,
     answers: formattedAnswers,
   };
 }
@@ -64,13 +65,13 @@ export function isQuestionnaireComplete(
  * @returns Error message if invalid, null if valid
  */
 export function validatePayload(
-  payload: ValuationPayload | null,
+  payload: SubmitAnswersDto | null,
 ): string | null {
   if (!payload) {
     return "Missing model or variation information. Please start over.";
   }
 
-  if (!payload.model_id || !payload.variation_id) {
+  if (!payload.modelId || !payload.variationId) {
     return "Invalid model or variation selection.";
   }
 
@@ -80,7 +81,7 @@ export function validatePayload(
 
   // Check for any missing IDs
   const hasInvalidAnswers = payload.answers.some(
-    (answer) => !answer.question_id || !answer.option_id,
+    (answer) => !answer.questionId || !answer.value,
   );
 
   if (hasInvalidAnswers) {
