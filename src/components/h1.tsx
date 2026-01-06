@@ -1,12 +1,11 @@
 import { cn } from "@/lib/utils";
 
-export function TypographyH1({
-  text,
-  className,
-}: {
-  text: string;
-  className?: string;
-}) {
+type H1Props = {
+  children: React.ReactNode;
+  className: string;
+};
+
+export function TypographyH1({ children, className }: H1Props) {
   return (
     <h1
       className={cn(
@@ -14,7 +13,7 @@ export function TypographyH1({
         className,
       )}
     >
-      {text}
+      {children}
     </h1>
   );
 }

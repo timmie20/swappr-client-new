@@ -65,10 +65,9 @@ export default function QuestionRenderer() {
               {currentQuestion.note}
             </motion.p> */}
 
-          <TypographyH1
-            text={currentQuestion.text}
-            className="min-[460px]:mt-10"
-          />
+          <TypographyH1 className="min-[460px]:mt-10">
+            {currentQuestion.text}
+          </TypographyH1>
 
           {currentQuestion.note && (
             <span className="text-center">
