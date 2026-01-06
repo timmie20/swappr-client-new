@@ -204,13 +204,13 @@ export type UpdateQuestionDto = Partial<CreateQuestionDto>;
 // ============================================
 
 export interface UserAnswer {
-  questionId: string;
-  value: unknown;
+  question_id: string;
+  option_id: unknown;
 }
 
 export interface SubmitAnswersDto {
-  modelId?: string;
-  variationId?: string;
+  model_id?: string;
+  variation_id?: string;
   answers: UserAnswer[];
 }
 

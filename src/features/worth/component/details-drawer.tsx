@@ -19,7 +19,7 @@ export default function DetailsDrawer() {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="ghost" className="cursor-pointer">
+        <Button variant="outline" className="cursor-pointer">
           View Details <IconLayoutBottombarInactive />
         </Button>
       </DrawerTrigger>

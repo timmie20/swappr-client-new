@@ -1,6 +1,6 @@
 "use client";
 import { QuestionsProps } from "./questionnaire-page";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import QuestionRenderer from "./components/question-renderer";
@@ -16,12 +16,13 @@ import ProgressBar from "./components/progress-bar";
 import GoRack from "@/components/route-back-btn";
 import {
   buildValuationPayload,
-  validatePayload,
+  // validatePayload,
 } from "@/lib/questionnaire-submission";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { valuationEndpoints } from "@/endpoints/valuation";
+import { useRouter, usePathname } from "next/navigation";
 import { clearQuestionnaireContext } from "@/lib/cookies";
+import { useSubmitAnswers } from "@/hooks/use-questions";
+import { useResultStore } from "@/store/result-store";
 
 /**
  * Extract error message from unknown error type
@@ -38,7 +39,12 @@ function getErrorMessage(error: unknown, defaultMessage: string): string {
 
 export default function Questions({ questions }: QuestionsProps) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const pathname = usePathname();
+  const { mutate: submitAnswers, isPending: isSubmitting } = useSubmitAnswers();
+  const setResult = useResultStore((s) => s.setResult);
+
+  // Extract model slug from pathname: /check-worth/[slug]/questionnaire
+  const modelSlug = pathname.split("/")[2];
 
   const initializeQuestions = useQuestionStore((s) => s.initializeQuestions);
   const currentQuestion = useQuestionStore((s) => s.currentQuestion);
@@ -53,8 +59,8 @@ export default function Questions({ questions }: QuestionsProps) {
     ? !!answers[currentQuestion.id]
     : false;
 
-  // Check if we're on the last question
-  const isLastQuestion = currentStep === questions.length;
+  // Check if we're on the last question (currentStep is 1-indexed)
+  const isLastQuestion = currentStep >= questions.length;
 
   // Initialize questions in store when component mounts
   useEffect(() => {
@@ -83,48 +89,56 @@ export default function Questions({ questions }: QuestionsProps) {
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
       // Build payload from store and cookies
       const answers = getAnswers();
       const payload = buildValuationPayload(answers);
 
       // Validate payload
-      const validationError = validatePayload(payload);
-      if (validationError) {
-        toast.error(validationError);
-        setIsSubmitting(false);
-        return;
-      }
+      // const validationError = validatePayload(payload);
+      // if (validationError) {
+      //   toast.error(validationError);
+      //   return;
+      // }
 
-      // Submit to API
-      console.log("Submitting valuation payload:", payload);
-      const response = await valuationEndpoints.calculateValue(payload!);
+      // Submit to API using React Query mutation
+      submitAnswers(payload!, {
+        onSuccess: (response) => {
+          // Store result in result store
+          if (response.data) {
+            setResult(response.data);
 
-      // Clear answers and context after successful submission
-      clearAnswers();
-      clearQuestionnaireContext();
+            // Clear answers and context after successful submission
+            clearAnswers();
+            clearQuestionnaireContext();
 
-      toast.success("Valuation submitted successfully!");
+            toast.success("Valuation submitted successfully!");
 
-      // Navigate to results page with valuation ID
-      if (response.data?.valuation_id) {
-        router.push(`/valuation-result/${response.data.valuation_id}`);
-      } else {
-        // Fallback if no valuation_id is returned
-        console.warn("No valuation_id returned from API");
-        router.push("/");
-      }
+            // Use setTimeout to ensure store update completes before navigation
+            setTimeout(() => {
+              router.push(
+                `/check-worth/${modelSlug}/result/${response.data.valuation_id}`,
+              );
+            }, 0);
+          } else {
+            // Fallback if no valuation_id is returned
+            console.warn("No valuation_id returned from API");
+            toast.warning("No valuation data returned");
+            router.push("/");
+          }
+        },
+        onError: (error) => {
+          console.error("Submission error:", error);
+          const errorMessage = getErrorMessage(
+            error,
+            "Failed to submit valuation. Please try again.",
+          );
+          toast.error(errorMessage);
+        },
+      });
     } catch (error) {
-      console.error("Submission error:", error);
-      const errorMessage = getErrorMessage(
-        error,
-        "Failed to submit valuation. Please try again.",
-      );
-      toast.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
+      console.error("Payload building error:", error);
+      toast.error("Failed to prepare submission. Please try again.");
     }
   };
 

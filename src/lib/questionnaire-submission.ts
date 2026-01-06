@@ -26,13 +26,13 @@ export function buildValuationPayload(
 
   // Transform answers to API format (camelCase with value field)
   const formattedAnswers = answers.map((answer) => ({
-    questionId: answer.questionId,
-    value: answer.optionId,
+    question_id: answer.questionId,
+    option_id: answer.optionId,
   }));
 
   return {
-    modelId: context.modelId,
-    variationId: context.variationId,
+    model_id: context.modelId,
+    variation_id: context.variationId,
     answers: formattedAnswers,
   };
 }
@@ -55,29 +55,29 @@ export function isQuestionnaireComplete(
  * @param payload - The valuation payload to validate
  * @returns Error message if invalid, null if valid
  */
-export function validatePayload(
-  payload: SubmitAnswersDto | null,
-): string | null {
-  if (!payload) {
-    return "Missing model or variation information. Please start over.";
-  }
+// export function validatePayload(
+//   payload: SubmitAnswersDto | null,
+// ): string | null {
+//   if (!payload) {
+//     return "Missing model or variation information. Please start over.";
+//   }
 
-  if (!payload.modelId || !payload.variationId) {
-    return "Invalid model or variation selection.";
-  }
+//   if (!payload.modelId || !payload.variationId) {
+//     return "Invalid model or variation selection.";
+//   }
 
-  if (!payload.answers || payload.answers.length === 0) {
-    return "Please answer all questions before submitting.";
-  }
+//   if (!payload.answers || payload.answers.length === 0) {
+//     return "Please answer all questions before submitting.";
+//   }
 
-  // Check for any missing IDs
-  const hasInvalidAnswers = payload.answers.some(
-    (answer) => !answer.questionId || !answer.value,
-  );
+//   // Check for any missing IDs
+//   const hasInvalidAnswers = payload.answers.some(
+//     (answer) => !answer.questionId || !answer.value,
+//   );
 
-  if (hasInvalidAnswers) {
-    return "Some answers are incomplete. Please review your selections.";
-  }
+//   if (hasInvalidAnswers) {
+//     return "Some answers are incomplete. Please review your selections.";
+//   }
 
-  return null;
-}
+//   return null;
+// }
