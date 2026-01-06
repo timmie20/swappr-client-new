@@ -18,6 +18,7 @@ import type {
   ApiResponse,
   SubmitAnswersDto,
 } from "@/types/api";
+import { valuationEndpoints } from "@/endpoints/valuation";
 
 // ============================================
 // Query Hooks (Data Fetching)
@@ -69,7 +70,8 @@ export function useSubmitAnswers() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (dto: SubmitAnswersDto) => questionEndpoints.submitAnswers(dto),
+    mutationFn: (dto: SubmitAnswersDto) =>
+      valuationEndpoints.calculateValue(dto),
     onSuccess: () => {
       // Optionally invalidate user submissions or related data
       queryClient.invalidateQueries({ queryKey: queryKeys.user.submissions() });

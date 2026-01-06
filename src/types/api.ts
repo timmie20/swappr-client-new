@@ -213,3 +213,24 @@ export interface SubmitAnswersDto {
   variationId?: string;
   answers: UserAnswer[];
 }
+
+export interface ValuationResponse {
+  valuation_id: string;
+  device: {
+    brand: string;
+    model: string;
+    storage: number;
+  };
+  base_price: number;
+  adjustments: Array<{
+    question: string;
+    answer: string;
+    impact: number;
+    type: "add" | "deduct";
+  }>;
+  final_value: number;
+  summary: {
+    total_deductions: number;
+    total_additions: number;
+  };
+}
