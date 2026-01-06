@@ -47,13 +47,11 @@ export default function Confetti() {
     });
   }, [makeShot]);
 
-  useEffect(() => {
-    fire();
-  }, [fire]);
+  useEffect(() => fire(), [fire]);
 
   return (
     <ReactCanvasConfetti
-      refConfetti={getInstance}
+      onInit={getInstance}
       style={{
         position: "fixed",
         pointerEvents: "none",

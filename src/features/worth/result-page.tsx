@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/h1";
 import { IconShare } from "@tabler/icons-react";
 import DetailsDrawer from "./component/details-drawer";
-import Confetti from "@/components/confetti";
 import { formatNaira } from "@/lib/format";
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
 export default function ResultPage() {
   return (
     <>
-      <Confetti />
+      <Fireworks autorun={{ speed: 3, duration: 4000 }} />
       <div className="mx-auto mt-6 flex h-dvh max-w-163.75 flex-col items-center space-y-5 md:space-y-12">
         <div className="space-y-2 text-center">
           <p className="text-small text-slate-400 sm:text-lg">
