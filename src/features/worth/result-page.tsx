@@ -18,40 +18,11 @@ export default function ResultPage() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
 
-  // Play fireworks audio on mount with multiple attempts
   useEffect(() => {
-    const playAudio = async () => {
-      if (audioRef.current) {
-        try {
-          // Set volume
-          audioRef.current.volume = 0.5;
-
-          // Attempt to play
-          await audioRef.current.play();
-          console.log("Audio playing successfully");
-        } catch (error) {
-          console.log("Audio autoplay prevented:", error);
-
-          // Fallback: try to play on first user interaction
-          const playOnInteraction = () => {
-            if (audioRef.current) {
-              audioRef.current.play().catch(console.error);
-              document.removeEventListener("click", playOnInteraction);
-              document.removeEventListener("touchstart", playOnInteraction);
-            }
-          };
-
-          document.addEventListener("click", playOnInteraction, { once: true });
-          document.addEventListener("touchstart", playOnInteraction, {
-            once: true,
-          });
-        }
-      }
-    };
-
-    // Small delay to ensure component is mounted
-    const timer = setTimeout(playAudio, 100);
-    return () => clearTimeout(timer);
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+      audioRef.current.play();
+    }
   }, []);
 
   // // Redirect if no result data
