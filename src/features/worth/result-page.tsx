@@ -108,7 +108,7 @@ export default function ResultPage() {
           />
         </div>
 
-        <DetailsDrawer />
+        {result && <DetailsDrawer result={result} />}
 
         <div className="flex w-full items-center justify-center gap-5 px-3 sm:w-[80%]">
           <Button
