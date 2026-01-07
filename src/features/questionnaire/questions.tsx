@@ -23,6 +23,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { clearQuestionnaireContext } from "@/lib/cookies";
 import { useSubmitAnswers } from "@/hooks/use-questions";
 import { useResultStore } from "@/store/result-store";
+import PageLoader from "@/components/page-loader";
 
 /**
  * Extract error message from unknown error type
@@ -147,6 +148,10 @@ export default function Questions({ questions }: QuestionsProps) {
 
   return (
     <>
+      <PageLoader
+        isLoading={isSubmitting}
+        text="Hang on while we process your answers..."
+      />
       <div className="my-6 flex items-center gap-4">
         <Breadcrumb className="shrink-0">
           <GoRack handleClick={handleBack} />

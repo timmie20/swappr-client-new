@@ -16,8 +16,6 @@ export default function ResultPage() {
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  console.log("result", result);
-
   // Play fireworks audio on mount with multiple attempts
   useEffect(() => {
     const playAudio = async () => {
@@ -63,7 +61,7 @@ export default function ResultPage() {
 
   // if (!result) {
   //   return null;
-  // }
+  // }  return (
 
   return (
     <>

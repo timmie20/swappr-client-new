@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatNaira } from "@/lib/format";
 import { Model } from "@/types/api";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Image from "next/image";
 import React from "react";
 
@@ -14,6 +15,23 @@ export default function WorthOverviewCard({
   const selectedVariation = model.variations?.find(
     (variation) => variation.id === selected,
   );
+
+  const renderBrandIcon = (brand: string | undefined) => {
+    switch (brand) {
+      case "apple":
+        return (
+          <DotLottieReact
+            src="/assets/icons/apple.json"
+            autoplay
+            loop
+            style={{ width: 80, height: 80 }}
+          />
+        );
+
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="flex w-full flex-col gap-5 sm:flex-row">
@@ -32,11 +50,11 @@ export default function WorthOverviewCard({
       <div className="space-y-2 sm:space-y-3 sm:self-end">
         <div className="flex flex-wrap items-center gap-5">
           <div className="flex flex-col">
-            <span className="text-tertiary/42 text-sm font-medium tracking-tight">
+            {/* <span className="text-tertiary/42 text-sm font-medium tracking-tight">
               Brand
-            </span>
+            </span> */}
             <span className="text-tertiary text-base font-medium tracking-tight">
-              {model.brand?.brand_name}
+              {renderBrandIcon(model.brand?.brand_name.toLowerCase())}
             </span>
           </div>
           <div className="flex flex-col">

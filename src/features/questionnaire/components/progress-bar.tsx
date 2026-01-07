@@ -4,10 +4,19 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useQuestionStore } from "@/store/question-store";
 import { Progress } from "@/components/ui/progress";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const ProgressBar = React.memo(function ProgressBar() {
   const progress = useQuestionStore((state) => state.progress);
   const prevStep = useQuestionStore((state) => state.prevStep);
+  const questions = useQuestionStore((state) => state.questions);
+
+  // Calculate the position for second to last question
+  // If there are N questions, second to last is at (N-1)/N * 100%
+  const flagPosition =
+    questions.length > 1
+      ? ((questions.length - 1) / questions.length) * 100
+      : 100;
 
   return (
     <div className="flex items-center gap-5">
@@ -26,7 +35,20 @@ const ProgressBar = React.memo(function ProgressBar() {
           priority
         />
       </Button>
-      <Progress value={progress} className="h-3" />
+      <div className="relative flex-1">
+        <Progress value={progress} className="h-3" />
+        <div
+          className="absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
+          style={{ left: `${flagPosition}%` }}
+        >
+          <DotLottieReact
+            src="/assets/icons/chequered-flag.json"
+            autoplay
+            loop
+            style={{ width: 40, height: 40 }}
+          />
+        </div>
+      </div>
     </div>
   );
 });
