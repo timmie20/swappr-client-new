@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <PageContainer>
         <div className="flex h-full flex-col items-center justify-center gap-4">
-          <TypographyH1 text="Home" />
+          <TypographyH1>Home</TypographyH1>
           <Link href="/check-worth">
             <Button size="lg">Check worth</Button>
           </Link>
