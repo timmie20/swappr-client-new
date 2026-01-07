@@ -8,13 +8,15 @@ import { formatNaira } from "@/lib/format";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useResultStore } from "@/store/result-store";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ComingSoonDialog } from "@/components/coming-soon-dialog";
 
 export default function ResultPage() {
   const result = useResultStore((s) => s.result);
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   // Play fireworks audio on mount with multiple attempts
   useEffect(() => {
@@ -114,6 +116,7 @@ export default function ResultPage() {
           <Button
             size="lg"
             className="flex-1 cursor-pointer rounded-full sm:flex-3"
+            onClick={() => setShowComingSoon(true)}
           >
             Swap Phone
           </Button>
@@ -123,6 +126,11 @@ export default function ResultPage() {
           </Button>
         </div>
       </div>
+
+      <ComingSoonDialog
+        open={showComingSoon}
+        onOpenChange={setShowComingSoon}
+      />
     </>
   );
 }
