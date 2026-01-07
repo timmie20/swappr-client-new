@@ -135,8 +135,14 @@ export default function RootLayout({
         <body
           className={`${switzer.variable} ${inter.variable} font-sans antialiased`}
         >
+          {/* Animated background positioned at top right */}
+          <div className="animated-mesh-gradient-background pointer-events-none fixed top-0 right-0 z-50 size-75 rounded-full opacity-30 blur-3xl md:size-125" />
+
+          {/* Animated background positioned at bottom left */}
+          <div className="animated-mesh-gradient-background-reverse pointer-events-none fixed bottom-0 left-0 z-50 hidden size-125 rounded-full opacity-30 blur-3xl md:block" />
+
           <QueryProvider>
-            <main>{children}</main>
+            <main className="relative z-10">{children}</main>
             <Toaster position="top-center" />
           </QueryProvider>
         </body>

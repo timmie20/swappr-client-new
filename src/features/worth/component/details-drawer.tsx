@@ -10,7 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import {
-  IconFileDownload,
+  // IconFileDownload,
   IconLayoutBottombarInactive,
   IconChevronUp,
   IconChevronDown,
@@ -177,9 +177,9 @@ export default function DetailsDrawer({ result }: DetailsDrawerProps) {
           </div>
 
           <DrawerFooter>
-            <Button className="cursor-pointer">
+            {/* <Button className="cursor-pointer">
               Download <IconFileDownload />
-            </Button>
+            </Button> */}
             <DrawerClose asChild>
               <Button variant="outline">Close</Button>
             </DrawerClose>

@@ -114,7 +114,7 @@ export default function Questions({ questions }: QuestionsProps) {
             clearAnswers();
             clearQuestionnaireContext();
 
-            toast.success("Valuation submitted successfully!");
+            // toast.success("Valuation submitted successfully!");
 
             // Use setTimeout to ensure store update completes before navigation
             setTimeout(() => {

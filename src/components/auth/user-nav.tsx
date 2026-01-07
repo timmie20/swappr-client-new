@@ -10,12 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SignOutButton } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { UserAvatarProfile } from "../user-avatar-profile";
 import type { UserResource } from "@clerk/types";
+import Link from "next/link";
 
 export function UserNav({ user }: { user: UserResource }) {
-  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,8 +38,8 @@ export function UserNav({ user }: { user: UserResource }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push("/dashboard/profile")}>
-            Profile
+          <DropdownMenuItem>
+            <Link href="#">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>Drafts</DropdownMenuItem>
         </DropdownMenuGroup>

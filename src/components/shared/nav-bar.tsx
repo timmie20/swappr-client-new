@@ -6,8 +6,8 @@ import { useUser } from "@clerk/nextjs";
 export default function Navbar() {
   const { user } = useUser();
   return (
-    <nav className="fixed top-0 right-0 left-0 z-50 mx-auto max-w-212.5 bg-white">
-      <div className="w-full px-4 sm:px-4 lg:px-0">
+    <nav className="fixed top-0 right-0 left-0 z-40 bg-white">
+      <div className="mx-auto w-full max-w-212.5 px-4 sm:px-4 lg:px-0">
         <div className="flex h-16 items-center justify-between">
           <div className="shrink-0">
             <h1 className="text-large font-bold tracking-tight text-gray-900">
