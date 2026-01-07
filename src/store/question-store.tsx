@@ -1,6 +1,6 @@
+import { Question } from "@/types/api";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Question } from "@/lib/api/types";
 
 // Answer structure: stores option_id for each question_id
 export interface QuestionAnswer {

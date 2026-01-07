@@ -46,13 +46,21 @@ export default function Questions({ questions }: QuestionsProps) {
   // Extract model slug from pathname: /check-worth/[slug]/questionnaire
   const modelSlug = pathname.split("/")[2];
 
-  const initializeQuestions = useQuestionStore((s) => s.initializeQuestions);
   const currentQuestion = useQuestionStore((s) => s.currentQuestion);
   const currentStep = useQuestionStore((s) => s.currentStep);
   const nextStep = useQuestionStore((s) => s.nextStep);
   const answers = useQuestionStore((s) => s.answers); // Subscribe to answers
   const getAnswers = useQuestionStore((s) => s.getAnswers);
   const clearAnswers = useQuestionStore((s) => s.clearAnswers);
+  const storedQuestions = useQuestionStore((s) => s.questions);
+
+  // Redirect if no questions in store
+  useEffect(() => {
+    if (storedQuestions.length === 0) {
+      toast.error("No questions loaded. Please start from device selection.");
+      router.push("/check-worth");
+    }
+  }, [storedQuestions, router]);
 
   // Check if current question has been answered (reacts to answers changes)
   const isCurrentQuestionAnswered = currentQuestion
@@ -60,14 +68,7 @@ export default function Questions({ questions }: QuestionsProps) {
     : false;
 
   // Check if we're on the last question (currentStep is 1-indexed)
-  const isLastQuestion = currentStep >= questions.length;
-
-  // Initialize questions in store when component mounts
-  useEffect(() => {
-    if (questions && questions.length > 0) {
-      initializeQuestions(questions);
-    }
-  }, [questions, initializeQuestions]);
+  const isLastQuestion = currentStep >= storedQuestions.length;
 
   const handleNext = () => {
     if (!isCurrentQuestionAnswered) {
@@ -185,7 +186,7 @@ export default function Questions({ questions }: QuestionsProps) {
             {isSubmitting
               ? "Submitting..."
               : isLastQuestion
-                ? "Calculate Value"
+                ? "Submit"
                 : "Next"}
           </Button>
         </motion.div>

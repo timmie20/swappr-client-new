@@ -11,6 +11,7 @@ import type {
   PaginationParams,
   ApiResponse,
   SubmitAnswersDto,
+  ApiResponser,
 } from "@/types/api";
 
 export const questionEndpoints = {
@@ -31,8 +32,8 @@ export const questionEndpoints = {
    */
   async getByBrand(
     brandId: string,
-  ): Promise<ApiResponse<{ questions: Question[] }>> {
-    const { data } = await api.get<ApiResponse<{ questions: Question[] }>>(
+  ): Promise<ApiResponser<{ questions: Question[] }>> {
+    const { data } = await api.get<ApiResponser<{ questions: Question[] }>>(
       `/questions/brand/${brandId}/with-general`,
     );
     return data;

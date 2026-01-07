@@ -12,12 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { questionEndpoints } from "@/endpoints";
 import { queryKeys } from "@/lib/api/query-keys";
-import type {
-  Question,
-  PaginationParams,
-  ApiResponse,
-  SubmitAnswersDto,
-} from "@/types/api";
+import type { Question, SubmitAnswersDto, ApiResponser } from "@/types/api";
 import { valuationEndpoints } from "@/endpoints/valuation";
 
 // ============================================
@@ -47,7 +42,7 @@ import { valuationEndpoints } from "@/endpoints/valuation";
 export function useQuestionsByModel(
   brandId: string,
   options?: Omit<
-    UseQueryOptions<ApiResponse<{ questions: Question[] }>>,
+    UseQueryOptions<ApiResponser<{ questions: Question[] }>>,
     "queryKey" | "queryFn"
   >,
 ) {
