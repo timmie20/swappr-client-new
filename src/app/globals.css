@@ -150,8 +150,8 @@
 .animated-mesh-gradient-background {
   background-color: transparent;
   background-image:
-    radial-gradient(at 97% 40%, hsla(338, 100%, 68%, 1) 0px, transparent 50%),
-    radial-gradient(at 78% 24%, hsla(213, 100%, 68%, 1) 0px, transparent 50%);
+    radial-gradient(at 97% 40%, hsla(338, 100%, 68%, 1) 0px, transparent 60%),
+    radial-gradient(at 78% 24%, hsla(213, 100%, 68%, 1) 0px, transparent 60%);
   animation: animatedgradient 10s ease infinite;
   background-size: 200% 200%;
 }
@@ -159,8 +159,8 @@
 .animated-mesh-gradient-background-reverse {
   background-color: transparent;
   background-image:
-    radial-gradient(at 97% 40%, hsla(338, 100%, 68%, 1) 0px, transparent 50%),
-    radial-gradient(at 78% 24%, hsla(213, 100%, 68%, 1) 0px, transparent 50%);
+    radial-gradient(at 97% 40%, hsla(338, 100%, 68%, 1) 0px, transparent 60%),
+    radial-gradient(at 78% 24%, hsla(213, 100%, 68%, 1) 0px, transparent 60%);
   animation: animatedgradient-reverse 10s ease infinite;
   background-size: 200% 200%;
 }

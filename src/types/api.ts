@@ -69,6 +69,7 @@ export interface Model {
   model_name: string;
   slug?: string;
   desc: string;
+  image_url?: string;
   variations?: Variation[];
   brand?: {
     id: string;

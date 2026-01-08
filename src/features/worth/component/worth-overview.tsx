@@ -2,8 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { formatNaira } from "@/lib/format";
 import { Model } from "@/types/api";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import Image from "next/image";
-import React from "react";
+import { SafeImage } from "./safe-image";
 
 export default function WorthOverviewCard({
   model,
@@ -37,8 +36,8 @@ export default function WorthOverviewCard({
     <div className="flex w-full flex-col gap-5 sm:flex-row">
       <Card className="bg-gray-light flex h-fit w-full p-6 sm:max-w-102.5 sm:shrink-0 sm:p-10">
         <CardContent>
-          <Image
-            src="/assets/images/iphone16.png"
+          <SafeImage
+            src={model.image_url ?? ""}
             alt={`image of ${model.model_name}`}
             width={230}
             height={281}

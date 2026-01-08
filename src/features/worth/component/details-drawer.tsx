@@ -118,7 +118,7 @@ export default function DetailsDrawer({ result }: DetailsDrawerProps) {
                           )}
                           <span
                             className={`text-sm font-bold ${
-                              adjustment.type === "add"
+                              adjustment.impact >= 0
                                 ? "text-chart-2"
                                 : "text-destructive"
                             }`}
