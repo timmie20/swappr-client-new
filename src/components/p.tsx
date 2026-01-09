@@ -1,3 +1,12 @@
-export function TypographyP({ text }: { text: string }) {
-  return <p className="leading-7 not-first:mt-6">{text}</p>;
+import { cn } from "@/lib/utils";
+
+type Props = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+export function TypographyP({ children, className }: Props) {
+  return (
+    <p className={cn("leading-7 not-first:mt-6", className)}>{children}</p>
+  );
 }

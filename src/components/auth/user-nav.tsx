@@ -38,10 +38,13 @@ export function UserNav({ user }: { user: UserResource }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Link href="#">Profile</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>Drafts</DropdownMenuItem>
+          <Link href="/account?tab=profile">
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+          </Link>
+
+          <Link href="/account?tab=drafts">
+            <DropdownMenuItem>Drafts</DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
