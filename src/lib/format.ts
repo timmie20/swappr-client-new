@@ -36,13 +36,14 @@ export function formatNaira(amount: number | string | undefined): string {
   }).format(numericAmount);
 }
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string | Date) => {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("en-NG", {
     month: "short",
     day: "numeric",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Africa/Lagos",
   }).format(date);
 };

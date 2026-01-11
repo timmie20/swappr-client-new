@@ -3,6 +3,7 @@ import type {
   ApiResponse,
   ValuationResponse,
   SubmitAnswersDto,
+  Valuation,
 } from "@/types/api";
 
 export const valuationEndpoints = {
@@ -16,6 +17,10 @@ export const valuationEndpoints = {
       "/valuations/calculate",
       payload,
     );
+    return data;
+  },
+  async getAll(): Promise<ApiResponse<Valuation[]>> {
+    const { data } = await api.get<ApiResponse<Valuation[]>>("/valuations");
     return data;
   },
 };

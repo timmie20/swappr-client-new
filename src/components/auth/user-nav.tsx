@@ -38,6 +38,9 @@ export function UserNav({ user }: { user: UserResource }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <Link href="/check-worth">
+            <DropdownMenuItem>Check Phone Worth</DropdownMenuItem>
+          </Link>
           <Link href="/account?tab=profile">
             <DropdownMenuItem>Profile</DropdownMenuItem>
           </Link>

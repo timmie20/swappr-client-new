@@ -236,3 +236,15 @@ export interface ValuationResponse {
     total_additions: number;
   };
 }
+
+export interface Valuation {
+  id: string;
+  device: {
+    brand: string;
+    model: string;
+    storage: number;
+  };
+  final_value: number;
+  status?: "completed" | "pending" | "draft";
+  created_at: Date;
+}

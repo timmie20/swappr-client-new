@@ -1,36 +1,23 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatNaira } from "@/lib/format";
+import { Valuation } from "@/types/api";
 import { IconEye, IconTrash, IconDeviceMobile } from "@tabler/icons-react";
 
-interface ValuationItemProps {
-  valuation: {
-    id: string;
-    device: {
-      brand: string;
-      model: string;
-      storage: number;
-    };
-    final_value: number;
-    created_at: string;
-    status: string;
-  };
-}
+// const getStatusColor = (status: string) => {
+//   switch (status) {
+//     case "completed":
+//       return "bg-chart-2/10 text-chart-2 border-chart-2/20";
+//     case "pending":
+//       return "bg-yellow-light/10 text-yellow-dark border-yellow-light/20";
+//     case "expired":
+//       return "bg-destructive/10 text-destructive border-destructive/20";
+//     default:
+//       return "bg-muted text-muted-foreground";
+//   }
+// };
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "completed":
-      return "bg-chart-2/10 text-chart-2 border-chart-2/20";
-    case "pending":
-      return "bg-yellow-light/10 text-yellow-dark border-yellow-light/20";
-    case "expired":
-      return "bg-destructive/10 text-destructive border-destructive/20";
-    default:
-      return "bg-muted text-muted-foreground";
-  }
-};
-
-export function ValuationItem({ valuation }: ValuationItemProps) {
+export function ValuationItem({ valuation }: { valuation: Valuation }) {
   return (
     <div className="border-border border-b py-2 last:border-b-0">
       <div className="flex items-start justify-between gap-4">
@@ -49,12 +36,12 @@ export function ValuationItem({ valuation }: ValuationItemProps) {
                 <Badge variant="outline" className="text-xs">
                   {valuation.device.storage}GB
                 </Badge>
-                <Badge
+                {/* <Badge
                   variant="outline"
                   className={`text-xs ${getStatusColor(valuation.status)}`}
                 >
                   {valuation.status}
-                </Badge>
+                </Badge> */}
               </div>
             </div>
 

@@ -21,9 +21,9 @@ import {
 import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
 import { clearQuestionnaireContext } from "@/lib/cookies";
-import { useSubmitAnswers } from "@/hooks/use-questions";
 import { useResultStore } from "@/store/result-store";
 import PageLoader from "@/components/page-loader";
+import { useCalculateValuation } from "@/hooks/use-valuation";
 
 /**
  * Extract error message from unknown error type
@@ -41,7 +41,8 @@ function getErrorMessage(error: unknown, defaultMessage: string): string {
 export default function Questions({ questions }: QuestionsProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { mutate: submitAnswers, isPending: isSubmitting } = useSubmitAnswers();
+  const { mutate: submitAnswers, isPending: isSubmitting } =
+    useCalculateValuation();
   const setResult = useResultStore((s) => s.setResult);
 
   // Extract model slug from pathname: /check-worth/[slug]/questionnaire
@@ -107,8 +108,8 @@ export default function Questions({ questions }: QuestionsProps) {
       submitAnswers(payload!, {
         onSuccess: (response) => {
           // Store result in result store
-          if (response.data) {
-            setResult(response.data);
+          if (response) {
+            setResult(response);
 
             // Clear answers and context after successful submission
             clearAnswers();
@@ -119,7 +120,7 @@ export default function Questions({ questions }: QuestionsProps) {
             // Use setTimeout to ensure store update completes before navigation
             setTimeout(() => {
               router.push(
-                `/check-worth/${modelSlug}/result/${response.data.valuation_id}`,
+                `/check-worth/${modelSlug}/result/${response.valuation_id}`,
               );
             }, 0);
           } else {

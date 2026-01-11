@@ -90,6 +90,18 @@ export const queryKeys = {
   },
 
   // ============================================
+  // Valuations
+  // ============================================
+  valuations: {
+    all: ["valuations"] as const,
+    lists: () => [...queryKeys.valuations.all, "list"] as const,
+    list: (params?: PaginationParams) =>
+      [...queryKeys.valuations.lists(), params] as const,
+    details: () => [...queryKeys.valuations.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.valuations.details(), id] as const,
+  },
+
+  // ============================================
   // User-specific queries (if needed)
   // ============================================
   user: {
