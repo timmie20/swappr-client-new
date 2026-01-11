@@ -1,6 +1,6 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
-export default function GhostLoading() {
+export default function GhostLoading({ desc }: { desc?: string }) {
   return (
     <div className="my-10 flex flex-col items-center text-center text-gray-500">
       <DotLottieReact
@@ -9,7 +9,7 @@ export default function GhostLoading() {
         autoplay
         className="h-48"
       />
-      <p className="text-sm">No models available for this brand</p>
+      {desc && <p className="text-sm">No models available for this brand</p>}
     </div>
   );
 }

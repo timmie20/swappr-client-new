@@ -2,7 +2,7 @@
 
 import { useModelsSuspense } from "@/hooks";
 import ModelsList from "./models-list";
-import GhostLoading from "@/components/ghost-loading";
+import { EmptyState } from "@/components/empty-state";
 
 type ModelsSectionProps = {
   brandId: string;
@@ -14,7 +14,12 @@ export default function ModelsSection({ brandId }: ModelsSectionProps) {
   });
 
   if (modelsData.models.length === 0) {
-    return <GhostLoading />;
+    return (
+      <EmptyState
+        title="No models yet"
+        description="This brand has no registered models"
+      />
+    );
   }
 
   return <ModelsList models={modelsData} />;

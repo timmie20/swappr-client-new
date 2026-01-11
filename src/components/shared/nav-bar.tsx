@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { UserNav } from "../auth/user-nav";
 import { useUser } from "@clerk/nextjs";
 export default function Navbar() {
@@ -9,11 +10,19 @@ export default function Navbar() {
     <nav className="fixed top-0 right-0 left-0 z-40 bg-white">
       <div className="mx-auto w-full max-w-212.5 px-4 sm:px-4 lg:px-0">
         <div className="flex h-16 items-center justify-between">
-          <div className="shrink-0">
-            <h1 className="text-large font-bold tracking-tight text-gray-900">
+          <Link href="/" className="flex shrink-0 items-center gap-2">
+            <Image
+              src="/assets/images/swappr-logo-filled.png"
+              alt="Swappr"
+              width={120}
+              height={40}
+              priority
+              className="h-8 w-auto"
+            />
+            <h1 className="text-large font-switzer font-semibold tracking-tight text-[#08161F]">
               swappr
             </h1>
-          </div>
+          </Link>
 
           {user ? <UserNav user={user} /> : <AuthActions />}
         </div>

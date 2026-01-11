@@ -3,9 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-// import Navbar from "@/components/shared/Navbar";
 import { ClerkProvider, QueryProvider } from "@/providers";
-import Navbar from "@/components/shared/nav-bar";
 import { Toaster } from "sonner";
 
 const inter = Inter({
@@ -44,6 +42,7 @@ export const metadata: Metadata = {
     "sell phone Lagos",
     "buy used phones",
     "phone valuation",
+    "iphone worth",
     "device trade-in",
     "phone exchange Nigeria",
     "smartphone marketplace",
