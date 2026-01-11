@@ -106,6 +106,7 @@ export interface CreateVariationDto {
   name: string;
   slug: string;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attributes?: Record<string, any>;
   basePrice?: number;
   isActive?: boolean;

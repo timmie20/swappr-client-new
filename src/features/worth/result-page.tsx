@@ -7,14 +7,14 @@ import DetailsDrawer from "./component/details-drawer";
 import { formatNaira } from "@/lib/format";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useResultStore } from "@/store/result-store";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ComingSoonDialog } from "@/components/coming-soon-dialog";
 
 export default function ResultPage() {
   const result = useResultStore((s) => s.result);
-  const router = useRouter();
+  // const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
 

@@ -23,6 +23,7 @@ export function useCreateAccount() {
       });
       queryClient.invalidateQueries({ queryKey: userKeys.all });
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       const message =
         error?.response?.data?.message || "Failed to create account";

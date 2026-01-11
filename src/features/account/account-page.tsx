@@ -4,12 +4,10 @@ import GoRack from "@/components/route-back-btn";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Profile from "./profile";
 import Drafts from "./draft";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function AccountPage() {
-  const searchParams = useSearchParams();
+export default function AccountPage({ activeTab }: { activeTab: string }) {
   const router = useRouter();
-  const activeTab = searchParams.get("tab") || "profile";
 
   const handleTabChange = (value: string) => {
     router.push(`/account?tab=${value}`);

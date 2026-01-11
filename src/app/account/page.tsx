@@ -1,10 +1,24 @@
-import PageContainer from "@/components/layout/page-container";
-import AccountPage from "@/features/account/account-page";
+"use client";
 
-export default function page() {
+import PageContainer from "@/components/layout/page-container";
+import PageLoader from "@/components/page-loader";
+import AccountPage from "@/features/account/account-page";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
+function AccountPageWrapper() {
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get("tab") || "profile";
+
+  return <AccountPage activeTab={activeTab} />;
+}
+
+export default function Page() {
   return (
     <PageContainer>
-      <AccountPage />
+      <Suspense fallback={<PageLoader isLoading text="loading" />}>
+        <AccountPageWrapper />
+      </Suspense>
     </PageContainer>
   );
 }

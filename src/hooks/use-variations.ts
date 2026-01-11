@@ -14,7 +14,6 @@ import { variationEndpoints } from "@/endpoints";
 import { queryKeys } from "@/lib/api/query-keys";
 import type {
   Variation,
-  CreateVariationDto,
   UpdateVariationDto,
   PaginationParams,
   PaginatedResponse,
