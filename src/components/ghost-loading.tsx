@@ -9,7 +9,7 @@ export default function GhostLoading({ desc }: { desc?: string }) {
         autoplay
         className="h-48"
       />
-      {desc && <p className="text-sm">No models available for this brand</p>}
+      {desc && <p className="text-sm">{desc}</p>}
     </div>
   );
 }
