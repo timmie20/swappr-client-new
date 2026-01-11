@@ -12,15 +12,16 @@ import type {
   PaginatedResponse,
   PaginationParams,
   ApiResponse,
+  ApiResponser,
 } from "@/types/api";
 
 export const modelEndpoints = {
   /**
-   * Get all models (paginated)
+   * Get all models (paginated, optionally filtered by brandId)
    */
   async getAll(params?: PaginationParams): Promise<PaginatedResponse<Model>> {
     const { data } = await api.get<PaginatedResponse<Model>>("/models", {
-      params,
+      params: params,
     });
     return data;
   },
@@ -30,11 +31,11 @@ export const modelEndpoints = {
    */
   async getByBrand(
     brandId: string,
-    params?: PaginationParams
+    params?: PaginationParams,
   ): Promise<PaginatedResponse<Model, "models">> {
     const { data } = await api.get<PaginatedResponse<Model, "models">>(
-      `/models/by-brand?brand_id=${brandId}`,
-      { params }
+      `/models/brand/${brandId}`,
+      { params },
     );
     return data;
   },
@@ -51,8 +52,10 @@ export const modelEndpoints = {
    * Get a single model by slug
    */
   async getBySlug(slug: string): Promise<Model> {
-    const { data } = await api.get<ApiResponse<Model>>(`/models/slug/${slug}`);
-    return data.data;
+    const { data } = await api.get<ApiResponser<{ model: Model }>>(
+      `/models/slug/${slug}`,
+    );
+    return data.model;
   },
 
   /**

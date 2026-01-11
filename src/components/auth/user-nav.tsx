@@ -1,0 +1,59 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SignOutButton } from "@clerk/nextjs";
+import { UserAvatarProfile } from "../user-avatar-profile";
+import type { UserResource } from "@clerk/types";
+import Link from "next/link";
+
+export function UserNav({ user }: { user: UserResource }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <UserAvatarProfile user={user} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="w-58"
+        align="end"
+        sideOffset={10}
+        forceMount
+      >
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm leading-none font-medium">{user.fullName}</p>
+            <p className="text-muted-foreground text-xs leading-none">
+              {user.emailAddresses[0].emailAddress}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <Link href="/check-worth">
+            <DropdownMenuItem>Check Phone Worth</DropdownMenuItem>
+          </Link>
+          <Link href="/account?tab=profile">
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+          </Link>
+
+          <Link href="/account?tab=drafts">
+            <DropdownMenuItem>Drafts</DropdownMenuItem>
+          </Link>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <SignOutButton redirectUrl="/auth/sign-in" />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

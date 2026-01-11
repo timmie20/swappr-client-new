@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-// import Navbar from "@/components/shared/Navbar";
 import { ClerkProvider, QueryProvider } from "@/providers";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,12 +15,12 @@ const switzer = localFont({
   src: [
     {
       path: "../../public/fonts/Switzer-Variable.ttf",
-      weight: "500",
+      weight: "100 900",
       style: "normal",
     },
     {
       path: "../../public/fonts/Switzer-VariableItalic.ttf",
-      weight: "400",
+      weight: "100 900",
       style: "italic",
     },
   ],
@@ -29,7 +29,7 @@ const switzer = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://swappr.com"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://swappr.com",
   ),
   title: {
     template: "%s | Swappr",
@@ -42,6 +42,7 @@ export const metadata: Metadata = {
     "sell phone Lagos",
     "buy used phones",
     "phone valuation",
+    "iphone worth",
     "device trade-in",
     "phone exchange Nigeria",
     "smartphone marketplace",
@@ -133,11 +134,15 @@ export default function RootLayout({
         <body
           className={`${switzer.variable} ${inter.variable} font-sans antialiased`}
         >
+          {/* Animated background positioned at top right */}
+          <div className="animated-mesh-gradient-background pointer-events-none fixed top-0 right-0 z-50 size-75 rounded-full opacity-30 blur-3xl md:size-125" />
+
+          {/* Animated background positioned at bottom left */}
+          <div className="animated-mesh-gradient-background-reverse pointer-events-none fixed bottom-0 left-0 z-50 hidden size-125 rounded-full opacity-30 blur-3xl md:block" />
+
           <QueryProvider>
-            {/* <Navbar /> */}
-            <main className="mx-auto h-dvh max-w-212.5 px-4 pb-4 sm:px-0 sm:pb-0">
-              {children}
-            </main>
+            <main className="relative z-10">{children}</main>
+            <Toaster position="top-center" />
           </QueryProvider>
         </body>
       </html>

@@ -7,12 +7,11 @@
 import { api } from "@/lib/api/client";
 import type {
   Question,
-  CreateQuestionDto,
-  UpdateQuestionDto,
   PaginatedResponse,
   PaginationParams,
   ApiResponse,
   SubmitAnswersDto,
+  ApiResponser,
 } from "@/types/api";
 
 export const questionEndpoints = {
@@ -20,7 +19,7 @@ export const questionEndpoints = {
    * Get all questions (paginated)
    */
   async getAll(
-    params?: PaginationParams & { modelId?: string; variationId?: string }
+    params?: PaginationParams & { modelId?: string; variationId?: string },
   ): Promise<PaginatedResponse<Question>> {
     const { data } = await api.get<PaginatedResponse<Question>>("/questions", {
       params,
@@ -29,39 +28,15 @@ export const questionEndpoints = {
   },
 
   /**
-   * Get questions by model ID
+   * This func is supposed to get questions by model ID but it uses brand Id
    */
-  async getByModel(
-    modelId: string,
-    params?: PaginationParams
-  ): Promise<PaginatedResponse<Question>> {
-    const { data } = await api.get<PaginatedResponse<Question>>(
-      `/models/${modelId}/questions`,
-      { params }
+  async getByBrand(
+    brandId: string,
+  ): Promise<ApiResponser<{ questions: Question[] }>> {
+    const { data } = await api.get<ApiResponser<{ questions: Question[] }>>(
+      `/questions/brand/${brandId}/with-general`,
     );
     return data;
-  },
-
-  /**
-   * Get questions by variation ID
-   */
-  async getByVariation(
-    variationId: string,
-    params?: PaginationParams
-  ): Promise<PaginatedResponse<Question>> {
-    const { data } = await api.get<PaginatedResponse<Question>>(
-      `/variations/${variationId}/questions`,
-      { params }
-    );
-    return data;
-  },
-
-  /**
-   * Get a single question by ID
-   */
-  async getById(id: string): Promise<Question> {
-    const { data } = await api.get<ApiResponse<Question>>(`/questions/${id}`);
-    return data.data;
   },
 
   /**
@@ -70,34 +45,8 @@ export const questionEndpoints = {
   async submitAnswers(dto: SubmitAnswersDto): Promise<unknown> {
     const { data } = await api.post<ApiResponse<unknown>>(
       "/questions/submit",
-      dto
+      dto,
     );
     return data.data;
-  },
-
-  /**
-   * Create a new question (admin only)
-   */
-  async create(dto: CreateQuestionDto): Promise<Question> {
-    const { data } = await api.post<ApiResponse<Question>>("/questions", dto);
-    return data.data;
-  },
-
-  /**
-   * Update a question (admin only)
-   */
-  async update(id: string, dto: UpdateQuestionDto): Promise<Question> {
-    const { data } = await api.patch<ApiResponse<Question>>(
-      `/questions/${id}`,
-      dto
-    );
-    return data.data;
-  },
-
-  /**
-   * Delete a question (admin only)
-   */
-  async delete(id: string): Promise<void> {
-    await api.delete(`/questions/${id}`);
   },
 };

@@ -7,13 +7,14 @@
 import { modelEndpoints } from "@/endpoints";
 import {
   useQuery,
+  useSuspenseQuery,
   useMutation,
   useQueryClient,
   type UseQueryOptions,
+  type UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 import type {
   Model,
-  CreateModelDto,
   UpdateModelDto,
   PaginationParams,
   PaginatedResponse,
@@ -25,18 +26,38 @@ import { queryKeys } from "@/lib/api/query-keys";
 // ============================================
 
 /**
- * Fetch all models with pagination
+ * Fetch all models with pagination (with Suspense support)
  */
-export function useModels(
+export function useModelsSuspense<K extends string = "data">(
   params?: PaginationParams,
   options?: Omit<
-    UseQueryOptions<PaginatedResponse<Model>>,
+    UseSuspenseQueryOptions<PaginatedResponse<Model, K>>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) {
-  return useQuery({
+  return useSuspenseQuery<PaginatedResponse<Model, K>>({
     queryKey: queryKeys.models.list(params),
-    queryFn: () => modelEndpoints.getAll(params),
+    queryFn: () =>
+      modelEndpoints.getAll(params) as Promise<PaginatedResponse<Model, K>>,
+    ...options,
+  });
+}
+
+/**
+ * Fetch all models with pagination
+ */
+export function useModels<K extends string = "data">(
+  params?: PaginationParams,
+  options?: Omit<
+    UseQueryOptions<PaginatedResponse<Model, K>>,
+    "queryKey" | "queryFn"
+  > & { initialData?: PaginatedResponse<Model, K> },
+) {
+  return useQuery<PaginatedResponse<Model, K>>({
+    queryKey: queryKeys.models.list(params),
+    queryFn: () =>
+      modelEndpoints.getAll(params) as Promise<PaginatedResponse<Model, K>>,
+    ...(options?.initialData ? { initialData: options.initialData } : {}),
     ...options,
   });
 }
@@ -50,7 +71,7 @@ export function useModelsByBrand(
   options?: Omit<
     UseQueryOptions<PaginatedResponse<Model, "models">>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) {
   return useQuery({
     queryKey: queryKeys.models.byBrand(brandId, params),
@@ -61,11 +82,29 @@ export function useModelsByBrand(
 }
 
 /**
+ * Fetch models by brand ID with Suspense support
+ */
+export function useModelsByBrandSuspense(
+  brandId: string,
+  params?: PaginationParams,
+  options?: Omit<
+    UseSuspenseQueryOptions<PaginatedResponse<Model, "models">>,
+    "queryKey" | "queryFn"
+  >,
+) {
+  return useSuspenseQuery({
+    queryKey: queryKeys.models.byBrand(brandId, params),
+    queryFn: () => modelEndpoints.getByBrand(brandId, params),
+    ...options,
+  });
+}
+
+/**
  * Fetch a single model by ID
  */
 export function useModel(
   id: string,
-  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: queryKeys.models.detail(id),
@@ -80,12 +119,26 @@ export function useModel(
  */
 export function useModelBySlug(
   slug: string,
-  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<Model>, "queryKey" | "queryFn">,
 ) {
   return useQuery({
     queryKey: queryKeys.models.detail(slug),
     queryFn: () => modelEndpoints.getBySlug(slug),
     enabled: !!slug,
+    ...options,
+  });
+}
+
+/**
+ * Fetch a single model by slug with Suspense support
+ */
+export function useModelBySlugSuspense(
+  slug: string,
+  options?: Omit<UseSuspenseQueryOptions<Model>, "queryKey" | "queryFn">,
+) {
+  return useSuspenseQuery({
+    queryKey: queryKeys.models.detail(slug),
+    queryFn: () => modelEndpoints.getBySlug(slug),
     ...options,
   });
 }

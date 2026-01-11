@@ -71,7 +71,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.488 0.243 264.376);
+  --primary: rgba(59, 130, 253, 1);
+  /* --primary: oklch(0.488 0.243 264.376); */
   --primary-foreground: oklch(0.97 0.014 254.604);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
@@ -138,6 +139,64 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-switzer;
+  }
+}
+
+.active-state {
+  @apply data-[state=on]:border-tertiary data-[state=on]:border-2 data-[state=on]:border-l-2;
+}
+
+.animated-mesh-gradient-background {
+  background-color: transparent;
+  background-image:
+    radial-gradient(at 97% 40%, hsla(338, 100%, 68%, 1) 0px, transparent 60%),
+    radial-gradient(at 78% 24%, hsla(213, 100%, 68%, 1) 0px, transparent 60%);
+  animation: animatedgradient 10s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animated-mesh-gradient-background-reverse {
+  background-color: transparent;
+  background-image:
+    radial-gradient(at 97% 40%, hsla(338, 100%, 68%, 1) 0px, transparent 60%),
+    radial-gradient(at 78% 24%, hsla(213, 100%, 68%, 1) 0px, transparent 60%);
+  animation: animatedgradient-reverse 10s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 25%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 50% 75%;
+  }
+  75% {
+    background-position: 25% 25%;
+  }
+  100% {
+    background-position: 0% 25%;
+  }
+}
+
+@keyframes animatedgradient-reverse {
+  0% {
+    background-position: 0% 25%;
+  }
+  25% {
+    background-position: 25% 25%;
+  }
+  50% {
+    background-position: 50% 75%;
+  }
+  75% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 25%;
   }
 }

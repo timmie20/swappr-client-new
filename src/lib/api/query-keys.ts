@@ -64,7 +64,7 @@ export const queryKeys = {
     all: ["options"] as const,
     lists: () => [...queryKeys.options.all, "list"] as const,
     list: (
-      params?: PaginationParams & { modelId?: string; variationId?: string }
+      params?: PaginationParams & { modelId?: string; variationId?: string },
     ) => [...queryKeys.options.lists(), params] as const,
     details: () => [...queryKeys.options.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.options.details(), id] as const,
@@ -81,14 +81,24 @@ export const queryKeys = {
     all: ["questions"] as const,
     lists: () => [...queryKeys.questions.all, "list"] as const,
     list: (
-      params?: PaginationParams & { modelId?: string; variationId?: string }
+      params?: PaginationParams & { modelId?: string; variationId?: string },
     ) => [...queryKeys.questions.lists(), params] as const,
     details: () => [...queryKeys.questions.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.questions.details(), id] as const,
-    byModel: (modelId: string, params?: PaginationParams) =>
-      [...queryKeys.questions.lists(), { modelId, ...params }] as const,
-    byVariation: (variationId: string, params?: PaginationParams) =>
-      [...queryKeys.questions.lists(), { variationId, ...params }] as const,
+    byModel: (modelId: string) =>
+      [...queryKeys.questions.lists(), { modelId }] as const,
+  },
+
+  // ============================================
+  // Valuations
+  // ============================================
+  valuations: {
+    all: ["valuations"] as const,
+    lists: () => [...queryKeys.valuations.all, "list"] as const,
+    list: (params?: PaginationParams) =>
+      [...queryKeys.valuations.lists(), params] as const,
+    details: () => [...queryKeys.valuations.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.valuations.details(), id] as const,
   },
 
   // ============================================

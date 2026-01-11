@@ -106,6 +106,7 @@ export interface CreateVariationDto {
   name: string;
   slug: string;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attributes?: Record<string, any>;
   basePrice?: number;
   isActive?: boolean;
@@ -156,27 +157,28 @@ export type UpdateOptionDto = Partial<CreateOptionDto>;
 // Question Types
 // ============================================
 
+export interface QuestionOption {
+  id: string;
+  text: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
 export interface Question {
   id: string;
-  modelId?: string;
-  variationId?: string;
-  model?: Model;
-  variation?: Variation;
   text: string;
   slug: string;
   type: "text" | "radio" | "checkbox" | "select" | "range" | "damages";
-  description?: string;
-  choices?: string[]; // For radio/checkbox/select types
-  validation?: Record<string, unknown>; // e.g., { min: 0, max: 100 }
-  dependsOn?: {
-    questionId: string;
-    expectedValue: unknown;
-  };
-  isRequired: boolean;
-  isRestricted: boolean; // Only visible to authenticated members
-  order: number;
-  createdAt: string;
-  updatedAt: string;
+  note?: string;
+  options?: QuestionOption[];
+  brand?: {
+    id: string;
+    brand_name: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
 }
 
 export interface CreateQuestionDto {

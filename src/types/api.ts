@@ -10,6 +10,7 @@
 // ============================================
 
 export interface PaginationParams {
+  brand_id?: string;
   page?: number;
   limit?: number;
   search?: string;
@@ -30,6 +31,11 @@ export interface ApiResponse<T> {
   data: T;
   message?: string;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-object-type
+export type ApiResponser<TData extends Record<string, any> = {}> = {
+  message: string;
+} & TData;
 
 // ============================================
 // Brand Types
@@ -61,7 +67,9 @@ export type UpdateBrandDto = Partial<CreateBrandDto>;
 export interface Model {
   id: string;
   model_name: string;
+  slug?: string;
   desc: string;
+  image_url?: string;
   variations?: Variation[];
   brand?: {
     id: string;
@@ -89,16 +97,8 @@ export type UpdateModelDto = Partial<CreateModelDto>;
 
 export interface Variation {
   id: string;
-  modelId: string;
-  model?: Model;
-  name: string;
-  slug: string;
-  description?: string;
-  attributes?: Record<string, unknown>; // e.g., { storage: "128GB", color: "Black" }
-  basePrice?: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  storage_capacity: number;
+  price: number;
 }
 
 export interface CreateVariationDto {
@@ -106,6 +106,7 @@ export interface CreateVariationDto {
   name: string;
   slug: string;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attributes?: Record<string, any>;
   basePrice?: number;
   isActive?: boolean;
@@ -156,27 +157,28 @@ export type UpdateOptionDto = Partial<CreateOptionDto>;
 // Question Types
 // ============================================
 
+export interface QuestionOption {
+  id: string;
+  text: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
 export interface Question {
   id: string;
-  modelId?: string;
-  variationId?: string;
-  model?: Model;
-  variation?: Variation;
   text: string;
   slug: string;
   type: "text" | "radio" | "checkbox" | "select" | "range" | "damages";
-  description?: string;
-  choices?: string[]; // For radio/checkbox/select types
-  validation?: Record<string, unknown>; // e.g., { min: 0, max: 100 }
-  dependsOn?: {
-    questionId: string;
-    expectedValue: unknown;
-  };
-  isRequired: boolean;
-  isRestricted: boolean; // Only visible to authenticated members
-  order: number;
-  createdAt: string;
-  updatedAt: string;
+  note?: string;
+  options?: QuestionOption[];
+  brand?: {
+    id: string;
+    brand_name: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
 }
 
 export interface CreateQuestionDto {
@@ -204,12 +206,45 @@ export type UpdateQuestionDto = Partial<CreateQuestionDto>;
 // ============================================
 
 export interface UserAnswer {
-  questionId: string;
-  value: unknown;
+  question_id: string;
+  option_id: unknown;
 }
 
 export interface SubmitAnswersDto {
-  modelId?: string;
-  variationId?: string;
+  model_id?: string;
+  variation_id?: string;
   answers: UserAnswer[];
+}
+
+export interface ValuationResponse {
+  valuation_id: string;
+  device: {
+    brand: string;
+    model: string;
+    storage: number;
+  };
+  base_price: number;
+  adjustments: Array<{
+    question: string;
+    answer: string;
+    impact: number;
+    type: "add" | "deduct";
+  }>;
+  final_value: number;
+  summary: {
+    total_deductions: number;
+    total_additions: number;
+  };
+}
+
+export interface Valuation {
+  id: string;
+  device: {
+    brand: string;
+    model: string;
+    storage: number;
+  };
+  final_value: number;
+  status?: "completed" | "pending" | "draft";
+  created_at: Date;
 }

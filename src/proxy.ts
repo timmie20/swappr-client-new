@@ -10,12 +10,7 @@ import { NextRequest } from "next/server";
  */
 
 // Define public routes that don't require authentication
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/public(.*)",
-]);
+const isPublicRoute = createRouteMatcher(["/", "/auth(.*)", "/api/public(.*)"]);
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   if (!isPublicRoute(req)) await auth.protect();
