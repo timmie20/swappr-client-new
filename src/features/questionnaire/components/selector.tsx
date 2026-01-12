@@ -1,27 +1,18 @@
-import React, { type Dispatch, type SetStateAction } from "react";
+import React from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { IconCheck } from "@tabler/icons-react";
-
-export type DamagesType = Record<string, boolean>;
+import { Button } from "@/components/ui/button";
 
 export default function Selector({
   component,
-  setValues,
   isSelected,
-  filter,
+  onToggle,
 }: {
   component: string;
-  setValues: Dispatch<SetStateAction<DamagesType>>;
   isSelected: boolean;
-  filter: boolean;
+  onToggle: () => void;
 }) {
-  const onClickHandler = () => {
-    if (!filter) {
-      setValues((prev) => ({ ...prev, [component]: !isSelected }));
-    }
-  };
-
   return (
     <motion.li
       layout="position"
@@ -29,7 +20,7 @@ export default function Selector({
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0, transition: { duration: 0.1 } }}
     >
-      <motion.button
+      <motion.span
         layout
         className={cn(
           "border-input bg-gray-light text-small flex h-13 cursor-pointer items-center gap-2 border px-4 font-medium text-slate-500 sm:h-13.5 sm:text-lg",
@@ -38,7 +29,7 @@ export default function Selector({
             : "hover:bg-accent hover:text-accent-foreground",
         )}
         style={{ borderRadius: 9999 }}
-        onClick={onClickHandler}
+        onClick={onToggle}
       >
         <motion.span layout className="inline-block">
           {component}
@@ -46,10 +37,12 @@ export default function Selector({
 
         {isSelected && (
           <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}>
-            <IconCheck />
+            <Button size="icon-sm" variant="destructive">
+              <IconCheck />
+            </Button>
           </motion.span>
         )}
-      </motion.button>
+      </motion.span>
     </motion.li>
   );
 }

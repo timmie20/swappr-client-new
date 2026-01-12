@@ -221,6 +221,7 @@ export interface ValuationResponse {
   device: {
     brand: string;
     model: string;
+    image_url?: string;
     storage: number;
   };
   base_price: number;

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/h1";
 import { IconShare, IconHome } from "@tabler/icons-react";
@@ -7,14 +6,13 @@ import DetailsDrawer from "./component/details-drawer";
 import { formatNaira } from "@/lib/format";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useResultStore } from "@/store/result-store";
-// import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ComingSoonDialog } from "@/components/coming-soon-dialog";
+import { SafeImage } from "./component/safe-image";
 
 export default function ResultPage() {
   const result = useResultStore((s) => s.result);
-  // const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
 
@@ -24,17 +22,6 @@ export default function ResultPage() {
       audioRef.current.play();
     }
   }, []);
-
-  // // Redirect if no result data
-  // useEffect(() => {
-  //   if (!result) {
-  //     router.push("/check-worth");
-  //   }
-  // }, [result, router]);
-
-  // if (!result) {
-  //   return null;
-  // }  return (
 
   return (
     <>
@@ -72,13 +59,14 @@ export default function ResultPage() {
         </div>
 
         <div className="bg-gray-light flex w-full items-center justify-center rounded-4xl py-10 sm:max-w-125 sm:shrink-0">
-          <Image
-            src="/assets/images/iphone16.png"
-            alt={`${result?.device.brand} ${result?.device.model}`}
+          <SafeImage
+            src={result?.device.image_url ?? ""}
+            alt={`image of ${result?.device.model}`}
             width={230}
             height={281}
-            className="h-auto w-auto"
-          />
+            className="h-auto w-auto max-w-full object-contain"
+            preload
+          />{" "}
         </div>
 
         {result && <DetailsDrawer result={result} />}

@@ -10,7 +10,7 @@ export interface QuestionAnswer {
 interface FormState {
   questions: Question[];
   currentStep: number;
-  answers: Record<string, string>; // { question_id: option_id }
+  answers: QuestionAnswer[]; // Array of { questionId, optionId } pairs
   currentQuestion: Question | null;
   progress: number;
   direction: "forward" | "backward";
@@ -18,8 +18,11 @@ interface FormState {
   // Actions
   initializeQuestions: (questions: Question[]) => void;
   setAnswer: (questionId: string, optionId: string) => void;
+  removeAnswer: (questionId: string, optionId: string) => void;
+  clearAnswersForQuestion: (questionId: string) => void;
   clearAnswers: () => void;
   getAnswers: () => QuestionAnswer[];
+  getAnswersForQuestion: (questionId: string) => string[];
   hasAnswerForQuestion: (questionId: string) => boolean;
   nextStep: () => void;
   prevStep: () => void;
@@ -30,7 +33,7 @@ interface FormState {
 export const useQuestionStore = create<FormState>()((set, get) => ({
   questions: [],
   currentStep: 1,
-  answers: {},
+  answers: [],
   currentQuestion: null,
   progress: 0,
   direction: "forward",
@@ -39,7 +42,7 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
     set({
       questions,
       currentStep: 1,
-      answers: {}, // Clear answers when initializing new questions
+      answers: [], // Clear answers when initializing new questions
       currentQuestion: questions[0] || null,
       progress:
         questions.length > 0 ? Math.round((1 / questions.length) * 100) : 0,
@@ -47,29 +50,52 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
   },
 
   setAnswer: (questionId: string, optionId: string) => {
+    set((state) => {
+      // Check if this exact answer already exists
+      const exists = state.answers.some(
+        (a) => a.questionId === questionId && a.optionId === optionId,
+      );
+
+      if (exists) return state;
+
+      return {
+        answers: [...state.answers, { questionId, optionId }],
+      };
+    });
+  },
+
+  removeAnswer: (questionId: string, optionId: string) => {
     set((state) => ({
-      answers: {
-        ...state.answers,
-        [questionId]: optionId,
-      },
+      answers: state.answers.filter(
+        (a) => !(a.questionId === questionId && a.optionId === optionId),
+      ),
+    }));
+  },
+
+  clearAnswersForQuestion: (questionId: string) => {
+    set((state) => ({
+      answers: state.answers.filter((a) => a.questionId !== questionId),
     }));
   },
 
   clearAnswers: () => {
-    set({ answers: {} });
+    set({ answers: [] });
   },
 
   getAnswers: () => {
+    return get().answers;
+  },
+
+  getAnswersForQuestion: (questionId: string) => {
     const { answers } = get();
-    return Object.entries(answers).map(([questionId, optionId]) => ({
-      questionId,
-      optionId,
-    }));
+    return answers
+      .filter((a) => a.questionId === questionId)
+      .map((a) => a.optionId);
   },
 
   hasAnswerForQuestion: (questionId: string) => {
     const { answers } = get();
-    return !!answers[questionId];
+    return answers.some((a) => a.questionId === questionId);
   },
 
   nextStep: () => {
@@ -106,7 +132,7 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
     const { questions } = get();
     set({
       currentStep: 1,
-      answers: {},
+      answers: [],
       currentQuestion: questions[0] || null,
       progress: 0,
     });

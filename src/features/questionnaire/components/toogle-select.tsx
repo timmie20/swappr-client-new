@@ -14,26 +14,53 @@ export default function ToggleSelect({
   labelLengthThreshold,
   direction,
 }: ToggleSelectProps) {
-  const { currentQuestion, setAnswer, answers } = useQuestionStore();
+  const {
+    currentQuestion,
+    setAnswer,
+    getAnswersForQuestion,
+    clearAnswersForQuestion,
+  } = useQuestionStore();
 
-  // Get currently selected answer for this question
-  const selectedValue = currentQuestion?.id
-    ? answers[currentQuestion.id] || ""
-    : "";
+  // Get currently selected answer(s) for this question
+  const selectedAnswers = currentQuestion?.id
+    ? getAnswersForQuestion(currentQuestion.id)
+    : [];
 
-  const handleValueChange = (value: string) => {
-    if (currentQuestion?.id && value) {
-      setAnswer(currentQuestion.id, value);
+  const selectedValue =
+    type === "single" ? selectedAnswers[0] || "" : selectedAnswers;
+
+  const handleValueChange = (value: string | string[]) => {
+    if (!currentQuestion?.id) return;
+
+    // Clear previous answers for this question first
+    clearAnswersForQuestion(currentQuestion.id);
+
+    // For single selection (string)
+    if (typeof value === "string") {
+      if (value) {
+        setAnswer(currentQuestion.id, value);
+      }
+    }
+    // For multiple selection (array)
+    else if (Array.isArray(value)) {
+      value.forEach((optionId) => {
+        setAnswer(currentQuestion.id, optionId);
+      });
     }
   };
 
   if (type === "single") {
+    const singleValue =
+      typeof selectedValue === "string"
+        ? selectedValue
+        : selectedValue[0] || "";
+
     return (
       <ToggleGroup
         type="single"
         variant="outline"
         size="custom"
-        value={selectedValue}
+        value={singleValue}
         onValueChange={handleValueChange}
         className="grid w-full shrink-0 grid-cols-1 items-center justify-center gap-5 p-2 text-wrap data-[variant=outline]:shadow-none"
       >
@@ -80,12 +107,16 @@ export default function ToggleSelect({
     );
   }
 
-  // Multiple type
+  // Multiple type - use the array directly
+  const multipleValues = Array.isArray(selectedValue) ? selectedValue : [];
+
   return (
     <ToggleGroup
       type="multiple"
       variant="outline"
       size="custom"
+      value={multipleValues}
+      onValueChange={handleValueChange}
       className="grid w-full shrink-0 grid-cols-1 items-center justify-center gap-5 p-2 text-wrap data-[variant=outline]:shadow-none"
     >
       {currentQuestion?.options?.map((option, index) => (
