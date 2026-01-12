@@ -102,6 +102,7 @@ export default function Questions({ questions }: QuestionsProps) {
         onSuccess: (response) => {
           // Store result in result store
           if (response) {
+            console.log(response);
             setResult(response);
 
             // Clear answers and context after successful submission

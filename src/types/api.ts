@@ -216,6 +216,15 @@ export interface SubmitAnswersDto {
   answers: UserAnswer[];
 }
 
+export interface ValuationAdjustment {
+  question: string;
+  answers: Array<{
+    option_text: string;
+    impact: number;
+    type: "add" | "deduct";
+  }>;
+}
+
 export interface ValuationResponse {
   valuation_id: string;
   device: {
@@ -225,12 +234,7 @@ export interface ValuationResponse {
     storage: number;
   };
   base_price: number;
-  adjustments: Array<{
-    question: string;
-    answer: string;
-    impact: number;
-    type: "add" | "deduct";
-  }>;
+  adjustments: ValuationAdjustment[];
   final_value: number;
   summary: {
     total_deductions: number;
