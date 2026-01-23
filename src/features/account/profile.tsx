@@ -8,10 +8,10 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { UserAvatarProfile } from "@/components/user-avatar-profile";
-import { useUser } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { useUserAccount } from "@/hooks";
+import { UserAvatarProfile } from "@/components/user-avatar-profile";
 
 interface ProfileFormData {
   firstname: string;
@@ -20,13 +20,12 @@ interface ProfileFormData {
 }
 
 export default function Profile() {
-  const { user } = useUser();
-
+  const { data: user } = useUserAccount();
   const { register, handleSubmit } = useForm<ProfileFormData>({
     values: {
       firstname: user?.firstName || "",
       lastname: user?.lastName || "",
-      email: user?.primaryEmailAddress?.emailAddress || "",
+      email: user?.email || "",
     },
   });
 
@@ -46,11 +45,7 @@ export default function Profile() {
       <CardContent>
         <div className="flex flex-col items-start gap-10 md:flex-row md:gap-16">
           <div className="flex w-full items-center justify-center md:block md:w-fit">
-            <UserAvatarProfile
-              showInfo={false}
-              user={user}
-              className="size-20 md:size-28"
-            />
+            <UserAvatarProfile user={user} className="size-20 md:size-28" />
           </div>
 
           <form

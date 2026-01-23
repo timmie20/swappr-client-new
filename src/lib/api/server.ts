@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
+import { cookies } from "next/headers";
 
 /**
- * Get authorization headers with Clerk token for server-side API requests
+ * Get authorization headers with custom auth token for server-side API requests
  * Use this in Server Components and Server Actions ONLY
  *
  * @example
@@ -12,19 +12,14 @@ import { auth } from "@clerk/nextjs/server";
  * ```
  */
 export async function getAuthHeaders() {
-  const authObj = await auth();
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("swappr_access_token")?.value;
 
-  // Get JWT template name from environment variable
-  const template = process.env.NEXT_PUBLIC_CLERK_JWT_TEMPLATE;
-
-  // Request token with the specified JWT template
-  const token = await authObj.getToken({ template });
-
-  if (!token) {
+  if (!accessToken) {
     throw new Error("Unauthorized - No auth token available");
   }
 
   return {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${accessToken}`,
   };
 }

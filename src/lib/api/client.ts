@@ -3,12 +3,14 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from "axios";
+import { getValidAccessToken, refreshAccessToken } from "@/lib/token-refresh";
+import { clearAuthTokens } from "@/lib/auth-tokens";
 
 /**
  * API Client Configuration
  *
  * Centralized axios instance with authentication and error handling.
- * Automatically attaches Clerk session tokens to all requests.
+ * Automatically attaches access tokens to all requests and handles token refresh.
  */
 
 export interface ApiErrorResponse {
@@ -19,7 +21,6 @@ export interface ApiErrorResponse {
 
 class ApiClient {
   public instance: AxiosInstance;
-  private getTokenFn: (() => Promise<string | null>) | null = null;
 
   constructor() {
     this.instance = axios.create({
@@ -33,34 +34,67 @@ class ApiClient {
     this.setupInterceptors();
   }
 
-  /**
-   * Set the token getter function (called from Clerk provider)
-   */
-  public setTokenGetter(fn: () => Promise<string | null>) {
-    this.getTokenFn = fn;
-  }
-
   private setupInterceptors() {
-    // Request interceptor - attach auth token
+    // Request interceptor - attach valid auth token
     this.instance.interceptors.request.use(
       async (config: InternalAxiosRequestConfig) => {
-        if (this.getTokenFn) {
-          const token = await this.getTokenFn();
+        // Skip auth for public endpoints
+        const publicEndpoints = [
+          "/auth/google",
+          "/auth/callback",
+          "/auth/refresh",
+        ];
+        const isPublicEndpoint = publicEndpoints.some((endpoint) =>
+          config.url?.includes(endpoint),
+        );
+
+        if (!isPublicEndpoint) {
+          // Get valid token (refreshes if needed)
+          const token = await getValidAccessToken();
           if (token) {
             config.headers.Authorization = `Bearer ${token}`;
           }
         }
+
         return config;
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
 
-    // Response interceptor - handle errors globally
+    // Response interceptor - handle errors and retry on 401
     this.instance.interceptors.response.use(
       (response) => response,
-      (error: AxiosError<ApiErrorResponse>) => {
+      async (error: AxiosError<ApiErrorResponse>) => {
+        const originalRequest = error.config as InternalAxiosRequestConfig & {
+          _retry?: boolean;
+        };
+
+        // If error is 401 and we haven't retried yet
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+
+          try {
+            const newToken = await refreshAccessToken();
+
+            if (newToken) {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              return this.instance(originalRequest);
+            }
+          } catch (refreshError) {
+            // Refresh failed, clear tokens and redirect to sign-in
+            clearAuthTokens();
+            if (typeof window !== "undefined") {
+              const currentPath = window.location.pathname;
+              if (!currentPath.startsWith("/auth/")) {
+                window.location.href = `/auth/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`;
+              }
+            }
+            return Promise.reject(refreshError);
+          }
+        }
+
         if (error.response) {
           // Server responded with error status
           const errorMessage =
@@ -97,7 +131,7 @@ class ApiClient {
             statusCode: 0,
           });
         }
-      }
+      },
     );
   }
 

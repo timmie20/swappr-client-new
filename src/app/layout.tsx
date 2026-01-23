@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { ClerkProvider, QueryProvider } from "@/providers";
+import { QueryProvider } from "@/providers";
 import { Toaster } from "sonner";
+import { TokenRefreshProvider } from "@/components/token-refresh-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -123,29 +124,29 @@ export default function RootLayout({
   };
 
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          />
-        </head>
-        <body
-          className={`${switzer.variable} ${inter.variable} font-sans antialiased`}
-        >
-          {/* Animated background positioned at top right */}
-          <div className="animated-mesh-gradient-background pointer-events-none fixed top-0 right-0 z-50 size-75 rounded-full opacity-30 blur-3xl md:size-125" />
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body
+        className={`${switzer.variable} ${inter.variable} font-sans antialiased`}
+      >
+        {/* Animated background positioned at top right */}
+        <div className="animated-mesh-gradient-background pointer-events-none fixed top-0 right-0 z-50 size-75 rounded-full opacity-30 blur-3xl md:size-125" />
 
-          {/* Animated background positioned at bottom left */}
-          <div className="animated-mesh-gradient-background-reverse pointer-events-none fixed bottom-0 left-0 z-50 hidden size-125 rounded-full opacity-30 blur-3xl md:block" />
+        {/* Animated background positioned at bottom left */}
+        <div className="animated-mesh-gradient-background-reverse pointer-events-none fixed bottom-0 left-0 z-50 hidden size-125 rounded-full opacity-30 blur-3xl md:block" />
 
-          <QueryProvider>
+        <QueryProvider>
+          <TokenRefreshProvider>
             <main className="relative z-10">{children}</main>
             <Toaster position="top-center" />
-          </QueryProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+          </TokenRefreshProvider>
+        </QueryProvider>
+      </body>
+    </html>
   );
 }

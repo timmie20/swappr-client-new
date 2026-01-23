@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCreateAccount } from "@/hooks/use-auth";
 import { CreateAccount } from "@/types";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const signUpSchema = z
   .object({
@@ -54,9 +55,8 @@ export default function SignUpForm() {
     const payload: CreateAccount = {
       first_name: values.firstName,
       last_name: values.lastName,
-      email_address: values.email,
+      email: values.email,
       password: values.password,
-      role: "member",
     };
 
     createAccount.mutate(payload, {
@@ -69,6 +69,17 @@ export default function SignUpForm() {
 
   return (
     <div className="w-full space-y-6">
+      <div className="flex items-center justify-center">
+        <Image
+          src="/assets/images/swappr-logo-filled.png"
+          alt="Swappr"
+          width={120}
+          height={40}
+          priority
+          className="h-10 w-auto"
+        />
+      </div>
+
       <GoogleSignUpButton />
 
       <div className="flex items-center gap-4">

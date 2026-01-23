@@ -5,6 +5,15 @@
  * These should match the NestJS backend DTOs.
  */
 
+export interface User {
+  id: string;
+  email: string;
+  role: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl?: string;
+}
+
 // ============================================
 // Common Types
 // ============================================

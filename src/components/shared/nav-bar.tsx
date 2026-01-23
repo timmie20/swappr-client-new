@@ -3,9 +3,18 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { UserNav } from "../auth/user-nav";
-import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
+import { isAuthenticated } from "@/lib/auth-tokens";
+
 export default function Navbar() {
-  const { user } = useUser();
+  const [isLoggedIn] = useState(() => {
+    // Check auth state on mount (client-side only)
+    if (typeof window !== "undefined") {
+      return isAuthenticated();
+    }
+    return false;
+  });
+
   return (
     <nav className="fixed top-0 right-0 left-0 z-40 bg-white">
       <div className="mx-auto w-full max-w-212.5 px-4 sm:px-4 lg:px-0">
@@ -24,7 +33,7 @@ export default function Navbar() {
             </h1>
           </Link>
 
-          {user ? <UserNav user={user} /> : <AuthActions />}
+          {isLoggedIn ? <UserNav /> : <AuthActions />}
         </div>
       </div>
     </nav>
