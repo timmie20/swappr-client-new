@@ -44,8 +44,7 @@ export function useCreateAccount() {
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
-      const message =
-        error?.response?.data?.message || "Failed to create account";
+      const message = error?.message || "Failed to create account";
       toast.error(message, { id: "create-account" });
     },
   });
@@ -77,8 +76,9 @@ export function useLogin() {
       router.refresh();
     },
     onError: (error: any) => {
-      const message = error?.response?.data?.message || "Failed to sign in";
+      const message = error?.message || "Failed to sign in";
       toast.error(message, { id: "login" });
+      console.log(error);
     },
   });
 }
@@ -109,10 +109,28 @@ export function useLogout() {
       // Clear tokens even if logout request fails
       clearAuthTokens();
       queryClient.clear();
-      const message = error?.response?.data?.message || "Failed to sign out";
+      const message = error?.message || "Failed to sign out";
       toast.error(message, { id: "logout" });
       router.push("/");
       router.refresh();
+    },
+  });
+}
+
+export function useVerifyEmail() {
+  return useMutation({
+    mutationFn: (token: string) => authEndpoints.verifyEmail(token),
+    onMutate: () => {
+      toast.loading("Verifying email...", { id: "verify-email" });
+    },
+    onSuccess: (res: { message: string }) => {
+      toast.success(res.message || "Email verified successfully", {
+        id: "verify-email",
+      });
+    },
+    onError: (error: any) => {
+      const message = error?.message || "Failed to verify email";
+      toast.error(message, { id: "verify-email" });
     },
   });
 }

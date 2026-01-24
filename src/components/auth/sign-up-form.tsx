@@ -11,8 +11,8 @@ import { GoogleSignUpButton } from "./google-oauth";
 import { Separator } from "@/components/ui/separator";
 import { useCreateAccount } from "@/hooks/use-auth";
 import { CreateAccount } from "@/types";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { TypographyH1 } from "../h1";
 
 const signUpSchema = z
   .object({
@@ -36,9 +36,12 @@ const signUpSchema = z
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
-export default function SignUpForm() {
+interface SignUpFormProps {
+  setMailSent: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function SignUpForm({ setMailSent }: SignUpFormProps) {
   const createAccount = useCreateAccount();
-  const router = useRouter();
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -62,13 +65,13 @@ export default function SignUpForm() {
     createAccount.mutate(payload, {
       onSuccess: () => {
         form.reset();
-        router.push("/auth/sign-in");
+        setMailSent(true);
       },
     });
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-6 px-4 md:px-0">
       <div className="flex items-center justify-center">
         <Image
           src="/assets/images/swappr-logo-filled.png"
@@ -79,6 +82,7 @@ export default function SignUpForm() {
           className="h-10 w-auto"
         />
       </div>
+      <TypographyH1>Create a swappr account</TypographyH1>
 
       <GoogleSignUpButton />
 
@@ -90,21 +94,23 @@ export default function SignUpForm() {
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FieldGroup>
-          <FormInput
-            control={form.control}
-            name="firstName"
-            label="First Name"
-            placeholder="John"
-            required
-          />
+          <div className="flex gap-4">
+            <FormInput
+              control={form.control}
+              name="firstName"
+              label="First Name"
+              placeholder="John"
+              required
+            />
 
-          <FormInput
-            control={form.control}
-            name="lastName"
-            label="Last Name"
-            placeholder="Doe"
-            required
-          />
+            <FormInput
+              control={form.control}
+              name="lastName"
+              label="Last Name"
+              placeholder="Doe"
+              required
+            />
+          </div>
 
           <FormInput
             control={form.control}
@@ -139,11 +145,11 @@ export default function SignUpForm() {
         <Field orientation="horizontal">
           <Button
             type="submit"
-            className="w-full"
+            className="h-12 w-full"
             disabled={createAccount.isPending}
             size="lg"
           >
-            {createAccount.isPending ? "Please wait..." : "Create account"}
+            {createAccount.isPending ? "Please wait..." : "Sign Up"}
           </Button>
         </Field>
       </form>

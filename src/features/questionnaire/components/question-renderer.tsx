@@ -48,7 +48,7 @@ export default function QuestionRenderer() {
 
           {currentQuestion.note && (
             <span className="text-center">
-              <TypographyMuted text={currentQuestion.note} />
+              <TypographyMuted>{currentQuestion.note}</TypographyMuted>
             </span>
           )}
 

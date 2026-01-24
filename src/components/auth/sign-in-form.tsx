@@ -11,6 +11,7 @@ import { GoogleSignUpButton } from "./google-oauth";
 import { Separator } from "@/components/ui/separator";
 import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
+import { TypographyH1 } from "../h1";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -42,7 +43,7 @@ export default function SignInForm() {
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-6 px-4 md:px-0">
       <div className="flex items-center justify-center">
         <Image
           src="/assets/images/swappr-logo-filled.png"
@@ -53,6 +54,10 @@ export default function SignInForm() {
           className="h-10 w-auto"
         />
       </div>
+
+      <TypographyH1 className="font-switzer">
+        Let&apos;s get you Signed in
+      </TypographyH1>
 
       <GoogleSignUpButton />
 
@@ -87,7 +92,7 @@ export default function SignInForm() {
         <Field orientation="horizontal">
           <Button
             type="submit"
-            className="w-full"
+            className="h-12 w-full"
             disabled={login.isPending}
             size="lg"
           >

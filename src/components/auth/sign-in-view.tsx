@@ -46,7 +46,7 @@ export default function SignUpViewPage() {
               href="/auth/sign-up"
               className="hover:text-primary font-medium underline underline-offset-4"
             >
-              Create one
+              Sign Up
             </Link>
           </p>
           <p className="text-muted-foreground px-8 text-center text-sm">

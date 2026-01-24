@@ -7,7 +7,7 @@ import { CreateAccount, LoginCredentials } from "@/types";
 
 export const authEndpoints = {
   async createAccount(payload: CreateAccount) {
-    const { data } = await api.post("/members/create", payload);
+    const { data } = await api.post("/auth/signup", payload);
     return data;
   },
   async getProfile() {
@@ -22,6 +22,10 @@ export const authEndpoints = {
   },
   async login(credentials: LoginCredentials) {
     const { data } = await api.post("/auth/login", credentials);
+    return data;
+  },
+  async verifyEmail(token: string) {
+    const { data } = await api.post("/auth/verify-email", { token });
     return data;
   },
 };

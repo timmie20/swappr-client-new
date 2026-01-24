@@ -132,7 +132,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${switzer.variable} ${inter.variable} font-sans antialiased`}
+        className={`${switzer.variable} ${inter.variable} font-switzer antialiased`}
       >
         {/* Animated background positioned at top right */}
         <div className="animated-mesh-gradient-background pointer-events-none fixed top-0 right-0 z-50 size-75 rounded-full opacity-30 blur-3xl md:size-125" />
