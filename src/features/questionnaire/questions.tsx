@@ -66,7 +66,7 @@ export default function Questions({ questions }: QuestionsProps) {
 
   // Check if current question has been answered (reacts to answers changes)
   const isCurrentQuestionAnswered = currentQuestion
-    ? !!answers[currentQuestion.id]
+    ? answers.some((a) => a.questionId === currentQuestion.id)
     : false;
 
   // Check if we're on the last question (currentStep is 1-indexed)
@@ -97,18 +97,12 @@ export default function Questions({ questions }: QuestionsProps) {
       const answers = getAnswers();
       const payload = buildValuationPayload(answers);
 
-      // Validate payload
-      // const validationError = validatePayload(payload);
-      // if (validationError) {
-      //   toast.error(validationError);
-      //   return;
-      // }
-
       // Submit to API using React Query mutation
       submitAnswers(payload!, {
         onSuccess: (response) => {
           // Store result in result store
           if (response) {
+            console.log(response);
             setResult(response);
 
             // Clear answers and context after successful submission

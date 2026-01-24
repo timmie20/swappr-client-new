@@ -5,6 +5,15 @@
  * These should match the NestJS backend DTOs.
  */
 
+export interface User {
+  id: string;
+  email: string;
+  role: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl?: string;
+}
+
 // ============================================
 // Common Types
 // ============================================
@@ -216,20 +225,25 @@ export interface SubmitAnswersDto {
   answers: UserAnswer[];
 }
 
+export interface ValuationAdjustment {
+  question: string;
+  answers: Array<{
+    option_text: string;
+    impact: number;
+    type: "add" | "deduct";
+  }>;
+}
+
 export interface ValuationResponse {
   valuation_id: string;
   device: {
     brand: string;
     model: string;
+    image_url?: string;
     storage: number;
   };
   base_price: number;
-  adjustments: Array<{
-    question: string;
-    answer: string;
-    impact: number;
-    type: "add" | "deduct";
-  }>;
+  adjustments: ValuationAdjustment[];
   final_value: number;
   summary: {
     total_deductions: number;

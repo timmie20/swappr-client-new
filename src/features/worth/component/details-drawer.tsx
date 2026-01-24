@@ -88,44 +88,48 @@ export default function DetailsDrawer({ result }: DetailsDrawerProps) {
                 </p>
                 <div className="space-y-2">
                   {result.adjustments.map((adjustment, index) => (
-                    <Card
-                      key={index}
-                      className="p-3"
-                      style={{
-                        borderLeftColor:
-                          adjustment.type === "add"
-                            ? "hsl(var(--chart-2))"
-                            : "hsl(var(--destructive))",
-                      }}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 space-y-1">
-                          <p className="text-sm font-medium">
-                            {adjustment.question}
-                          </p>
-                          <Badge
-                            variant="outline"
-                            className="text-xs font-normal"
-                          >
-                            {adjustment.answer}
-                          </Badge>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-1">
-                          {adjustment.type === "add" ? (
-                            <IconChevronUp className="text-chart-2 size-4" />
-                          ) : (
-                            <IconChevronDown className="text-destructive size-4" />
-                          )}
-                          <span
-                            className={`text-sm font-bold ${
-                              adjustment.impact >= 0
-                                ? "text-chart-2"
-                                : "text-destructive"
-                            }`}
-                          >
-                            {/* {adjustment.type === "add" ? "+" : "-"} */}
-                            {formatNaira(adjustment.impact)}
-                          </span>
+                    <Card key={index} className="p-3">
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium">
+                          {adjustment.question}
+                        </p>
+                        <div className="space-y-1">
+                          {adjustment.answers?.map((answer, answerIndex) => (
+                            <div
+                              key={answerIndex}
+                              className="bg-muted/80 flex items-start justify-between gap-3 rounded-lg p-2"
+                              style={{
+                                borderLeftColor:
+                                  answer.type === "add"
+                                    ? "hsl(var(--chart-2))"
+                                    : "hsl(var(--destructive))",
+                              }}
+                            >
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal"
+                              >
+                                {answer.option_text}
+                              </Badge>
+                              <div className="flex shrink-0 items-center gap-1">
+                                {answer.type === "add" ? (
+                                  <IconChevronUp className="text-chart-2 size-4" />
+                                ) : (
+                                  <IconChevronDown className="text-destructive size-4" />
+                                )}
+                                <span
+                                  className={`text-sm font-bold ${
+                                    answer.type === "add"
+                                      ? "text-chart-2"
+                                      : "text-destructive"
+                                  }`}
+                                >
+                                  {answer.type === "add" ? "+" : ""}
+                                  {formatNaira(Math.abs(answer.impact))}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </Card>

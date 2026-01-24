@@ -7,25 +7,42 @@ import {
   MotionConfig,
   motion,
 } from "motion/react";
-
 import useMeasure from "react-use-measure";
 import Selector from "./selector";
 import { useQuestionStore } from "@/store/question-store";
 
 export default function DamagesSelector() {
   const currentQuestion = useQuestionStore((s) => s.currentQuestion);
-  const filter = false; // Filter functionality is disabled
+  const setAnswer = useQuestionStore((s) => s.setAnswer);
+  const removeAnswer = useQuestionStore((s) => s.removeAnswer);
+  const getAnswersForQuestion = useQuestionStore(
+    (s) => s.getAnswersForQuestion,
+  );
 
-  const options =
-    currentQuestion?.options?.reduce<Record<string, boolean>>(
-      (acc, option) => ({
-        ...acc,
-        [option.text]: false,
-      }),
-      {},
-    ) || {};
+  // Initialize from saved answers (runs once per question due to key prop)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => {
+    if (!currentQuestion?.id) return new Set<string>();
+    const savedAnswers = getAnswersForQuestion(currentQuestion.id);
+    return new Set(savedAnswers);
+  });
 
-  const [values, setValues] = useState<Record<string, boolean>>(options);
+  const toggleOption = (optionId: string) => {
+    if (!currentQuestion?.id) return;
+
+    if (selectedIds.has(optionId)) {
+      // Remove selection
+      setSelectedIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(optionId);
+        return newSet;
+      });
+      removeAnswer(currentQuestion.id, optionId);
+    } else {
+      // Add selection
+      setSelectedIds((prev) => new Set(prev).add(optionId));
+      setAnswer(currentQuestion.id, optionId);
+    }
+  };
 
   const [ref, { height }] = useMeasure();
 
@@ -35,7 +52,6 @@ export default function DamagesSelector() {
         transition={{
           duration: 0.7,
           type: "spring",
-          bounce: filter ? 0 : undefined,
         }}
       >
         <motion.div
@@ -48,17 +64,14 @@ export default function DamagesSelector() {
           >
             <LayoutGroup>
               <AnimatePresence initial={false} mode="popLayout">
-                {Object.entries(values)
-                  .filter(([, value]) => !filter || value)
-                  .map(([key, value]) => (
-                    <Selector
-                      key={key}
-                      component={key}
-                      isSelected={value}
-                      setValues={setValues}
-                      filter={filter}
-                    />
-                  ))}
+                {currentQuestion?.options?.map((option) => (
+                  <Selector
+                    key={option.id}
+                    component={option.text}
+                    isSelected={selectedIds.has(option.id)}
+                    onToggle={() => toggleOption(option.id)}
+                  />
+                ))}
               </AnimatePresence>
             </LayoutGroup>
           </motion.ul>

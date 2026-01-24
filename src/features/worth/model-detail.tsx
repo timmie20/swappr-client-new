@@ -74,9 +74,6 @@ export function ModelDetail({ slug }: ModelDetailProps) {
     try {
       // Fetch questions for this brand
       const { data: response } = await refetchQuestions();
-
-      console.log(response?.questions);
-
       if (!response?.questions || response.questions.length === 0) {
         toast.error("No questions available for this device");
         return;

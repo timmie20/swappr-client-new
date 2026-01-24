@@ -1,20 +1,34 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth-tokens";
 
-/**
- * Clerk Middleware Configuration
- *
- * Protects routes and ensures authentication.
- * Public routes are accessible without authentication.
- * All other routes require authentication.
- */
+const publicRoutes = [
+  "/",
+  "/auth/sign-in",
+  "/auth/sign-up",
+  "/auth/callback",
+  "/api/public",
+];
 
-// Define public routes that don't require authentication
-const isPublicRoute = createRouteMatcher(["/", "/auth(.*)", "/api/public(.*)"]);
+function isPublicRoute(pathname: string): boolean {
+  return publicRoutes.some((route) => pathname.startsWith(route));
+}
 
-export default clerkMiddleware(async (auth, req: NextRequest) => {
-  if (!isPublicRoute(req)) await auth.protect();
-});
+export default function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Allow public routes
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  if (!isAuthenticated) {
+    const signInUrl = new URL("/auth/sign-in", req.url);
+    signInUrl.searchParams.set("redirect_url", req.url);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

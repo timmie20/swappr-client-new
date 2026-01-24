@@ -1,41 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
-import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { saveAuthTokens } from "@/lib/auth-tokens";
 
 export default function OAuthCallbackPage() {
   const router = useRouter();
-  const { getToken, userId, isLoaded } = useAuth();
+  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoaded) return;
-
-    if (!userId) {
-      throw new Error("Authentication failed");
-    }
-
     const handleCallback = async () => {
       try {
-        // Get fresh token
-        const token = await getToken();
+        // Extract tokens from URL query parameters
+        const accessToken = searchParams.get("access_token");
+        const refreshToken = searchParams.get("refresh_token");
+        const expiresIn = searchParams.get("expires_in");
 
-        // Call your backend
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/oauth-callback`,
-          { clerk_user_id: userId },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            // withCredentials: true,
+        // Validate tokens are present
+        if (!accessToken || !refreshToken) {
+          setError("Authentication failed - missing tokens");
+          return;
+        }
 
-            // Removed withCredentials: true temporarily. However, the proper fix is on the backend - it needs to return
-            // the specific origin (http://localhost:3000) in the Access-Control-Allow-Origin header
-            // instead of * when credentials are needed.
-          },
-        );
+        // Parse expires_in or default to 1 hour (3600 seconds)
+        const expirySeconds = expiresIn ? parseInt(expiresIn, 10) : 3600;
 
+        // Save tokens to cookies and localStorage with expiry
+        saveAuthTokens(accessToken, refreshToken, expirySeconds);
+
+        // Redirect to the app
         router.replace("/check-worth");
       } catch (err) {
         console.error("OAuth callback error:", err);
@@ -44,7 +38,7 @@ export default function OAuthCallbackPage() {
     };
 
     handleCallback();
-  }, [isLoaded, userId, getToken, router]);
+  }, [searchParams, router]);
 
   if (error) {
     return (

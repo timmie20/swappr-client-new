@@ -1,9 +1,11 @@
-import { buttonVariants } from "@/components/ui/button";
+"use client";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import Link from "next/link";
 import SignUpForm from "./sign-up-form";
 import { InteractiveGridPattern } from "../interactive-grid";
+import MailSuccess from "../mail-sent-success.";
+import { useState } from "react";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -11,21 +13,13 @@ export const metadata: Metadata = {
 };
 
 export default function SignUpViewPage() {
+  const [mailSent, setMailSent] = useState(false);
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <Link
-        href="/examples/authentication"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute top-4 right-4 hidden md:top-8 md:right-8",
-        )}
-      >
-        Login
-      </Link>
       <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
-        <div className="relative z-20 flex items-center text-lg font-medium">
-          SWAPPR
+        <div className="text-large relative z-20 flex items-center font-medium">
+          <h1 className="font-switzer tracking-tight">swappr</h1>{" "}
         </div>
         <InteractiveGridPattern
           className={cn(
@@ -49,33 +43,43 @@ export default function SignUpViewPage() {
       </div>
       <div className="flex h-full items-center justify-center p-4 lg:p-8">
         <div className="flex w-full max-w-md flex-col items-center justify-center space-y-6">
-          <SignUpForm />
-          <p className="text-muted-foreground text-center text-sm">
-            Already have an account?{" "}
-            <Link
-              href="/auth/sign-in"
-              className="hover:text-primary font-medium underline underline-offset-4"
-            >
-              Sign in
-            </Link>
-          </p>
-          <p className="text-muted-foreground px-8 text-center text-sm">
-            By clicking continue, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="hover:text-primary underline underline-offset-4"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="hover:text-primary underline underline-offset-4"
-            >
-              Privacy Policy
-            </Link>
-            .
-          </p>
+          {mailSent ? (
+            <MailSuccess
+              title="Check your mail"
+              description="We've sent a verification link to your email address. Please check your inbox and click the link to verify your account and complete your registration."
+              note="Didn't receive the email? Check your spam folder or contact support if you need assistance."
+            />
+          ) : (
+            <>
+              <SignUpForm setMailSent={setMailSent} />
+              <p className="text-muted-foreground text-center text-sm">
+                Already have an account?{" "}
+                <Link
+                  href="/auth/sign-in"
+                  className="hover:text-primary font-medium underline underline-offset-4"
+                >
+                  Sign in
+                </Link>
+              </p>
+              <p className="text-muted-foreground px-8 text-center text-sm">
+                By clicking continue, you agree to our{" "}
+                <Link
+                  href="/terms"
+                  className="hover:text-primary underline underline-offset-4"
+                >
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy"
+                  className="hover:text-primary underline underline-offset-4"
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>

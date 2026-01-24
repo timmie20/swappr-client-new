@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +8,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SignOutButton } from "@clerk/nextjs";
-import { UserAvatarProfile } from "../user-avatar-profile";
-import type { UserResource } from "@clerk/types";
 import Link from "next/link";
+import { UserAvatarProfile } from "../user-avatar-profile";
+import { useUserAccount, useLogout } from "@/hooks";
+import { getFullName } from "@/lib/use-auth-obj";
 
-export function UserNav({ user }: { user: UserResource }) {
+export function UserNav() {
+  const { data: user } = useUserAccount();
+  const { mutate: logout } = useLogout();
+
+  const handleSignOut = () => {
+    logout();
+  };
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <UserAvatarProfile user={user} />
-        </Button>
+      <DropdownMenuTrigger>
+        <UserAvatarProfile user={user} />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-58"
@@ -30,9 +34,11 @@ export function UserNav({ user }: { user: UserResource }) {
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm leading-none font-medium">{user.fullName}</p>
+            <p className="text-sm leading-none font-medium">
+              {getFullName(user)}
+            </p>
             <p className="text-muted-foreground text-xs leading-none">
-              {user.emailAddresses[0].emailAddress}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -41,18 +47,12 @@ export function UserNav({ user }: { user: UserResource }) {
           <Link href="/check-worth">
             <DropdownMenuItem>Check Phone Worth</DropdownMenuItem>
           </Link>
-          <Link href="/account?tab=profile">
+          <Link href="/account">
             <DropdownMenuItem>Profile</DropdownMenuItem>
-          </Link>
-
-          <Link href="/account?tab=drafts">
-            <DropdownMenuItem>Drafts</DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <SignOutButton redirectUrl="/auth/sign-in" />
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
