@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function SignUpViewPage() {
   return (
-    <div className="relative h-screen flex-col items-center justify-center overflow-y-hidden md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="relative min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="text-large relative z-20 flex items-center font-medium">
@@ -37,7 +37,7 @@ export default function SignUpViewPage() {
           </blockquote>
         </div>
       </div>
-      <div className="flex h-full items-center justify-center p-4 lg:p-8">
+      <div className="flex min-h-screen items-center justify-center p-4 py-8 lg:p-8">
         <div className="flex w-full max-w-md flex-col items-center justify-center space-y-6">
           <SignInForm />
           <p className="text-muted-foreground text-center text-sm">

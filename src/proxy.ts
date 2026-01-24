@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAuthenticated } from "@/lib/auth-tokens";
 
 const publicRoutes = [
   "/",
   "/auth/sign-in",
   "/auth/sign-up",
   "/auth/callback",
+  "/auth/reset-password",
+  "/auth/verify-email",
   "/api/public",
 ];
 
@@ -21,9 +22,12 @@ export default function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  if (!isAuthenticated) {
+  // Check if user is authenticated by checking for access token in cookies
+  const accessToken = req.cookies.get("swappr_access_token");
+
+  if (!accessToken) {
     const signInUrl = new URL("/auth/sign-in", req.url);
-    signInUrl.searchParams.set("redirect_url", req.url);
+    signInUrl.searchParams.set("redirect_url", pathname);
     return NextResponse.redirect(signInUrl);
   }
 
