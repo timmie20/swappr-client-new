@@ -75,8 +75,9 @@ export function useLogin() {
       router.push("/check-worth");
       router.refresh();
     },
-    onError: (error: any) => {
-      const message = error?.message || "Failed to sign in";
+    onError: (error: Error) => {
+      const message =
+        (error as Error & { message?: string })?.message || "Failed to sign in";
       toast.error(message, { id: "login" });
       console.log(error);
     },
@@ -105,11 +106,13 @@ export function useLogout() {
       router.push("/");
       router.refresh();
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       // Clear tokens even if logout request fails
       clearAuthTokens();
       queryClient.clear();
-      const message = error?.message || "Failed to sign out";
+      const message =
+        (error as Error & { message?: string })?.message ||
+        "Failed to sign out";
       toast.error(message, { id: "logout" });
       router.push("/");
       router.refresh();
@@ -128,9 +131,57 @@ export function useVerifyEmail() {
         id: "verify-email",
       });
     },
-    onError: (error: any) => {
-      const message = error?.message || "Failed to verify email";
+    onError: (error: Error) => {
+      const message =
+        (error as Error & { message?: string })?.message ||
+        "Failed to verify email";
       toast.error(message, { id: "verify-email" });
+    },
+  });
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (email: string) => authEndpoints.forgotPassword(email),
+    onMutate: () => {
+      toast.loading("Sending reset link...", { id: "forgot-password" });
+    },
+    onSuccess: (res: { message: string }) => {
+      toast.success(res.message || "Password reset link sent to your email", {
+        id: "forgot-password",
+      });
+    },
+    onError: (error: Error) => {
+      const message =
+        (error as Error & { message?: string })?.message ||
+        "Failed to send reset link";
+      toast.error(message, { id: "forgot-password" });
+    },
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: ({
+      token,
+      newPassword,
+    }: {
+      token: string;
+      newPassword: string;
+    }) => authEndpoints.resetPassword(token, newPassword),
+    onMutate: () => {
+      toast.loading("Resetting password...", { id: "reset-password" });
+    },
+    onSuccess: (res: { message: string }) => {
+      toast.success(res.message || "Password reset successfully", {
+        id: "reset-password",
+      });
+    },
+    onError: (error: Error) => {
+      const message =
+        (error as Error & { message?: string })?.message ||
+        "Failed to reset password";
+      toast.error(message, { id: "reset-password" });
     },
   });
 }

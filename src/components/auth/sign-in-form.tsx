@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
 import { TypographyH1 } from "../h1";
+import Link from "next/link";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -87,6 +88,15 @@ export default function SignInForm() {
             showPasswordToggle
             required
           />
+
+          <div className="flex justify-end">
+            <Link
+              href="/auth/reset-password"
+              className="text-primary hover:text-primary/80 text-sm font-medium hover:cursor-pointer"
+            >
+              Forgot password?
+            </Link>
+          </div>
         </FieldGroup>
 
         <Field orientation="horizontal">

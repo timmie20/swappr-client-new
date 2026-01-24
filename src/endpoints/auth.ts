@@ -28,4 +28,15 @@ export const authEndpoints = {
     const { data } = await api.post("/auth/verify-email", { token });
     return data;
   },
+  async forgotPassword(email: string) {
+    const { data } = await api.post("/auth/forgot-password", { email });
+    return data;
+  },
+  async resetPassword(token: string, newPassword: string) {
+    const { data } = await api.post("/auth/reset-password", {
+      token,
+      new_password: newPassword,
+    });
+    return data;
+  },
 };
