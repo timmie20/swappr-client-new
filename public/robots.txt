@@ -7,4 +7,4 @@ Disallow: /api/
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://swappr.com/sitemap.xml
+Sitemap: https://swappr.com.ng/sitemap.xml

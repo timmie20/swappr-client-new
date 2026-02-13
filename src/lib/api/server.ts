@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
  * Get authorization headers with custom auth token for server-side API requests
@@ -16,7 +17,7 @@ export async function getAuthHeaders() {
   const accessToken = cookieStore.get("swappr_access_token")?.value;
 
   if (!accessToken) {
-    throw new Error("Unauthorized - No auth token available");
+    redirect("/auth/sign-in");
   }
 
   return {
