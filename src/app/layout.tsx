@@ -30,7 +30,7 @@ const switzer = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://swappr.com",
+    process.env.NEXT_PUBLIC_SITE_URL || "https://swappr.com.ng",
   ),
   title: {
     template: "%s | Swappr",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     "phone exchange Nigeria",
     "smartphone marketplace",
   ],
-  authors: [{ name: "Swappr Team", url: "https://swappr.com" }],
+  authors: [{ name: "Swappr Team", url: "https://swappr.com.ng" }],
   creator: "Swappr",
   publisher: "Swappr",
   formatDetection: {
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_NG",
-    url: "https://swappr.com",
+    url: "https://swappr.com.ng",
     siteName: "Swappr",
     title: "Swappr | Nigeria's First Phone Valuation System",
     description:
@@ -107,7 +107,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Swappr",
-    url: "https://swappr.com",
+    url: "https://swappr.com.ng",
     logo: "https://swappr.com/logo.png",
     description:
       "Nigeria's first phone valuation system for trading, buying, and selling devices",
