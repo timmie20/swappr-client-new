@@ -13,6 +13,7 @@ import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
 import { TypographyH1 } from "../h1";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -30,6 +31,8 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
   const login = useLogin();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") ?? undefined;
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -60,7 +63,7 @@ export default function SignInForm() {
         Let&apos;s get you Signed in
       </TypographyH1>
 
-      <GoogleSignUpButton />
+      <GoogleSignUpButton redirect={redirect} />
 
       <div className="flex items-center gap-4">
         <Separator className="flex-1" />

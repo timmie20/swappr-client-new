@@ -13,6 +13,7 @@ import { useCreateAccount } from "@/hooks/use-auth";
 import { CreateAccount } from "@/types";
 import Image from "next/image";
 import { TypographyH1 } from "../h1";
+import { useSearchParams } from "next/navigation";
 
 const signUpSchema = z
   .object({
@@ -42,6 +43,8 @@ interface SignUpFormProps {
 
 export default function SignUpForm({ setMailSent }: SignUpFormProps) {
   const createAccount = useCreateAccount();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") ?? undefined;
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -84,7 +87,7 @@ export default function SignUpForm({ setMailSent }: SignUpFormProps) {
       </div>
       <TypographyH1>Create a swappr account</TypographyH1>
 
-      <GoogleSignUpButton />
+      <GoogleSignUpButton redirect={redirect} />
 
       <div className="flex items-center gap-4">
         <Separator className="flex-1" />
