@@ -12,16 +12,27 @@ import Link from "next/link";
 import { UserAvatarProfile } from "../user-avatar-profile";
 import { useUserAccount, useLogout } from "@/hooks";
 import { getFullName } from "@/lib/use-auth-obj";
+import { isAuthenticated } from "@/lib/auth-tokens";
+import { useState } from "react";
+import { Icons } from "../icons";
+import { Button } from "../ui/button";
 
 export function UserNav() {
   const { data: user } = useUserAccount();
   const { mutate: logout } = useLogout();
+  const [isLoggedIn] = useState(() => {
+    // Check auth state on mount (client-side only)
+    if (typeof window !== "undefined") {
+      return isAuthenticated();
+    }
+    return false;
+  });
 
   const handleSignOut = () => {
     logout();
   };
 
-  return (
+  return isLoggedIn ? (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <UserAvatarProfile user={user} />
@@ -55,5 +66,12 @@ export function UserNav() {
         <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  ) : (
+    <Link href="/auth/sign-in" className="ml-1 hidden sm:inline-flex">
+      <Button variant="outline" className="cursor-pointer">
+        <Icons.user size={16} />
+        Sign in
+      </Button>
+    </Link>
   );
 }
