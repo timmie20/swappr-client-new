@@ -33,8 +33,20 @@ import {
   IconBrandGithub,
   IconDeviceMobile,
   IconUserPlus,
+  IconHeart,
+  IconBell,
+  IconSearch,
+  IconMenu2,
   IconHttpQue,
+  IconBookmark,
+  IconFlameFilled,
+  IconShoppingCartCopy,
+  IconExchange,
+  IconShieldCheckFilled,
+  IconHeartFilled,
+  IconBookmarkFilled,
 } from "@tabler/icons-react";
+
 import AppleIcon from "./apple-icon";
 
 export type Icon = React.ComponentType<IconProps>;
@@ -75,4 +87,15 @@ export const Icons = {
   userPlus: IconUserPlus,
   question: IconHttpQue,
   apple: AppleIcon,
+  heart: IconHeart,
+  bell: IconBell,
+  search: IconSearch,
+  menu: IconMenu2,
+  bookmark: IconBookmark,
+  flame: IconFlameFilled,
+  cartCopy: IconShoppingCartCopy,
+  exchange: IconExchange,
+  shieldCheck: IconShieldCheckFilled,
+  heartFilled: IconHeartFilled,
+  bookmarkFilled: IconBookmarkFilled,
 };

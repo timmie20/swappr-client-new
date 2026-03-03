@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCreateAccount } from "@/hooks/use-auth";
 import { CreateAccount } from "@/types";
 import Image from "next/image";
-import { TypographyH1 } from "../h1";
+import { TypographyH1 } from "../typography/h1";
 import { useSearchParams } from "next/navigation";
 
 const signUpSchema = z

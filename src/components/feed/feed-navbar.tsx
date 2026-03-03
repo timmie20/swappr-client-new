@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
-import { User } from "lucide-react";
 import { UserNav } from "../auth/user-nav";
 
 export function FeedNavbar() {

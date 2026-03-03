@@ -62,6 +62,33 @@
   --text-large: 28px;
   --text-xlarge: 36px;
   --text-xxlarge: 48px;
+
+  /* Swappr Brand Tokens */
+  --swappr-teal: #1a6b5a;
+  --swappr-teal-light: #22886f;
+  --swappr-teal-muted: #e8f5f1;
+  --swappr-amber: #f4762a;
+  --swappr-amber-light: #f59e0b;
+  --swappr-amber-muted: #fff7ed;
+  --swappr-bg: #f8f9fa;
+  --swappr-card: #ffffff;
+  --swappr-text: #1a1a1a;
+  --swappr-text-secondary: #6b7280;
+  --swappr-border: #e5e7eb;
+  --swappr-sale: #f59e0b;
+  --swappr-new: #7c3aed;
+  --swappr-sold: #6b7280;
+
+  --color-swappr-teal: var(--swappr-teal);
+  --color-swappr-teal-light: var(--swappr-teal-light);
+  --color-swappr-teal-muted: var(--swappr-teal-muted);
+  --color-swappr-amber: var(--swappr-amber);
+  --color-swappr-amber-light: var(--swappr-amber-light);
+  --color-swappr-amber-muted: var(--swappr-amber-muted);
+  --color-swappr-bg: var(--swappr-bg);
+  --color-swappr-text: var(--swappr-text);
+  --color-swappr-text-secondary: var(--swappr-text-secondary);
+  --color-swappr-border: var(--swappr-border);
 }
 
 :root {
@@ -140,6 +167,16 @@
   }
   body {
     @apply bg-background text-foreground font-switzer;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

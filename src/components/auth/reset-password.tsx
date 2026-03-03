@@ -19,7 +19,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { IconCircleCheck, IconMail } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
-import { TypographyH1 } from "../h1";
+import { TypographyH1 } from "../typography/h1";
 
 // Schema for email submission (forgot password)
 const forgotPasswordSchema = z.object({

@@ -11,7 +11,7 @@ import { GoogleSignUpButton } from "./google-oauth";
 import { Separator } from "@/components/ui/separator";
 import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
-import { TypographyH1 } from "../h1";
+import { TypographyH1 } from "../typography/h1";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
