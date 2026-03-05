@@ -99,8 +99,9 @@ export function FooterSection({ className }: FooterSectionProps) {
 
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-white/35">
-            © {new Date().getFullYear()} Swappr. All rights reserved.
+          <p className="text-xs text-[#6B7280]">
+            © {new Date().getFullYear()} Swappr Technologies Ltd · All rights
+            reserved
           </p>
           <p className="text-xs text-white/35">Vendor Program — Nigeria</p>
         </div>

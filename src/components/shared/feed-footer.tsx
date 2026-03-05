@@ -1,10 +1,6 @@
 import Link from "next/link";
-import {
-  IconBrandInstagram,
-  IconBrandX,
-  IconBrandTiktok,
-  IconBrandWhatsapp,
-} from "@tabler/icons-react";
+import Image from "next/image";
+import { Icons } from "../icons";
 
 const FOOTER_LINKS = {
   Marketplace: [
@@ -44,7 +40,7 @@ export function FeedFooter() {
   return (
     <footer className="border-t border-[#E5E7EB] bg-[#1A1A1A] text-white">
       {/* E-waste banner */}
-      <div className="to-swappr-teal-light bg-linear-to-r from-[#1A6B5A] px-4 py-4">
+      {/* <div className="to-swappr-teal-light bg-linear-to-r from-[#1A6B5A] px-4 py-4">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-1 text-center sm:flex-row sm:justify-between sm:text-left">
           <div>
             <p className="text-sm font-bold text-white">
@@ -62,19 +58,20 @@ export function FeedFooter() {
             Learn More →
           </Link>
         </div>
-      </div>
+      </div> */}
 
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-5">
           {/* Brand col */}
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1A6B5A]">
-                <span className="text-sm font-bold text-white">↔</span>
-              </div>
-              <span className="font-switzer text-xl font-bold text-white">
-                swappr
-              </span>
+              <Image
+                src="/assets/images/logo.png"
+                alt="Swapp-logor"
+                width={120}
+                height={40}
+                priority
+              />
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-[#9CA3AF]">
               Nigeria&apos;s first peer-to-peer device marketplace. Buy, sell,
@@ -82,15 +79,16 @@ export function FeedFooter() {
             </p>
             <div className="mt-4 flex items-center gap-3">
               {[
-                { icon: <IconBrandInstagram size={18} />, href: "#" },
-                { icon: <IconBrandX size={18} />, href: "#" },
-                { icon: <IconBrandTiktok size={18} />, href: "#" },
-                { icon: <IconBrandWhatsapp size={18} />, href: "#" },
+                { icon: <Icons.instagram size={18} />, href: "#" },
+                { icon: <Icons.x size={18} />, href: "#" },
+                { icon: <Icons.tiktok size={18} />, href: "#" },
+                { icon: <Icons.whatsapp size={18} />, href: "#" },
+                { icon: <Icons.linkedin size={18} />, href: "#" },
               ].map((social, i) => (
                 <Link
                   key={i}
                   href={social.href}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3A3A3A] text-[#9CA3AF] transition-colors hover:border-[#1A6B5A] hover:text-[#1A6B5A]"
+                  className="hover:border-primary hover:text-primary flex h-8 w-8 items-center justify-center rounded-full border border-[#3A3A3A] text-[#9CA3AF] transition-colors"
                 >
                   {social.icon}
                 </Link>

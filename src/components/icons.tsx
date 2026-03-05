@@ -49,6 +49,11 @@ import {
   IconPackage,
   IconMail,
   IconMapPin,
+  IconBrandInstagram,
+  IconBrandX,
+  IconBrandTiktok,
+  IconBrandWhatsapp,
+  IconBrandLinkedin,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -106,4 +111,9 @@ export const Icons = {
   package: IconPackage,
   mail: IconMail,
   mapPin: IconMapPin,
+  instagram: IconBrandInstagram,
+  x: IconBrandX,
+  tiktok: IconBrandTiktok,
+  whatsapp: IconBrandWhatsapp,
+  linkedin: IconBrandLinkedin,
 };
