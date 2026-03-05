@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { VendorDialog } from "./vendor-dialog";
 
 interface ProductCardProps {
   product: Product;
@@ -158,15 +159,7 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
 
         {/* Seller info */}
         <div className="flex items-center gap-1.5 pt-0.5">
-          <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#1A6B5A]/10 text-[9px] font-bold text-[#1A6B5A]">
-            {product.seller.username[0].toUpperCase()}
-          </div>
-          <span className="cursor-pointer truncate text-xs hover:underline">
-            @{product.seller.username}
-          </span>
-          {product.seller.verified && (
-            <Icons.shieldCheck size={12} className="shrink-0 text-[#1A6B5A]" />
-          )}
+          <VendorDialog product={product} />
           <span className="text-muted-foreground ml-auto shrink-0 text-[11px]">
             {product.listedAgo}
           </span>

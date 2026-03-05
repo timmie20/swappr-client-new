@@ -22,3 +22,17 @@ export type LoginResponse = {
     role: string;
   };
 };
+
+export interface Vendor {
+  id: string;
+  business_name: string;
+  city: string;
+  state: string;
+  contact_number: string;
+  contact_email: string;
+  logo_url: string | null;
+  description: string | null;
+  is_verified: boolean;
+  rating: string;
+  total_trades_completed: number;
+}

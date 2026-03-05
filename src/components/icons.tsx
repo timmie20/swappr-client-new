@@ -45,6 +45,10 @@ import {
   IconShieldCheckFilled,
   IconHeartFilled,
   IconBookmarkFilled,
+  IconStar,
+  IconPackage,
+  IconMail,
+  IconMapPin,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -98,4 +102,8 @@ export const Icons = {
   shieldCheck: IconShieldCheckFilled,
   heartFilled: IconHeartFilled,
   bookmarkFilled: IconBookmarkFilled,
+  star: IconStar,
+  package: IconPackage,
+  mail: IconMail,
+  mapPin: IconMapPin,
 };
