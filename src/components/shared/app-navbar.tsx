@@ -16,7 +16,7 @@ export function AppNavbar() {
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cartCount = useFeedStore((s) => s.cartCount)();
-  const wishlistIds = useFeedStore((s) => s.wishlistIds);
+  const bookMarkIds = useFeedStore((s) => s.bookMarkIds);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -73,9 +73,9 @@ export function AppNavbar() {
                 variant="ghost"
               >
                 <Icons.bookmark size={36} />
-                {wishlistIds.size > 0 && (
+                {bookMarkIds.size > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#F4762A] text-[10px] font-bold text-white">
-                    {wishlistIds.size}
+                    {bookMarkIds.size}
                   </span>
                 )}
               </Button>

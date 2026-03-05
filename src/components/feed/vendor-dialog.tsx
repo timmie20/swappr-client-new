@@ -42,7 +42,7 @@ export function VendorDialog({ product }: { product: Product }) {
             @{seller.username}
           </span>
           {seller.verified && (
-            <Icons.shieldCheck size={12} className="shrink-0 text-[#1A6B5A]" />
+            <Icons.shieldCheck size={12} className="text-primary shrink-0" />
           )}
         </button>
       </DialogTrigger>
@@ -74,10 +74,7 @@ export function VendorDialog({ product }: { product: Product }) {
               @{seller.username}
             </span>
             {seller.verified ? (
-              <Icons.shieldCheck
-                size={16}
-                className="shrink-0 text-[#1A6B5A]"
-              />
+              <Icons.shieldCheck size={16} className="text-primary shrink-0" />
             ) : (
               <Badge
                 variant="outline"

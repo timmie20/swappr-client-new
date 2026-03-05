@@ -425,6 +425,36 @@ export const MOCK_PRODUCTS: Product[] = [
     },
     listedAgo: "5 days ago",
   },
+  {
+    id: "p13",
+    brand: "Samsung",
+    model: "Galaxy Z Fold 5",
+    title: "Samsung Galaxy Z Fold 5 256GB Cream",
+    imageUrl: `${PLACEHOLDER}1601784551446-19ebb37b69b1?w=400&h=400&fit=crop&q=80`,
+    price: 820000,
+    isSoldOut: true,
+    badge: "sold-out",
+    rating: 4.82,
+    reviewCount: 156,
+    colors: [
+      { name: "Cream", hex: "#F5F0E0" },
+      { name: "Phantom Black", hex: "#1C1C1C" },
+      { name: "Icy Blue", hex: "#B8D8E8" },
+    ],
+    storage: ["256GB", "512GB"],
+    condition: "UK Used",
+    mode: "buy",
+    swapStatus: "none",
+    category: "Android",
+    seller: {
+      id: "s12",
+      username: "fold_nation",
+      rating: 4.7,
+      verified: true,
+      totalSales: 38,
+    },
+    listedAgo: "5 days ago",
+  },
 ];
 
 export const DEAL_OF_WEEK_PRODUCTS: Product[] = [

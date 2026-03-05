@@ -8,10 +8,10 @@ interface FeedStore {
   removeFromCart: (productId: string) => void;
   cartCount: () => number;
 
-  // Wishlist
-  wishlistIds: Set<string>;
-  toggleWishlist: (productId: string) => void;
-  isWishlisted: (productId: string) => boolean;
+  // bookmarks
+  bookMarkIds: Set<string>;
+  toggleBookmarks: (productId: string) => void;
+  isBookMarked: (productId: string) => boolean;
 
   // Feed filter
   feedMode: "all" | "buy" | "swap";
@@ -63,19 +63,19 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
     })),
   cartCount: () => get().cartItems.reduce((sum, i) => sum + i.quantity, 0),
 
-  // Wishlist
-  wishlistIds: new Set(),
-  toggleWishlist: (productId) =>
+  // bookmarks
+  bookMarkIds: new Set(),
+  toggleBookmarks: (productId) =>
     set((state) => {
-      const next = new Set(state.wishlistIds);
+      const next = new Set(state.bookMarkIds);
       if (next.has(productId)) {
         next.delete(productId);
       } else {
         next.add(productId);
       }
-      return { wishlistIds: next };
+      return { bookMarkIds: next };
     }),
-  isWishlisted: (productId) => get().wishlistIds.has(productId),
+  isBookMarked: (productId) => get().bookMarkIds.has(productId),
 
   // Feed filter
   feedMode: "all",

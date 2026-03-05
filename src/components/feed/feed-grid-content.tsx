@@ -6,6 +6,7 @@ import { ProductCard } from "./product-card";
 import { SkeletonGrid } from "./skeleton-card";
 import { EmptyState } from "@/components/empty-state";
 import type { Product } from "@/features/feed/types";
+import { Button } from "../ui/button";
 
 type Cols = 2 | 3 | 4;
 
@@ -29,7 +30,6 @@ export function FeedGridContent({
   visibleCount,
   loading,
   onLoadMore,
-  onProductClick,
   cols = 4,
 }: FeedGridContentProps) {
   const visibleProducts = products.slice(0, visibleCount);
@@ -62,23 +62,16 @@ export function FeedGridContent({
     <>
       <div className={`grid gap-3 ${gridClass}`}>
         {visibleProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onProductClick={onProductClick}
-          />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
       {visibleCount < products.length && (
-        <div className="mt-10 flex justify-center">
-          <button
-            onClick={onLoadMore}
-            className="flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-8 py-3 text-sm font-semibold text-[#1A1A1A] shadow-sm transition-all hover:border-[#1A6B5A] hover:text-[#1A6B5A] hover:shadow"
-          >
+        <div className="mt-10 flex cursor-pointer justify-center">
+          <Button onClick={onLoadMore} variant="outline">
             Load More
             <IconArrowRight size={15} />
-          </button>
+          </Button>
         </div>
       )}
     </>

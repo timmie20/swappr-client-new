@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { IconShoppingCart, IconStar, IconCheck } from "@tabler/icons-react";
 import { formatNaira } from "@/lib/format";
 import { useFeedStore } from "@/store/feed-store";
 import type { Product } from "@/features/feed/types";
@@ -14,7 +14,7 @@ import { VendorDialog } from "./vendor-dialog";
 
 interface ProductCardProps {
   product: Product;
-  onProductClick?: (product: Product) => void;
+  // onProductClick?: (product: Product) => void;
 }
 
 function ConditionPill({ condition }: { condition: Product["condition"] }) {
@@ -64,11 +64,17 @@ function ConditionPill({ condition }: { condition: Product["condition"] }) {
 //   );
 // }
 
-export function ProductCard({ product, onProductClick }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
   const [imgHovered, setImgHovered] = useState(false);
 
-  const toggleWishlist = useFeedStore((s) => s.toggleWishlist);
-  const isWishlisted = useFeedStore((s) => s.isWishlisted)(product.id);
+  const handleNavigate = () => {
+    // onProductClick?.(product);
+    router.push(`/products/${product.id}`);
+  };
+
+  const toggleBookmark = useFeedStore((s) => s.toggleBookmarks);
+  const isBookMarked = useFeedStore((s) => s.isBookMarked)(product.id);
   const addToCart = useFeedStore((s) => s.addToCart);
   const recentlyAddedIds = useFeedStore((s) => s.recentlyAddedIds);
   const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
@@ -85,7 +91,7 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
       {/* Image area */}
       <div
         className="relative aspect-square cursor-pointer overflow-hidden bg-[#F8F9FA]"
-        onClick={() => onProductClick?.(product)}
+        onClick={handleNavigate}
         onMouseEnter={() => setImgHovered(true)}
         onMouseLeave={() => setImgHovered(false)}
       >
@@ -124,14 +130,14 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
         {/* Title */}
         <h3
           className="line-clamp-2 cursor-pointer text-base leading-tight font-semibold text-[#1A1A1A] transition-colors hover:text-[#1A1A1A]/75"
-          onClick={() => onProductClick?.(product)}
+          onClick={handleNavigate}
         >
           {product.title}
         </h3>
 
         {/* Rating */}
         <div className="flex items-center gap-1">
-          <IconStar size={15} />
+          <Icons.star size={15} />
           <span className="text-xs font-medium text-[#6B7280]">
             {product.rating.toFixed(2)}{" "}
             <span className="text-[10px]">
@@ -182,7 +188,7 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
                   animate={{ scale: 1 }}
                   className="flex items-center gap-1"
                 >
-                  <IconCheck size={13} />
+                  <Icons.check size={13} />
                   Added
                 </motion.div>
               ) : (
@@ -192,7 +198,7 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
                   animate={{ scale: 1 }}
                   className="flex items-center gap-1"
                 >
-                  <IconShoppingCart size={13} />
+                  <Icons.cartCopy size={13} />
                   {product.isSoldOut ? "Sold Out" : "Add to Cart"}
                 </motion.div>
               )}
@@ -215,12 +221,12 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
             size="icon"
             onClick={(e) => {
               e.stopPropagation();
-              toggleWishlist(product.id);
+              toggleBookmark(product.id);
             }}
             className="cursor-pointer"
           >
-            {isWishlisted ? (
-              <Icons.bookmarkFilled size={24} className="text-black" />
+            {isBookMarked ? (
+              <Icons.bookmarkFilled size={24} className="text-primary" />
             ) : (
               <Icons.bookmark size={24} />
             )}
