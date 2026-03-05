@@ -56,7 +56,7 @@ export function DealOfWeekSection() {
             >
               {/* Deal badge */}
               <div className="absolute top-2 left-2 z-10">
-                <div className="flex size-6 items-center justify-center rounded-full bg-[#F4762A]/75">
+                <div className="flex size-6 items-center justify-center rounded-full bg-[#F4762A]/35">
                   <Icons.flame size={12} className="text-[#F4762A]" />
                 </div>
               </div>

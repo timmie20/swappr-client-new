@@ -1,4 +1,3 @@
-import { FeedNavbar } from "@/components/feed/feed-navbar";
 import { HeroBanner } from "@/components/feed/hero-banner";
 import { TrustSignalStrip } from "@/components/feed/trust-signal-strip";
 import { CategoryFilterBar } from "@/components/feed/category-filter-bar";
@@ -10,9 +9,6 @@ import { FeedFooter } from "@/components/feed/feed-footer";
 export default function Page() {
   return (
     <div className="min-h-screen bg-[#F8F9FA]">
-      {/* Sticky navbar */}
-      <FeedNavbar />
-
       {/* Hero */}
       {/* <HeroBanner /> */}
 

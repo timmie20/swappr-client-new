@@ -1,5 +1,10 @@
+import PageContainer from "@/components/layout/page-container";
 import { FeedPage } from "@/features/feed";
 
 export default function page() {
-  return <FeedPage />;
+  return (
+    <PageContainer>
+      <FeedPage />
+    </PageContainer>
+  );
 }

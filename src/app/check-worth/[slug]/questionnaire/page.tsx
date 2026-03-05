@@ -1,4 +1,4 @@
-import PageContainer from "@/components/layout/page-container";
+import PageContainer from "@/components/layout/container";
 import QuestionnairePage from "@/features/questionnaire/questionnaire-page";
 import React from "react";
 

@@ -7,11 +7,21 @@ import { SkeletonGrid } from "./skeleton-card";
 import { EmptyState } from "@/components/empty-state";
 import type { Product } from "@/features/feed/types";
 
+type Cols = 2 | 3 | 4;
+
+const colsClass: Record<Cols, string> = {
+  2: "grid-cols-1 sm:grid-cols-2",
+  3: "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3",
+  4: "grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
+};
+
 interface FeedGridContentProps {
   products: Product[];
   visibleCount: number;
   loading: boolean;
   onLoadMore: () => void;
+  onProductClick?: (product: Product) => void;
+  cols?: Cols;
 }
 
 export function FeedGridContent({
@@ -19,12 +29,15 @@ export function FeedGridContent({
   visibleCount,
   loading,
   onLoadMore,
+  onProductClick,
+  cols = 4,
 }: FeedGridContentProps) {
   const visibleProducts = products.slice(0, visibleCount);
+  const gridClass = colsClass[cols];
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+      <div className={`grid gap-3 ${gridClass}`}>
         <SkeletonGrid count={8} />
       </div>
     );
@@ -47,9 +60,13 @@ export function FeedGridContent({
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+      <div className={`grid gap-3 ${gridClass}`}>
         {visibleProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            onProductClick={onProductClick}
+          />
         ))}
       </div>
 

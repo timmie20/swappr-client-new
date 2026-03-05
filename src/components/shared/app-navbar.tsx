@@ -11,7 +11,7 @@ import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { UserNav } from "../auth/user-nav";
 
-export function FeedNavbar() {
+export function AppNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
