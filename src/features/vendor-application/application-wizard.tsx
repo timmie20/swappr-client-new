@@ -38,7 +38,7 @@ export function ApplicationWizard() {
   const form = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     values: DEFAULT_VALUES as ApplicationFormData,
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   /* ── Navigation ────────────────────────────────────────────────── */

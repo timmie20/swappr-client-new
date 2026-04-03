@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Product, CartItem, ColorVariant } from "@/features/feed/types";
+import { ListingMode } from "@/types/product";
 
 interface FeedStore {
   // Cart
@@ -14,8 +15,8 @@ interface FeedStore {
   isBookMarked: (productId: string) => boolean;
 
   // Feed filter
-  feedMode: "all" | "buy" | "swap";
-  setFeedMode: (mode: "all" | "buy" | "swap") => void;
+  feedMode: ListingMode;
+  setFeedMode: (mode: ListingMode) => void;
 
   // Category
   activeCategory: string;

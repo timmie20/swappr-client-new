@@ -20,6 +20,9 @@ interface FeedGridContentProps {
   products: Product[];
   visibleCount: number;
   loading: boolean;
+  loadingMore?: boolean;
+  canLoadMore?: boolean;
+  isError?: boolean;
   onLoadMore: () => void;
   onProductClick?: (product: Product) => void;
   cols?: Cols;
@@ -29,6 +32,9 @@ export function FeedGridContent({
   products,
   visibleCount,
   loading,
+  loadingMore = false,
+  canLoadMore = false,
+  isError = false,
   onLoadMore,
   cols = 4,
 }: FeedGridContentProps) {
@@ -51,8 +57,12 @@ export function FeedGridContent({
         className="flex flex-col items-center justify-center py-24 text-center"
       >
         <EmptyState
-          title="No Listings Found"
-          description="No devices match your current filters."
+          title={isError ? "Could not load listings" : "No Listings Found"}
+          description={
+            isError
+              ? "Please check your connection and try again."
+              : "No devices match your current filters."
+          }
         />
       </motion.div>
     );
@@ -66,10 +76,10 @@ export function FeedGridContent({
         ))}
       </div>
 
-      {visibleCount < products.length && (
+      {canLoadMore && (
         <div className="mt-10 flex cursor-pointer justify-center">
-          <Button onClick={onLoadMore} variant="outline">
-            Load More
+          <Button onClick={onLoadMore} variant="outline" disabled={loadingMore}>
+            {loadingMore ? "Loading..." : "Load More"}
             <IconArrowRight size={15} />
           </Button>
         </div>

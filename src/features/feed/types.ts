@@ -1,4 +1,5 @@
-export type ListingMode = "buy" | "swap" | "both";
+import { ListingMode } from "@/types/product";
+
 export type ConditionGrade =
   | "New"
   | "UK Used"
@@ -23,8 +24,9 @@ export interface Seller {
 
 export interface Product {
   id: string;
+  slug: string;
   brand: string;
-  model: string;
+  name: string;
   title: string;
   description?: string;
   imageUrl: string;
@@ -35,9 +37,10 @@ export interface Product {
   rating: number;
   reviewCount: number;
   colors?: ColorVariant[];
-  storage?: string[];
+  storage?: number[];
   condition: ConditionGrade;
-  mode: ListingMode;
+  mode: string;
+  subCategory?: string;
   swapStatus: SwapStatus;
   swapFor?: string[];
   badge?: "sale" | "deal-of-week" | "new" | "sold-out";
@@ -52,5 +55,5 @@ export interface CartItem {
   product: Product;
   quantity: number;
   selectedColor?: ColorVariant;
-  selectedStorage?: string;
+  selectedStorage?: number;
 }

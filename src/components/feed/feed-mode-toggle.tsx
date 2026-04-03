@@ -3,10 +3,15 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Icons } from "@/components/icons";
 import { useFeedStore } from "@/store/feed-store";
+import { ProductMode } from "@/types/product";
 
 const MODES = [
-  { label: "Buy Now", value: "buy" as const, icon: Icons.cartCopy },
-  { label: "Swap", value: "swap" as const, icon: Icons.exchange },
+  { label: "Buy Now", value: ProductMode.SALE as const, icon: Icons.cartCopy },
+  {
+    label: "Swap",
+    value: ProductMode.SALE_SWAP as const,
+    icon: Icons.exchange,
+  },
   { label: "All", value: "all" as const, icon: Icons.flame },
 ];
 

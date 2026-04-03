@@ -11,6 +11,7 @@ import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { VendorDialog } from "./vendor-dialog";
+import { formatStorage } from "@/lib/utils/product-helpers";
 
 interface ProductCardProps {
   product: Product;
@@ -69,8 +70,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [imgHovered, setImgHovered] = useState(false);
 
   const handleNavigate = () => {
-    // onProductClick?.(product);
-    router.push(`/products/${product.id}`);
+    router.push(`/products/${product.slug}`);
   };
 
   const toggleBookmark = useFeedStore((s) => s.toggleBookmarks);
@@ -146,6 +146,22 @@ export function ProductCard({ product }: ProductCardProps) {
           </span>
         </div>
 
+        {/* storages */}
+
+        {product.storage && product.storage.length > 0 && (
+          <div className="flex items-center gap-1">
+            {product.storage.map((item) => (
+              <Badge
+                key={item}
+                variant="outline"
+                className="text-xs font-medium text-[#6B7280]"
+              >
+                {formatStorage(item)}
+              </Badge>
+            ))}
+          </div>
+        )}
+
         {/* Price */}
         <div className="font-inter flex flex-wrap items-baseline gap-1.5">
           <span className="text-base font-bold text-[#1A1A1A]">
@@ -205,7 +221,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </AnimatePresence>
           </Button>
 
-          {(product.mode === "swap" || product.mode === "both") && (
+          {product.mode === "sale_swap" && (
             <Button
               variant="outline"
               className="cursor-pointer"

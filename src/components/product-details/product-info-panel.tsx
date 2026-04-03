@@ -44,7 +44,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
       <ProductBreadcrumb
         category={product.category.name}
         brand={product.brand.brand_name}
-        model={product.model}
+        model={product.name}
       />
 
       <ProductHeader

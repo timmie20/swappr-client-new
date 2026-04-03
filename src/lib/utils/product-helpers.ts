@@ -82,7 +82,7 @@ export function buildProductTitle(
   product: ProductDetail,
   selected: SelectedVariant,
 ): string {
-  const parts: string[] = [product.brand.brand_name, product.model];
+  const parts: string[] = [product.name];
   if (selected.color) parts.push(selected.color);
   if (selected.storage) parts.push(`${selected.storage}GB`);
   if (product.carrier_status === "unlocked") parts.push("Unlocked");
@@ -92,9 +92,8 @@ export function buildProductTitle(
 /** Format storage number to readable string */
 export function formatStorage(gb: number): string {
   if (gb >= 1000) return `${(gb / 1000).toFixed(gb % 1000 === 0 ? 0 : 1)}TB`;
-  return `${gb}GB`;
+  return `${Math.round(gb)}GB`;
 }
-
 /** Map condition enum to a readable label */
 export function formatCondition(condition: ProductDetail["condition"]): string {
   const map: Record<ProductDetail["condition"], string> = {
