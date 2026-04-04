@@ -4,7 +4,7 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface PageLoaderProps {
   isLoading?: boolean;
-  text: string;
+  text?: string;
 }
 
 export default function PageLoader({ isLoading, text }: PageLoaderProps) {

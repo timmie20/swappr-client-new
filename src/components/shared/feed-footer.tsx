@@ -4,35 +4,38 @@ import { Icons } from "../icons";
 
 const FOOTER_LINKS = {
   Marketplace: [
-    "All Listings",
-    "iPhone",
-    "Android",
-    "MacBook",
-    "iPad",
-    "Watches",
-    "Audio",
+    { label: "All Listings", path: "#" },
+    { label: "iPhone", path: "#" },
+    { label: "Android", path: "#" },
+    { label: "MacBook", path: "#" },
+    { label: "iPad", path: "#" },
+    { label: "Watches", path: "#" },
+    { label: "Audio", path: "#" },
   ],
   Swappr: [
-    "How Swapping Works",
-    "List Your Device",
-    "Swap Offers",
-    "Condition Guide",
-    "Valuation",
+    {
+      label: "Become a vendor",
+      path: "/vendor",
+    },
+    { label: "How Swapping Works", path: "#" },
+    { label: "Swap Offers", path: "#" },
+    { label: "Condition Guide", path: "#" },
+    { label: "Valuation", path: "#" },
   ],
   Support: [
-    "FAQ",
-    "Contact Us",
-    "Returns Policy",
-    "Warranty Claims",
-    "Seller Guide",
+    { label: "FAQ", path: "#" },
+    { label: "Contact Us", path: "#" },
+    { label: "Returns Policy", path: "#" },
+    { label: "Warranty Claims", path: "#" },
+    { label: "Seller Guide", path: "#" },
   ],
   Company: [
-    "About Us",
-    "Blog",
-    "Careers",
-    "Press",
-    "Privacy Policy",
-    "Terms of Service",
+    { label: "About Us", path: "#" },
+    { label: "Blog", path: "#" },
+    { label: "Careers", path: "#" },
+    { label: "Press", path: "#" },
+    { label: "Privacy Policy", path: "#" },
+    { label: "Terms of Service", path: "#" },
   ],
 };
 
@@ -60,7 +63,7 @@ export function FeedFooter() {
         </div>
       </div> */}
 
-      <div className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
+      <div className="mx-auto max-w-screen-2xl px-4 py-12 lg:px-6">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-5">
           {/* Brand col */}
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
@@ -104,12 +107,12 @@ export function FeedFooter() {
               </h4>
               <ul className="space-y-2">
                 {links.map((link) => (
-                  <li key={link}>
+                  <li key={link.label} className="text-sm">
                     <Link
-                      href="#"
+                      href={link.path}
                       className="text-sm text-[#9CA3AF] transition-colors hover:text-white"
                     >
-                      {link}
+                      {link.label}
                     </Link>
                   </li>
                 ))}
@@ -121,8 +124,8 @@ export function FeedFooter() {
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[#2D2D2D] pt-8 sm:flex-row">
           <p className="text-xs text-[#6B7280]">
-            © {new Date().getFullYear()} Swappr Technologies Ltd · All rights
-            reserved
+            © {new Date().getFullYear()} Swappr Technologies Limited · All
+            rights reserved
           </p>
           <div className="flex items-center gap-2">
             <span className="rounded-full border border-[#3A3A3A] px-2 py-0.5 text-[10px] text-[#6B7280]">

@@ -64,7 +64,8 @@ export function ProductImageGallery({
                 src={images[activeIdx]}
                 alt={`${productName} — view ${activeIdx + 1}`}
                 fill
-                className="object-contain"
+                className="object-cover"
+                loading="eager"
                 onError={() =>
                   setImgError((p) => ({ ...p, [activeIdx]: true }))
                 }
@@ -111,7 +112,7 @@ export function ProductImageGallery({
               onClick={() => goTo(i)}
               aria-label={`View image ${i + 1}`}
               className={cn(
-                "relative size-20 shrink-0 overflow-hidden rounded-xl border-2 bg-[#F8F9FA] transition-all",
+                "relative size-16 shrink-0 overflow-hidden rounded-lg border-2 bg-[#F8F9FA] transition-all sm:size-20",
                 i === activeIdx
                   ? "border-primary shadow-sm"
                   : "border-transparent opacity-60 hover:opacity-100",

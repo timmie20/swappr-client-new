@@ -13,35 +13,52 @@ import { Icons } from "../icons";
 
 interface ProductActionsProps {
   activeVariant: ProductVariant | null;
+  hasVariants: boolean;
   isSwappable: boolean;
   productId: string;
+  totalStock: number;
 }
 
 export function ProductActions({
   activeVariant,
+  hasVariants,
   isSwappable,
+  totalStock,
 }: ProductActionsProps) {
   const [added, setAdded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
-  const outOfStock = activeVariant ? activeVariant.stock_quantity === 0 : false;
-  const noVariant = !activeVariant;
+  // Determine stock status based on whether product has variants
+  const outOfStock = hasVariants
+    ? activeVariant
+      ? activeVariant.stock_quantity === 0
+      : false
+    : totalStock === 0;
+
+  // Only show "Select Variant" if product HAS variants but none is selected
+  const needsVariantSelection = hasVariants && !activeVariant;
 
   const handleAddToCart = () => {
-    if (!activeVariant || outOfStock) return;
+    // For products with variants, require variant selection
+    if (hasVariants && !activeVariant) return;
+    // Don't allow if out of stock
+    if (outOfStock) return;
+
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col space-y-3 sm:flex-row sm:space-x-3">
       {/* Primary CTA */}
       <Button
         size="lg"
         onClick={handleAddToCart}
-        disabled={noVariant || outOfStock || added}
-        className="w-full py-6 text-base font-semibold"
-        aria-label={noVariant ? "Select a variant first" : "Add to cart"}
+        disabled={needsVariantSelection || outOfStock || added}
+        className="w-full flex-auto py-6 text-base font-semibold"
+        aria-label={
+          needsVariantSelection ? "Select a variant first" : "Add to cart"
+        }
       >
         <AnimatePresence mode="wait">
           {added ? (
@@ -66,7 +83,7 @@ export function ProductActions({
               <Icons.cartCopy size={18} />
               {outOfStock
                 ? "Out of Stock"
-                : noVariant
+                : needsVariantSelection
                   ? "Select a Variant"
                   : "Add to Cart"}
             </motion.span>
@@ -91,7 +108,6 @@ export function ProductActions({
           variant="outline"
           size="icon-lg"
           onClick={() => setBookmarked((b) => !b)}
-          className="px-5"
           aria-label={bookmarked ? "Remove bookmark" : "Bookmark product"}
         >
           <AnimatePresence mode="wait">
@@ -116,7 +132,7 @@ export function ProductActions({
         </Button>
       </div>
 
-      {noVariant && (
+      {needsVariantSelection && (
         <p className="text-center text-xs text-[#9CA3AF]">
           Select a color and storage to continue
         </p>

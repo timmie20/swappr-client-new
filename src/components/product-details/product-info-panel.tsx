@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { ProductBreadcrumb } from "./product-breadcrumb";
 import { ProductHeader } from "./product-header";
 import { VariantSelector } from "./variant-selector";
@@ -20,9 +20,15 @@ interface ProductInfoPanelProps {
 }
 
 export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
-  const defaultColor = product.variants[0]?.color ?? null;
-  const defaultStorage =
-    getAvailableStorage(product.variants, defaultColor)[0] ?? null;
+  const hasVariants =
+    product.variants && product.variants.length > 0 ? true : false;
+
+  const defaultColor = hasVariants
+    ? (product.variants[0]?.color ?? null)
+    : null;
+  const defaultStorage = hasVariants
+    ? (getAvailableStorage(product.variants, defaultColor)[0] ?? null)
+    : null;
 
   const [selected, setSelected] = useState<SelectedVariant>({
     color: defaultColor,
@@ -30,8 +36,8 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   });
 
   const activeVariant = useMemo(
-    () => getMatchingVariant(product.variants, selected),
-    [product.variants, selected],
+    () => (hasVariants ? getMatchingVariant(product.variants, selected) : null),
+    [product.variants, selected, hasVariants],
   );
 
   const title = useMemo(
@@ -53,20 +59,26 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         activeVariant={activeVariant}
       />
 
-      <Separator />
+      {hasVariants && (
+        <Fragment>
+          <Separator />
 
-      <VariantSelector
-        variants={product.variants}
-        selected={selected}
-        onChange={setSelected}
-      />
+          <VariantSelector
+            variants={product.variants}
+            selected={selected}
+            onChange={setSelected}
+          />
+        </Fragment>
+      )}
 
       <Separator />
 
       <ProductActions
         activeVariant={activeVariant}
-        isSwappable={product.is_swappable}
+        hasVariants={hasVariants}
+        isSwappable={product.mode === "sale_swap"}
         productId={product.id}
+        totalStock={product.total_stock}
       />
 
       <VendorInfoCard vendor={product.vendor} />

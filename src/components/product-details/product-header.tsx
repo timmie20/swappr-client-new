@@ -33,9 +33,12 @@ export function ProductHeader({
         <Badge className={conditionStyles[product.condition]}>
           {formatCondition(product.condition)}
         </Badge>
-        <Badge variant="outline" className="capitalize">
-          {product.carrier_status}
-        </Badge>
+
+        {product.carrier_status && (
+          <Badge variant="outline" className="capitalize">
+            {product.carrier_status}
+          </Badge>
+        )}
         {product.is_swappable && (
           <Badge className="bg-primary/10 text-primary border-primary/20">
             Swap Available
