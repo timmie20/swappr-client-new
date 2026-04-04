@@ -7,6 +7,7 @@ import { SkeletonGrid } from "./skeleton-card";
 import { EmptyState } from "@/components/empty-state";
 import type { Product } from "@/features/feed/types";
 import { Button } from "../ui/button";
+import { Spinner } from "../ui/spinner";
 
 type Cols = 2 | 3 | 4;
 
@@ -78,9 +79,18 @@ export function FeedGridContent({
 
       {canLoadMore && (
         <div className="mt-10 flex cursor-pointer justify-center">
-          <Button onClick={onLoadMore} variant="outline" disabled={loadingMore}>
+          <Button
+            onClick={onLoadMore}
+            variant="outline"
+            disabled={loadingMore}
+            size="lg"
+          >
             {loadingMore ? "Loading..." : "Load More"}
-            <IconArrowRight size={15} />
+            {loadingMore ? (
+              <Spinner className="size-6" />
+            ) : (
+              <IconArrowRight size={15} />
+            )}
           </Button>
         </div>
       )}

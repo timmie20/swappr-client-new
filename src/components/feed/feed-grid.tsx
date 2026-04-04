@@ -13,7 +13,7 @@ export function FeedGrid() {
 
   const {
     data,
-    isFetching,
+    isLoading,
     isError,
     hasNextPage,
     fetchNextPage,
@@ -63,7 +63,7 @@ export function FeedGrid() {
       <FeedGridContent
         products={filteredProducts}
         visibleCount={filteredProducts.length}
-        loading={isFetching}
+        loading={isLoading}
         isError={isError}
         canLoadMore={!!hasNextPage}
         loadingMore={isFetchingNextPage}

@@ -17,10 +17,10 @@ const FOOTER_LINKS = {
       label: "Become a vendor",
       path: "/vendor",
     },
+    { label: "Valuation", path: "#" },
     { label: "How Swapping Works", path: "#" },
     { label: "Swap Offers", path: "#" },
     { label: "Condition Guide", path: "#" },
-    { label: "Valuation", path: "#" },
   ],
   Support: [
     { label: "FAQ", path: "#" },

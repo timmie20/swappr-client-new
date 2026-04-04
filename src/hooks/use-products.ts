@@ -1,4 +1,5 @@
 import {
+  keepPreviousData,
   useInfiniteQuery,
   useQuery,
   type InfiniteData,
@@ -80,6 +81,7 @@ export function useProducts(
         limit: params?.limit ?? 20,
       }),
     staleTime: 60_000, // 1 minute
+    placeholderData: keepPreviousData,
     ...options,
   });
 }
