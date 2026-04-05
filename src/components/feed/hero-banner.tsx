@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { IconArrowRight, IconSparkles } from "@tabler/icons-react";
+import { Button } from "../ui/button";
 
 export function HeroBanner() {
   return (
-    <div className="to-swappr-teal-light relative overflow-hidden bg-linear-to-br from-[#0D3D30] via-[#1A6B5A]">
+    <div className="font-inter relative overflow-hidden bg-linear-to-br from-[#FF5492] via-[#9B6BC9] to-[#3B82FD]">
       {/* Decorative circles */}
       <div className="pointer-events-none absolute -top-16 -right-16 h-64 w-64 rounded-full bg-white/5" />
       <div className="pointer-events-none absolute -bottom-8 -left-8 h-48 w-48 rounded-full bg-white/5" />
@@ -31,9 +32,9 @@ export function HeroBanner() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-switzer text-3xl leading-tight font-bold text-white sm:text-4xl lg:text-5xl"
+              className="font-inter text-3xl leading-tight font-bold text-white sm:text-4xl lg:text-5xl"
             >
-              Buy, Sell & <span className="text-[#F4762A]">Swap</span> Premium
+              Buy, Sell & <span className="text-[#FFC918]">Swap</span> Premium
               Devices
             </motion.h1>
 
@@ -44,7 +45,7 @@ export function HeroBanner() {
               className="mt-3 max-w-lg text-base text-white/75 lg:text-lg"
             >
               Every device inspected, verified & priced in NGN. Trade your old
-              gadget, no cash needed.
+              gadget, Cop new ones.
             </motion.p>
 
             <motion.div
@@ -53,18 +54,20 @@ export function HeroBanner() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
             >
-              <Link
-                href="#feed"
-                className="inline-flex h-11 items-center gap-2 rounded-full bg-[#F4762A] px-6 text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#e0661f] hover:shadow-xl"
-              >
-                Shop Now
-                <IconArrowRight size={16} />
+              <Link href="#feed" className="inline-flex h-11">
+                <Button size="lg" className="cursor-pointer">
+                  Shop Now
+                  <IconArrowRight size={16} />
+                </Button>
               </Link>
-              <Link
-                href="#feed"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
-              >
-                ↔ Swap a Device
+              <Link href="#feed" className="inline-flex h-11">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="cursor-pointer text-white hover:text-white"
+                >
+                  ↔ Swap a Device
+                </Button>
               </Link>
             </motion.div>
 
@@ -91,7 +94,14 @@ export function HeroBanner() {
           </div>
 
           {/* Hero image area — stacked device mockups */}
-          <motion.div
+        </div>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -124,7 +134,7 @@ export function HeroBanner() {
                   key={item.label}
                   className={`relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm ${i === 0 ? "col-span-2" : ""}`}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={item.img}
                     alt={item.label}
@@ -141,9 +151,5 @@ export function HeroBanner() {
                 </div>
               ))}
             </div>
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  );
+          </motion.div> */
 }

@@ -10,7 +10,7 @@ export default function PageContainer({
   return (
     <>
       <AppNavbar />
-      <main className="mx-auto min-h-[calc(100dvh-3.5rem)] pt-16 pb-4 sm:pb-0 lg:p-0 lg:pt-16">
+      <main className="mx-auto min-h-[calc(100dvh-3.5rem)] sm:pb-0 lg:p-0">
         {children}
       </main>
       <FeedFooter />

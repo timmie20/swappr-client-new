@@ -8,7 +8,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p1",
     brand: "Apple",
-    model: "iPhone 13",
+    name: "iPhone 13",
     title: "iPhone 13 Midnight 128GB",
     imageUrl: `${PLACEHOLDER}1632516723866-a3ef4ae9823c?w=400&h=400&fit=crop&q=80`,
     price: 380700,
@@ -55,7 +55,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p2",
     brand: "Apple",
-    model: "iPhone 16 Pro Max",
+    name: "iPhone 16 Pro Max",
     title: "iPhone 16 Pro Max 256GB Natural Titanium",
     imageUrl: `${PLACEHOLDER}1695048133547-9bc356ee6b74?w=400&h=400&fit=crop&q=80`,
     price: 1150000,
@@ -100,7 +100,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p3",
     brand: "Samsung",
-    model: "Galaxy S24 Ultra",
+    name: "Galaxy S24 Ultra",
     title: "Samsung Galaxy S24 Ultra 256GB Titanium Black",
     imageUrl: `${PLACEHOLDER}1610945415114-a0c758a4ab96?w=400&h=400&fit=crop&q=80`,
     price: 675000,
@@ -145,7 +145,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p4",
     brand: "Apple",
-    model: "MacBook Pro 14",
+    name: "MacBook Pro 14",
     title: "MacBook Pro 14-inch M3 Pro 512GB Space Black",
     imageUrl: `${PLACEHOLDER}1517336714731-489689fd1ca8?w=400&h=400&fit=crop&q=80`,
     price: 1350000,
@@ -175,7 +175,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p5",
     brand: "Apple",
-    model: "iPad Pro 12.9",
+    name: "iPad Pro 12.9",
     title: "iPad Pro 12.9-inch M2 256GB Wi-Fi Space Gray",
     imageUrl: `${PLACEHOLDER}1544244015-0df4cec9d57f?w=400&h=400&fit=crop&q=80`,
     price: 485000,
@@ -206,7 +206,8 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p6",
     brand: "Apple",
-    model: "Apple Watch Ultra 2",
+    name: "Apple Watch Ultra 2",
+    slug: "",
     title: "Apple Watch Ultra 2 GPS+Cellular 49mm Natural Titanium",
     imageUrl: `${PLACEHOLDER}1434494878577-86c23bcb06b9?w=400&h=400&fit=crop&q=80`,
     price: 520000,
@@ -236,7 +237,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p7",
     brand: "Google",
-    model: "Pixel 8 Pro",
+    name: "Pixel 8 Pro",
     title: "Google Pixel 8 Pro 256GB Bay",
     imageUrl: `${PLACEHOLDER}1598327105854-b8c1e3fc7e49?w=400&h=400&fit=crop&q=80`,
     price: 310000,
@@ -302,7 +303,8 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: "p9",
     brand: "Sony",
-    model: "WH-1000XM5",
+    name: "WH-1000XM5",
+    slug: "",
     title: "Sony WH-1000XM5 Wireless Noise-Cancelling Headphones",
     imageUrl: `${PLACEHOLDER}1505740420928-5e560c06d30e?w=400&h=400&fit=crop&q=80`,
     price: 185000,

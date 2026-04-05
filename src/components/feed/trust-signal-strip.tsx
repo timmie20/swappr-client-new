@@ -32,8 +32,8 @@ export function TrustSignalStrip() {
           {TRUST_SIGNALS.map((signal, i) => (
             <div key={signal.label} className="flex items-center">
               <div className="flex shrink-0 items-center gap-2 px-4 text-[#1A6B5A]">
-                <span className="text-[#1A6B5A]">{signal.icon}</span>
-                <span className="text-xs font-semibold whitespace-nowrap text-[#1A1A1A] sm:text-sm">
+                <span className="text-primary">{signal.icon}</span>
+                <span className="text-sm font-semibold whitespace-nowrap text-[#1A1A1A] sm:text-base">
                   {signal.label}
                 </span>
               </div>

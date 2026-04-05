@@ -43,7 +43,7 @@ export function DealOfWeekSection() {
         </div>
 
         {/* Deals grid */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {DEAL_OF_WEEK_PRODUCTS.map((product, i) => (
             <motion.div
               key={product.id}
@@ -80,13 +80,15 @@ export function DealOfWeekSection() {
                   {product.brand}
                 </p>
                 <h3 className="font-inter mt-0.5 line-clamp-1 text-sm font-bold text-[#1A1A1A]">
-                  {product.model}
+                  {product.name}
                 </h3>
 
                 {/* Price */}
                 <div className="font-inter flex items-baseline gap-1.5 font-medium text-[#08161F6B]">
                   <span className="text-sm">from</span>
-                  <span className="text-lg">{formatNaira(product.price)}</span>
+                  <span className="text-muted-foreground text-base font-bold">
+                    {formatNaira(product.price)}
+                  </span>
                 </div>
                 {product.originalPrice && (
                   <div className="flex items-center gap-1.5">
@@ -102,16 +104,18 @@ export function DealOfWeekSection() {
                 {/* CTA */}
                 <div className="mt-3 flex gap-2">
                   <Button onClick={() => addToCart(product)}>
+                    <Icons.cartCopy size={18} />
                     Run am
-                    <IconArrowRight size={12} />
                   </Button>
                   {(product.mode === "swap" || product.mode === "both") && (
-                    <button
+                    <Button
+                      variant="outline"
+                      className="cursor-pointer"
                       onClick={() => openSwapOffer(product)}
-                      className="flex items-center justify-center rounded-xl border border-[#1A6B5A]/30 px-2.5 text-xs font-semibold text-[#1A6B5A] transition-all hover:bg-[#E8F5F1]"
                     >
-                      ↔
-                    </button>
+                      <Icons.exchange size={13} />
+                      <span className="hidden sm:inline">Swap</span>
+                    </Button>
                   )}
                 </div>
               </div>
