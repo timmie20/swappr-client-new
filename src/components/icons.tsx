@@ -54,6 +54,7 @@ import {
   IconBrandTiktok,
   IconBrandWhatsapp,
   IconBrandLinkedin,
+  IconError404,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -116,4 +117,5 @@ export const Icons = {
   tiktok: IconBrandTiktok,
   whatsapp: IconBrandWhatsapp,
   linkedin: IconBrandLinkedin,
+  error: IconError404,
 };

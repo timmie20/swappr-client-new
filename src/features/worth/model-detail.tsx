@@ -97,10 +97,10 @@ export function ModelDetail({ slug }: ModelDetailProps) {
 
   return (
     <>
-      <PageLoader
+      {/* <PageLoader
         isLoading={isLoadingQuestions}
         text="Loading questions, Hang on..."
-      />
+      /> */}
 
       <div className="mx-auto max-w-170 pb-6">
         <GoRack />

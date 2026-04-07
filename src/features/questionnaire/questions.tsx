@@ -143,10 +143,10 @@ export default function Questions({ questions }: QuestionsProps) {
 
   return (
     <>
-      <PageLoader
+      {/* <PageLoader
         isLoading={isSubmitting}
         text="Hang on while we process your answers..."
-      />
+      /> */}
       <div className="my-6 flex items-center gap-4">
         <Breadcrumb className="shrink-0">
           <GoRack handleClick={handleBack} />

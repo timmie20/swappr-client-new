@@ -12,6 +12,8 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { VendorDialog } from "./vendor-dialog";
 import { formatStorage } from "@/lib/utils/product-helpers";
+import { isAuthenticated } from "@/lib/auth-tokens";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
@@ -71,6 +73,26 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const handleNavigate = () => {
     router.push(`/products/${product.slug}`);
+  };
+
+  const handleSwapTrigger = (product: Product) => {
+    if (!isAuthenticated()) {
+      toast.warning("Hold on", {
+        description: "You need to be logged in to make a swap offer.",
+        action: {
+          label: "Sign In",
+          onClick: () => {
+            const currentUrl = window.location.pathname;
+            router.push(
+              `/auth/sign-in?redirect=${encodeURIComponent(currentUrl)}`,
+            );
+          },
+        },
+      });
+      return;
+    }
+
+    openSwapOffer(product);
   };
 
   const toggleBookmark = useFeedStore((s) => s.toggleBookmarks);
@@ -225,7 +247,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <Button
               variant="outline"
               className="cursor-pointer"
-              onClick={() => openSwapOffer(product)}
+              onClick={() => handleSwapTrigger(product)}
             >
               <Icons.exchange size={13} />
               <span className="hidden sm:inline">Swap</span>

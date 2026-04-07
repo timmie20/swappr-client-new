@@ -7,7 +7,7 @@ import HeroCarousel from "@/components/feed/hero-carousel";
 
 export default function Page() {
   return (
-    <div className="min-h-dvh bg-[#F8F9FA]">
+    <div className="min-h-screen bg-[#F8F9FA]">
       <HeroCarousel />
       <TrustSignalStrip />
       <DealOfWeekSection />

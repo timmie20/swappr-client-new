@@ -17,7 +17,7 @@ const FOOTER_LINKS = {
       label: "Become a vendor",
       path: "/vendor",
     },
-    { label: "Valuation", path: "#" },
+    { label: "Valuation", path: "/check-worth" },
     { label: "How Swapping Works", path: "#" },
     { label: "Swap Offers", path: "#" },
     { label: "Condition Guide", path: "#" },

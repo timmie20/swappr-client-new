@@ -33,7 +33,7 @@ export function PageError({
           <EmptyDescription>{description}</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <DotLottieReact src="/assets/icons/fail.lottie" loop autoplay />
+          <DotLottieReact src="/assets/icons/Lonely 404.lottie" loop autoplay />
         </EmptyContent>
       </Empty>
       {children && <div className="flex justify-center gap-4">{children}</div>}

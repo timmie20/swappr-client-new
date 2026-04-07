@@ -1,6 +1,4 @@
 "use client";
-
-import { motion } from "motion/react";
 import { IconArrowRight } from "@tabler/icons-react";
 import { ProductCard } from "./product-card";
 import { SkeletonGrid } from "./skeleton-card";
@@ -8,6 +6,7 @@ import { EmptyState } from "@/components/empty-state";
 import type { Product } from "@/features/feed/types";
 import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
+import { ErrorState } from "../error-state";
 
 type Cols = 2 | 3 | 4;
 
@@ -50,22 +49,21 @@ export function FeedGridContent({
     );
   }
 
+  if (isError) {
+    return (
+      <ErrorState
+        title="Could not load listings"
+        description="Please check your connection and try again."
+      />
+    );
+  }
+
   if (products.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center py-24 text-center"
-      >
-        <EmptyState
-          title={isError ? "Could not load listings" : "No Listings Found"}
-          description={
-            isError
-              ? "Please check your connection and try again."
-              : "No devices match your current filters."
-          }
-        />
-      </motion.div>
+      <EmptyState
+        title="No Listings Found"
+        description="No devices match your current filters"
+      />
     );
   }
 
