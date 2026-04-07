@@ -41,7 +41,7 @@ export function SwapFormStep({
         exit={{ opacity: 0, x: -20 }}
         className="flex flex-col gap-4"
       >
-        <p className="text-sm font-semibold text-[#1A1A1A]">
+        <p className="text-muted-foreground text-sm font-semibold">
           Loading your valuations...
         </p>
         <div className="space-y-2">
@@ -109,7 +109,7 @@ export function SwapFormStep({
       exit={{ opacity: 0, x: -20 }}
       className="flex flex-col gap-4"
     >
-      <p className="text-sm font-semibold text-[#1A1A1A]">
+      <p className="text-muted-foreground text-sm font-semibold">
         Select a device from your valuation history
       </p>
 
@@ -141,7 +141,7 @@ export function SwapFormStep({
             }
             placeholder="Any extra info about your device or the swap..."
             rows={3}
-            className="w-full resize-none rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5 text-sm text-[#1A1A1A] placeholder-[#9CA3AF] transition-all outline-none focus:border-[#1A6B5A] focus:ring-2 focus:ring-[#1A6B5A]/20"
+            className="focus:border-primary focus:ring-primary/20 w-full resize-none rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5 text-sm text-[#1A1A1A] placeholder-[#9CA3AF] transition-all outline-none focus:ring-2"
           />
         </div>
       )}
@@ -177,8 +177,8 @@ function ValuationCard({
       onClick={onSelect}
       className={`flex items-center justify-between rounded-xl border p-3 transition-all ${
         isSelected
-          ? "border-[#1A6B5A] bg-[#F0FAF7] ring-2 ring-[#1A6B5A]/20"
-          : "border-[#E5E7EB] bg-white hover:border-[#1A6B5A]/50 hover:bg-[#F9FAFB]"
+          ? "border-primary ring-primary/20 bg-primary/5 ring-2"
+          : "hover:border-primary/50 border-[#E5E7EB] bg-white hover:bg-[#F9FAFB]"
       }`}
     >
       <div className="flex flex-col items-start gap-1">
@@ -201,12 +201,12 @@ function ValuationCard({
 
       <div
         className={`rounded-lg px-3 py-1.5 ${
-          isSelected ? "bg-[#1A6B5A]" : "bg-[#F3F4F6]"
+          isSelected ? "bg-primary" : "bg-[#F3F4F6]"
         }`}
       >
         <p
           className={`text-xs font-bold ${
-            isSelected ? "text-white" : "text-[#1A6B5A]"
+            isSelected ? "text-white" : "text-primary"
           }`}
         >
           ₦{valuation.final_value.toLocaleString()}

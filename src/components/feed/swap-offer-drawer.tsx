@@ -152,17 +152,18 @@ export function SwapOfferDrawer() {
           <div className="border-t border-[#E5E7EB] px-5 py-4">
             <div className="flex gap-3">
               {step === "confirm" && (
-                <button
+                <Button
                   onClick={() => setStep("form")}
-                  className="flex h-11 flex-1 items-center justify-center rounded-xl border border-[#E5E7EB] text-sm font-semibold text-[#6B7280] hover:bg-[#F9FAFB]"
+                  className="flex h-11 flex-1"
+                  variant="outline"
                 >
                   Back
-                </button>
+                </Button>
               )}
-              <button
+              <Button
                 onClick={step === "form" ? handleSubmit : handleConfirm}
                 disabled={!offer.valuationId}
-                className="hover:bg-swappr-teal-light flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#1A6B5A] text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-11 flex-1 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {step === "form" ? (
                   <>
@@ -175,7 +176,7 @@ export function SwapOfferDrawer() {
                     <IconArrowsLeftRight size={16} />
                   </>
                 )}
-              </button>
+              </Button>
             </div>
           </div>
         )}
