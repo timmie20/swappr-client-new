@@ -29,7 +29,7 @@ export interface ProductVendor {
   id: string;
   business_name: string;
   is_verified: boolean;
-  rating: number | string;
+  rating: number;
 }
 
 export interface ProductDetail {
@@ -80,4 +80,4 @@ export enum ProductMode {
   SALE_SWAP = "sale_swap",
 }
 
-export type ListingMode = ProductMode & "all";
+export type ListingMode = ProductMode | "all";

@@ -24,7 +24,6 @@ interface SwapFormStepProps {
 }
 
 export function SwapFormStep({
-  product,
   offer,
   onOfferChange,
   selectedValuation,

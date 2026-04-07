@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/features/feed/types";
 import { Icons } from "../icons";
+import Image from "next/image";
 
 // Placeholder store photos — replace with real vendor.store_photos when available
 const PLACEHOLDER_PHOTOS = [
@@ -116,11 +117,13 @@ export function VendorDialog({ product }: { product: Product }) {
                   key={i}
                   className="aspect-square overflow-hidden bg-[#F9FAFB]"
                 >
-                  <img
+                  <Image
                     src={src}
                     alt={`Store photo ${i + 1}`}
                     className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                     loading="lazy"
+                    width={400}
+                    height={400}
                   />
                 </div>
               ))}

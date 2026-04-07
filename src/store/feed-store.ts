@@ -5,7 +5,7 @@ import { ListingMode } from "@/types/product";
 interface FeedStore {
   // Cart
   cartItems: CartItem[];
-  addToCart: (product: Product, color?: ColorVariant, storage?: string) => void;
+  addToCart: (product: Product, color?: ColorVariant, storage?: number) => void;
   removeFromCart: (productId: string) => void;
   cartCount: () => number;
 

@@ -9,7 +9,6 @@ import { Icons } from "../icons";
 import { TypographyMuted } from "../typography/muted";
 import { TypographyH2 } from "../typography/h2";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 
 export function DealOfWeekSection() {
   const openSwapOffer = useFeedStore((s) => s.openSwapOffer);

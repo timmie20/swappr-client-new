@@ -29,8 +29,8 @@ export function StepBasicInfo({
 }: StepBasicInfoProps) {
   const {
     formState: { isSubmitting },
-    setValue,
-    watch,
+    // setValue,
+    // watch,
     trigger,
   } = form;
 
@@ -51,7 +51,7 @@ export function StepBasicInfo({
     if (valid) onNext();
   };
 
-  const selectedState = watch("state");
+  // const selectedState = watch("state");
 
   const slideVariants = {
     enter: { opacity: 0, x: direction > 0 ? 60 : -60 },

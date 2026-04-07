@@ -1,4 +1,4 @@
-import { ListingMode } from "@/types/product";
+// import { ListingMode } from "@/types/product";
 
 export type ConditionGrade =
   | "New"

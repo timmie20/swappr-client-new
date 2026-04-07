@@ -7,7 +7,7 @@ interface PageLoaderProps {
   text?: string;
 }
 
-export default function PageLoader({ isLoading, text }: PageLoaderProps) {
+export default function PageLoader({ text }: PageLoaderProps) {
   // if (!isLoading) return null;
 
   return (

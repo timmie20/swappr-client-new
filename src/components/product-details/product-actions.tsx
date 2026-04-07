@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  IconCheck,
-  IconBookmark,
-  IconBookmarkFilled,
-} from "@tabler/icons-react";
+import { IconCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import type { ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
