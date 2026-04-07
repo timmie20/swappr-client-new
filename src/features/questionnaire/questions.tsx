@@ -1,5 +1,4 @@
 "use client";
-import { QuestionsProps } from "./questionnaire-page";
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
@@ -22,8 +21,8 @@ import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
 import { clearQuestionnaireContext } from "@/lib/cookies";
 import { useResultStore } from "@/store/result-store";
-import PageLoader from "@/components/page-loader";
 import { useCalculateValuation } from "@/hooks/use-valuation";
+import { Question } from "@/lib/api/types";
 
 /**
  * Extract error message from unknown error type
@@ -37,6 +36,10 @@ function getErrorMessage(error: unknown, defaultMessage: string): string {
   }
   return defaultMessage;
 }
+
+type QuestionsProps = {
+  questions: Question[];
+};
 
 export default function Questions({ questions }: QuestionsProps) {
   const router = useRouter();

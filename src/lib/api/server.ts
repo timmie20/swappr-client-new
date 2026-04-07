@@ -34,6 +34,9 @@ const BASE_URL = process.env.API_BASE_URL!;
 export async function serverFetch<T>(
   endpoint: string,
   params?: Record<string, string>,
+  options?: {
+    revalidate?: number | false;
+  },
 ): Promise<T> {
   const url = new URL(`${BASE_URL}${endpoint}`);
 
@@ -46,7 +49,7 @@ export async function serverFetch<T>(
       // Authorization: `Bearer ${SERVICE_KEY}`,
       "Content-Type": "application/json",
     },
-    next: { revalidate: 60 }, // ISR cache duration
+    next: { revalidate: options?.revalidate ?? 60 }, // Default 60s, customizable
   });
 
   if (!res.ok) throw new Error(`Server fetch failed: ${res.status}`);

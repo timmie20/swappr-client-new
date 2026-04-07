@@ -85,6 +85,8 @@ export const queryKeys = {
     ) => [...queryKeys.questions.lists(), params] as const,
     details: () => [...queryKeys.questions.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.questions.details(), id] as const,
+    byBrand: (brandId: string) =>
+      [...queryKeys.questions.lists(), { brandId }] as const,
     byModel: (modelId: string) =>
       [...queryKeys.questions.lists(), { modelId }] as const,
   },

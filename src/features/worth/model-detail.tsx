@@ -12,10 +12,9 @@ import WorthOverviewCard from "./component/worth-overview";
 import { useState } from "react";
 import GoRack from "@/components/route-back-btn";
 import { useRouter } from "next/navigation";
-import { useQuestionsByModel } from "@/hooks/use-questions";
+import { useQuestionsByBrand } from "@/hooks/use-questions";
 import { useQuestionStore } from "@/store/question-store";
 import { toast } from "sonner";
-import PageLoader from "@/components/page-loader";
 
 type ModelDetailProps = {
   slug: string;
@@ -52,7 +51,7 @@ export function ModelDetail({ slug }: ModelDetailProps) {
 
   // Fetch questions using React Query hook
   const { refetch: refetchQuestions, isFetching: isLoadingQuestions } =
-    useQuestionsByModel(model.brand?.id || "", {
+    useQuestionsByBrand(model.brand?.id || "", {
       enabled: false, // Don't fetch automatically, only on button click
     });
 
@@ -97,11 +96,6 @@ export function ModelDetail({ slug }: ModelDetailProps) {
 
   return (
     <>
-      {/* <PageLoader
-        isLoading={isLoadingQuestions}
-        text="Loading questions, Hang on..."
-      /> */}
-
       <div className="mx-auto max-w-170 pb-6">
         <GoRack />
 

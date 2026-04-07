@@ -8,10 +8,12 @@ import { FeaturesCarousel } from "@/components/vendor-landing/features-carousel"
 import { FaqSection } from "@/components/vendor-landing/faq-section";
 import { FinalCta } from "@/components/vendor-landing/final-cta";
 import { FooterSection } from "@/components/vendor-landing/footer-section";
+import Navbar from "@/components/shared/nav-bar";
 
 export default function LandingPage() {
   return (
     <main>
+      <Navbar />
       <HeroSection />
       <WhoIsVendor />
       <BenefitsSection />
