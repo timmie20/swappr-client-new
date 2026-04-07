@@ -1,9 +1,9 @@
 "use client";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { motion } from "motion/react";
-import { TypographyH1 } from "./h1";
-import { TypographyMuted } from "./muted";
-import { TypographyP } from "./p";
+import { TypographyH1 } from "./typography/h1";
+import { TypographyMuted } from "./typography/muted";
+import { TypographyP } from "./typography/p";
 
 type MailProps = {
   title: string;

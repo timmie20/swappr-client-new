@@ -1,5 +1,5 @@
 "use client";
-import { TypographyP } from "@/components/p";
+import { TypographyP } from "@/components/typography/p";
 import GoRack from "@/components/route-back-btn";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Profile from "./profile";

@@ -1,5 +1,6 @@
 import React from "react";
-import Navbar from "../shared/nav-bar";
+import { AppNavbar } from "../shared/app-navbar";
+import { FeedFooter } from "../shared/feed-footer";
 
 export default function PageContainer({
   children,
@@ -8,11 +9,11 @@ export default function PageContainer({
 }) {
   return (
     <>
-      <Navbar />
-      <div className="mx-auto h-[calc(100dvh-52px)] max-w-212.5 px-4 pt-16 pb-4 sm:pb-0 lg:p-0 lg:pt-16">
+      <AppNavbar />
+      <main className="mx-auto min-h-[calc(100dvh-3.5rem)] sm:pb-0 lg:p-0">
         {children}
-      </div>
-      {/* <div className="flex flex-1 p-4 md:px-6">{children}</div> */}
+      </main>
+      <FeedFooter />
     </>
   );
 }

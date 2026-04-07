@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { TypographyH1 } from "@/components/h1";
+import { TypographyH1 } from "@/components/typography/h1";
 import { IconShare, IconHome } from "@tabler/icons-react";
 import DetailsDrawer from "./component/details-drawer";
 import { formatNaira } from "@/lib/format";

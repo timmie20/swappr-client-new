@@ -1,8 +1,13 @@
 "use client";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Spinner } from "../ui/spinner";
 
-export function GoogleSignUpButton() {
+interface GoogleSignUpButtonProps {
+  redirect?: string;
+}
+
+export function GoogleSignUpButton({ redirect }: GoogleSignUpButtonProps = {}) {
   const [initiate, setInitiate] = useState(false);
 
   const signUpWithGoogle = async () => {
@@ -11,7 +16,9 @@ export function GoogleSignUpButton() {
       // Redirect to backend Google OAuth endpoint
       const apiUrl =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
-      window.location.href = `${apiUrl}/auth/google`;
+      const url = new URL(`${apiUrl}/auth/google`);
+      if (redirect) url.searchParams.set("redirect", redirect);
+      window.location.href = url.toString();
     } catch (error) {
       console.error("Google OAuth error:", error);
       setInitiate(false);
@@ -35,7 +42,13 @@ export function GoogleSignUpButton() {
         <path d="M564 325.8C564 467.3 467.1 568 324 568C186.8 568 76 457.2 76 320C76 182.8 186.8 72 324 72C390.8 72 447 96.5 490.3 136.9L422.8 201.8C334.5 116.6 170.3 180.6 170.3 320C170.3 406.5 239.4 476.6 324 476.6C422.2 476.6 459 406.2 464.8 369.7L324 369.7L324 284.4L560.1 284.4C562.4 297.1 564 309.3 564 325.8z" />
       </svg>
 
-      {initiate ? "Redirecting to Google..." : "Continue with Google"}
+      {initiate ? (
+        <>
+          <Spinner /> <span className="ml-2">Please wait...</span>
+        </>
+      ) : (
+        "Continue with Google"
+      )}
     </Button>
   );
 }

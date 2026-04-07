@@ -85,6 +85,8 @@ export const queryKeys = {
     ) => [...queryKeys.questions.lists(), params] as const,
     details: () => [...queryKeys.questions.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.questions.details(), id] as const,
+    byBrand: (brandId: string) =>
+      [...queryKeys.questions.lists(), { brandId }] as const,
     byModel: (modelId: string) =>
       [...queryKeys.questions.lists(), { modelId }] as const,
   },
@@ -99,6 +101,18 @@ export const queryKeys = {
       [...queryKeys.valuations.lists(), params] as const,
     details: () => [...queryKeys.valuations.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.valuations.details(), id] as const,
+  },
+
+  // ============================================
+  // Products
+  // ============================================
+  products: {
+    all: ["products"] as const,
+    lists: () => [...queryKeys.products.all, "list"] as const,
+    list: (params?: PaginationParams) =>
+      [...queryKeys.products.lists(), params] as const,
+    details: () => [...queryKeys.products.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.products.details(), id] as const,
   },
 
   // ============================================

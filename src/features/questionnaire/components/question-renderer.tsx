@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 // import { AnimatePresence, motion } from "motion/react";
-import { TypographyH1 } from "@/components/h1";
+import { TypographyH1 } from "@/components/typography/h1";
 import { useQuestionStore } from "@/store/question-store";
 import ToggleSelect from "./toogle-select";
 import DamagesSelector from "./damages-selector";
-import { TypographyMuted } from "@/components/muted";
+import { TypographyMuted } from "@/components/typography/muted";
 
 export default function QuestionRenderer() {
   const currentQuestion = useQuestionStore((s) => s.currentQuestion);

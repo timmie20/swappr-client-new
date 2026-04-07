@@ -9,8 +9,6 @@ import type {
   Question,
   PaginatedResponse,
   PaginationParams,
-  ApiResponse,
-  SubmitAnswersDto,
   ApiResponser,
 } from "@/types/api";
 
@@ -28,7 +26,7 @@ export const questionEndpoints = {
   },
 
   /**
-   * This func is supposed to get questions by model ID but it uses brand Id
+   *
    */
   async getByBrand(
     brandId: string,
@@ -37,16 +35,5 @@ export const questionEndpoints = {
       `/questions/brand/${brandId}/with-general`,
     );
     return data;
-  },
-
-  /**
-   * Submit answers to questions (member only)
-   */
-  async submitAnswers(dto: SubmitAnswersDto): Promise<unknown> {
-    const { data } = await api.post<ApiResponse<unknown>>(
-      "/questions/submit",
-      dto,
-    );
-    return data.data;
   },
 };

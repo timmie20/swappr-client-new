@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { saveAuthTokens } from "@/lib/auth-tokens";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function OAuthCallbackPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function OAuthCallbackPage() {
         const accessToken = searchParams.get("access_token");
         const refreshToken = searchParams.get("refresh_token");
         const expiresIn = searchParams.get("expires_in");
+        const redirect = searchParams.get("state") || "/";
 
         // Validate tokens are present
         if (!accessToken || !refreshToken) {
@@ -29,8 +31,9 @@ export default function OAuthCallbackPage() {
         // Save tokens to cookies and localStorage with expiry
         saveAuthTokens(accessToken, refreshToken, expirySeconds);
 
-        // Redirect to the app
-        router.replace("/check-worth");
+        // Redirect to the requested path or fall back to home
+        // Backend may return the redirect via "redirect" or "state" param
+        router.replace(redirect);
       } catch (err) {
         console.error("OAuth callback error:", err);
         setError("Failed to complete authentication. Please try again.");
@@ -55,8 +58,11 @@ export default function OAuthCallbackPage() {
   }
 
   return (
-    <div className="flex h-full items-center justify-center">
-      <p className="text-lg">Completing sign-in…</p>
+    <div className="flex h-screen w-full flex-col items-center justify-center">
+      <Spinner className="size-8" />
+      <p className="text-muted-foreground mt-4 text-sm">
+        Please wait while we complete your sign-in...
+      </p>
     </div>
   );
 }

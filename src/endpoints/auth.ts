@@ -10,6 +10,7 @@ export const authEndpoints = {
     const { data } = await api.post("/auth/signup", payload);
     return data;
   },
+
   async getProfile() {
     const { data } = await api.get("/auth/me");
     return data;

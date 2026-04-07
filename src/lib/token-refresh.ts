@@ -12,6 +12,7 @@ import {
   clearAuthTokens,
   isTokenExpired,
 } from "@/lib/auth-tokens";
+import { isPublicPageRoute } from "@/lib/public-routes";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
@@ -84,11 +85,14 @@ export async function refreshAccessToken(): Promise<string | null> {
     isRefreshing = false;
     clearAuthTokens();
 
-    // Redirect to sign-in on refresh failure
+    // Redirect to sign-in on refresh failure (only for protected routes)
     if (typeof window !== "undefined") {
       const currentPath = window.location.pathname;
-      // Don't redirect if already on auth pages
-      if (!currentPath.startsWith("/auth/")) {
+      // Don't redirect if on auth pages or public routes
+      if (
+        !currentPath.startsWith("/auth/") &&
+        !isPublicPageRoute(currentPath)
+      ) {
         window.location.href = `/auth/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`;
       }
     }

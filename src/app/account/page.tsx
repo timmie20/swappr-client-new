@@ -1,4 +1,4 @@
-import PageContainer from "@/components/layout/page-container";
+import PageContainer from "@/components/layout/container";
 import AccountPage from "@/features/account/account-page";
 
 export default function Page() {
