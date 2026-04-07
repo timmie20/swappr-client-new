@@ -55,6 +55,7 @@ import {
   IconBrandWhatsapp,
   IconBrandLinkedin,
   IconError404,
+  IconBuildingStore,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -118,4 +119,5 @@ export const Icons = {
   whatsapp: IconBrandWhatsapp,
   linkedin: IconBrandLinkedin,
   error: IconError404,
+  store: IconBuildingStore,
 };

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { useFeedStore } from "@/store/feed-store";
+import { useScrollDetection } from "@/hooks/use-scroll-detection";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Icons } from "../icons";
@@ -12,17 +13,11 @@ import { Button } from "../ui/button";
 import { UserNav } from "../auth/user-nav";
 
 export function AppNavbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrollDetection(10);
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cartCount = useFeedStore((s) => s.cartCount)();
   const bookMarkIds = useFeedStore((s) => s.bookMarkIds);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <>
