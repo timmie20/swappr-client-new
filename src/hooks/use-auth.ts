@@ -60,7 +60,7 @@ export function useLogin() {
     onMutate: () => {
       toast.loading("Signing in...", { id: "login" });
     },
-    onSuccess: (response: LoginResponse) => {
+    onSuccess: async (response: LoginResponse) => {
       const { access_token, refresh_token, expires_in } = response;
 
       // Save tokens with expiry
@@ -70,10 +70,6 @@ export function useLogin() {
 
       // Invalidate user queries to fetch fresh data
       queryClient.invalidateQueries({ queryKey: userKeys.all });
-
-      // Redirect to check-worth page
-      router.push("/check-worth");
-      router.refresh();
     },
     onError: (error: Error) => {
       const message =

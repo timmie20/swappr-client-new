@@ -31,7 +31,7 @@ export default function DetailsDrawer({ result }: DetailsDrawerProps) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="cursor-pointer">
+        <Button variant="ghost" className="cursor-pointer">
           View Details <IconLayoutBottombarInactive />
         </Button>
       </DrawerTrigger>

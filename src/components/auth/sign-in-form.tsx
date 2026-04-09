@@ -13,7 +13,14 @@ import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
 import { TypographyH1 } from "../typography/h1";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  clearPendingValuationRef,
+  getPendingValuationRef,
+} from "@/lib/pending-valuation";
+import { useClaimPendingValuation } from "@/hooks/use-valuation";
+import router from "next/dist/shared/lib/router/router";
+import { toast } from "sonner";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -31,8 +38,11 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
   const login = useLogin();
+  const { mutate: claimPendingValuation } = useClaimPendingValuation();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? undefined;
+
+  const router = useRouter();
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -43,7 +53,29 @@ export default function SignInForm() {
   });
 
   function onSubmit(values: SignInFormValues) {
-    login.mutate(values);
+    login.mutate(values, {
+      onSuccess: () => {
+        const pendingRef = getPendingValuationRef();
+        if (pendingRef) {
+          claimPendingValuation(pendingRef);
+        }
+        router.push(redirect || "/");
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onError: (error: any) => {
+        const errorMessage = error?.response?.data?.message || error?.message;
+        toast.error("Failed to claim valuation.", {
+          id: "claim-valuation",
+          description: errorMessage,
+          cancel: {
+            label: "Discard it!",
+            onClick: () => {
+              clearPendingValuationRef();
+            },
+          },
+        });
+      },
+    });
   }
 
   return (

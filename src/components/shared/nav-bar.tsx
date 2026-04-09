@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { name: "Models", href: "/check-worth", icon: "phone" as const },
   { name: "Products Listings", href: "/", icon: "product" as const },
   { name: "How it Works", href: "/how-it-works", icon: "help" as const },
-  { name: "Vendor", href: "/vendor", icon: "store" as const },
+  { name: "Become a Vendor", href: "/vendor", icon: "store" as const },
 ];
 
 export default function Navbar() {
@@ -38,7 +38,7 @@ export default function Navbar() {
             : "border-b border-[#E5E7EB] bg-white",
         )}
       >
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-4 lg:px-0">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-4 xl:px-0">
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="flex shrink-0 items-center gap-2">
               <Image

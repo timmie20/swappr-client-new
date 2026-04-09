@@ -236,6 +236,8 @@ export interface ValuationAdjustment {
 
 export interface ValuationResponse {
   valuation_id: string;
+  reference: string;
+  status: string;
   device: {
     brand: string;
     model: string;
