@@ -40,7 +40,7 @@ export default function SignUpViewPage() {
       <div className="flex min-h-screen items-center justify-center p-4 py-8 lg:p-8">
         <div className="flex w-full max-w-md flex-col items-center justify-center space-y-6">
           <SignInForm />
-          <p className="text-muted-foreground text-center text-sm">
+          {/* <p className="text-muted-foreground text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link
               href="/auth/sign-up"
@@ -48,7 +48,7 @@ export default function SignUpViewPage() {
             >
               Sign Up
             </Link>
-          </p>
+          </p> */}
           <p className="text-muted-foreground px-8 text-center text-sm">
             By clicking continue, you agree to our{" "}
             <Link

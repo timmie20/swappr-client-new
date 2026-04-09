@@ -44,7 +44,7 @@ export function SwapConfirmStep({ offer, valuation }: SwapConfirmStepProps) {
         </div>
         <div className="flex items-center justify-between px-4 py-3">
           <span className="text-xs text-[#9CA3AF]">Estimated Value</span>
-          <span className="text-xs font-bold text-[#1A6B5A]">
+          <span className="text-primary text-xs font-bold">
             ₦{valuation.final_value.toLocaleString()}
           </span>
         </div>

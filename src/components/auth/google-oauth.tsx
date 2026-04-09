@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
 
 interface GoogleSignUpButtonProps {
@@ -26,11 +25,9 @@ export function GoogleSignUpButton({ redirect }: GoogleSignUpButtonProps = {}) {
   };
 
   return (
-    <Button
+    <button
+      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-black bg-white px-6 py-3 font-semibold text-black uppercase transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-x-[0px] disabled:hover:translate-y-[0px] disabled:hover:rounded-2xl disabled:hover:shadow-none"
       onClick={signUpWithGoogle}
-      className="w-full cursor-pointer disabled:cursor-not-allowed"
-      variant="outline"
-      size="lg"
       disabled={initiate}
     >
       <svg
@@ -49,6 +46,6 @@ export function GoogleSignUpButton({ redirect }: GoogleSignUpButtonProps = {}) {
       ) : (
         "Continue with Google"
       )}
-    </Button>
+    </button>
   );
 }
