@@ -19,6 +19,14 @@ export const valuationEndpoints = {
     );
     return data;
   },
+
+  async claim(reference: string): Promise<ApiResponse<unknown>> {
+    const { data } = await api.post<ApiResponse<unknown>>(
+      `/valuations/${reference}/claim`,
+    );
+    return data;
+  },
+
   async getAll(): Promise<ApiResponse<Valuation[]>> {
     const { data } = await api.get<ApiResponse<Valuation[]>>("/valuations");
     return data;

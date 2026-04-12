@@ -5,6 +5,7 @@ import axios, {
 } from "axios";
 import { getValidAccessToken, refreshAccessToken } from "@/lib/token-refresh";
 import { clearAuthTokens } from "@/lib/auth-tokens";
+import { isPublicApiEndpoint, isPublicPageRoute } from "@/lib/public-routes";
 
 /**
  * API Client Configuration
@@ -38,17 +39,8 @@ class ApiClient {
     // Request interceptor - attach valid auth token
     this.instance.interceptors.request.use(
       async (config: InternalAxiosRequestConfig) => {
-        // Skip auth for public endpoints
-        const publicEndpoints = [
-          "/auth/google",
-          "/auth/callback",
-          "/auth/refresh",
-        ];
-        const isPublicEndpoint = publicEndpoints.some((endpoint) =>
-          config.url?.includes(endpoint),
-        );
-
-        if (!isPublicEndpoint) {
+        // Skip auth for public endpoints (from centralized config)
+        if (!isPublicApiEndpoint(config.url)) {
           // Get valid token (refreshes if needed)
           const token = await getValidAccessToken();
           if (token) {
@@ -83,11 +75,12 @@ class ApiClient {
               return this.instance(originalRequest);
             }
           } catch (refreshError) {
-            // Refresh failed, clear tokens and redirect to sign-in
+            // Refresh failed, clear tokens and redirect to sign-in (only for protected routes)
             clearAuthTokens();
             if (typeof window !== "undefined") {
               const currentPath = window.location.pathname;
-              if (!currentPath.startsWith("/auth/")) {
+              // Don't redirect if on auth pages or public routes
+              if (!currentPath.startsWith("/auth/") && !isPublicPageRoute(currentPath)) {
                 window.location.href = `/auth/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`;
               }
             }

@@ -1,20 +1,27 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { TypographyH1 } from "@/components/h1";
-import { IconShare, IconHome } from "@tabler/icons-react";
+import { TypographyH1 } from "@/components/typography/h1";
+import { IconShare } from "@tabler/icons-react";
 import DetailsDrawer from "./component/details-drawer";
 import { formatNaira } from "@/lib/format";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useResultStore } from "@/store/result-store";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { ComingSoonDialog } from "@/components/coming-soon-dialog";
+// import { ComingSoonDialog } from "@/components/coming-soon-dialog";
 import { SafeImage } from "./component/safe-image";
+import { isAuthenticated } from "@/lib/auth-tokens";
+import { getPendingValuationRef } from "@/lib/pending-valuation";
+import { SaveValuationDialog } from "./component/save-valuation-dialog";
+import { cn } from "@/lib/utils";
 
 export default function ResultPage() {
   const result = useResultStore((s) => s.result);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [showComingSoon, setShowComingSoon] = useState(false);
+  // const [showComingSoon, setShowComingSoon] = useState(false);
+  const [showSaveNudge] = useState(
+    () => !isAuthenticated() && !!getPendingValuationRef(),
+  );
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -28,8 +35,8 @@ export default function ResultPage() {
       <audio ref={audioRef} src="/assets/audio/fireworks-02-419019.mp3" />
       <Fireworks autorun={{ speed: 3, duration: 4500 }} />
 
-      <div className="relative mx-auto mt-6 flex h-full max-w-163.75 flex-col items-center space-y-5 md:space-y-12">
-        <Link
+      <div className="relative mx-auto mt-6 flex max-w-163.75 flex-col items-center space-y-5 pb-32 md:space-y-12">
+        {/* <Link
           href="/check-worth"
           className="absolute top-0 left-0 z-50 cursor-pointer"
         >
@@ -40,7 +47,7 @@ export default function ResultPage() {
           >
             <IconHome size={26} />
           </Button>
-        </Link>
+        </Link> */}
 
         <div className="space-y-2 text-center">
           <p className="text-small text-slate-400 sm:text-lg">
@@ -70,26 +77,52 @@ export default function ResultPage() {
         </div>
 
         {result && <DetailsDrawer result={result} />}
+      </div>
 
-        <div className="flex w-full items-center justify-center gap-5 px-3 sm:w-[80%]">
-          <Button
-            size="lg"
-            className="flex-1 cursor-pointer rounded-full sm:flex-3"
-            onClick={() => setShowComingSoon(true)}
-          >
-            Swap Phone
-          </Button>
-          <Button size="lg" className="flex-1">
-            Share
-            <IconShare size={18} />
+      {/* <div className="border-border bg-background/80 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur-sm"> */}
+      <div className="mx-auto max-w-163.75 px-3 pt-4 pb-6">
+        <div
+          className={cn(
+            "flex w-full items-center gap-5 sm:w-[80%]",
+            !showSaveNudge && "justify-end",
+          )}
+        >
+          {showSaveNudge && (
+            <Button
+              size="lg"
+              className="w-full flex-1 animate-pulse cursor-pointer"
+              onClick={() => setSaveDialogOpen(true)}
+            >
+              Click me
+            </Button>
+          )}
+          <Button size="icon-lg" variant="outline">
+            <IconShare size={24} />
           </Button>
         </div>
       </div>
+      {/* </div> */}
 
+      {showSaveNudge && (
+        <>
+          {/* <Button
+            type="button"
+            onClick={() => setSaveDialogOpen(true)}
+            className="fixed top-1/2 right-4 z-50 -translate-y-1/2 animate-pulse"
+          >
+            Click me
+          </Button> */}
+          <SaveValuationDialog
+            open={saveDialogOpen}
+            onOpenChange={setSaveDialogOpen}
+          />
+        </>
+      )}
+      {/* 
       <ComingSoonDialog
         open={showComingSoon}
         onOpenChange={setShowComingSoon}
-      />
+      /> */}
     </>
   );
 }

@@ -8,11 +8,20 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { isTokenExpired, isAuthenticated } from "@/lib/auth-tokens";
 import { refreshAccessToken } from "@/lib/token-refresh";
+import { isPublicPageRoute } from "@/lib/public-routes";
 
 export function useTokenRefresh() {
+  const pathname = usePathname();
+
   useEffect(() => {
+    // Don't refresh tokens on public routes
+    if (isPublicPageRoute(pathname)) {
+      return;
+    }
+
     // Only run if user is authenticated
     if (!isAuthenticated()) {
       return;
@@ -21,7 +30,11 @@ export function useTokenRefresh() {
     // Check token expiry every 5 minutes
     const interval = setInterval(
       async () => {
-        if (isAuthenticated() && isTokenExpired()) {
+        if (
+          isAuthenticated() &&
+          isTokenExpired() &&
+          !isPublicPageRoute(pathname)
+        ) {
           console.log("Token expired, refreshing...");
           await refreshAccessToken();
         }
@@ -35,5 +48,5 @@ export function useTokenRefresh() {
     }
 
     return () => clearInterval(interval);
-  }, []);
+  }, [pathname]);
 }

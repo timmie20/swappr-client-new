@@ -24,3 +24,35 @@ export async function getAuthHeaders() {
     Authorization: `Bearer ${accessToken}`,
   };
 }
+
+// lib/api/server.ts
+// ⚠️ Never import this in a client component
+
+const BASE_URL = process.env.API_BASE_URL!;
+// const SERVICE_KEY = process.env.API_SERVICE_KEY!; // backend service-to-service key
+
+export async function serverFetch<T>(
+  endpoint: string,
+  params?: Record<string, string>,
+  options?: {
+    revalidate?: number | false;
+  },
+): Promise<T> {
+  const url = new URL(`${BASE_URL}${endpoint}`);
+
+  if (params) {
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  }
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      // Authorization: `Bearer ${SERVICE_KEY}`,
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: options?.revalidate ?? 60 }, // Default 60s, customizable
+  });
+
+  if (!res.ok) throw new Error(`Server fetch failed: ${res.status}`);
+
+  return res.json();
+}

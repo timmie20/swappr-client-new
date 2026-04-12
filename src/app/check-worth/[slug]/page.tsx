@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ModelDetailSkeleton } from "@/components/skeletons/model-detail-skeleton";
 import { ModelDetail } from "@/features/worth/model-detail";
-import PageContainer from "@/components/layout/page-container";
+import PageContainer from "@/components/layout/container";
 
 type PageProps = {
   params: Promise<{ slug: string }>;

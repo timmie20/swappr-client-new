@@ -1,10 +1,20 @@
-import PageContainer from "@/components/layout/page-container";
+import PageContainer from "@/components/layout/container";
 import QuestionnairePage from "@/features/questionnaire/questionnaire-page";
 import React from "react";
+import { getQuestionsByBrand } from "@/server-actions/questionnaire";
+import { queryKeys } from "@/lib/api/query-keys";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 type PageProps = {
   searchParams: Promise<{ brandId?: string }>;
 };
+
+// ISR - revalidate every 24 hours since questions rarely change
+export const revalidate = 86400;
 
 export default async function Page({ searchParams }: PageProps) {
   const { brandId } = await searchParams;
@@ -17,9 +27,20 @@ export default async function Page({ searchParams }: PageProps) {
     );
   }
 
+  // Create QueryClient for this request
+  const queryClient = new QueryClient();
+
+  // Prefetch questions on the server
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.questions.byBrand(brandId),
+    queryFn: () => getQuestionsByBrand(brandId),
+  });
+
   return (
-    <PageContainer>
-      <QuestionnairePage brandId={brandId} />
-    </PageContainer>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PageContainer>
+        <QuestionnairePage brandId={brandId} />
+      </PageContainer>
+    </HydrationBoundary>
   );
 }

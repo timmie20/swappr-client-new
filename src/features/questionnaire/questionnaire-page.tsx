@@ -1,35 +1,54 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Questions from "./questions";
-import { getAuthHeaders } from "@/lib/api/server";
-import { Question } from "@/lib/api/types";
-import { apiClient } from "@/lib/api/client";
+import { useQuestionsByBrand } from "@/hooks/use-questions";
+import { useQuestionStore } from "@/store/question-store";
+import PageLoader from "@/components/page-loader";
 
 type QuestionnairePageProps = {
   brandId: string;
 };
 
-export type QuestionsProps = {
-  questions: Question[];
-};
+export default function QuestionnairePage({ brandId }: QuestionnairePageProps) {
+  // Hydrate from React Query (data prefetched on server)
+  const { data, isLoading, isError } = useQuestionsByBrand(brandId);
 
-const getQuestions = async (brandId: string): Promise<QuestionsProps> => {
-  const headers = await getAuthHeaders();
-  const response = await apiClient.instance.get<Promise<QuestionsProps>>(
-    `/questions/brand/${brandId}/with-general`,
-    {
-      ...(headers && { headers }),
-    },
-  );
-  return response.data;
-};
+  const initializeQuestions = useQuestionStore((s) => s.initializeQuestions);
 
-export default async function QuestionnairePage({
-  brandId,
-}: QuestionnairePageProps) {
-  const questions = (await getQuestions(brandId)).questions;
+  // Initialize Zustand store when questions are loaded
+  useEffect(() => {
+    if (data?.questions) {
+      initializeQuestions(data.questions);
+    }
+  }, [data?.questions, initializeQuestions]);
+
+  if (isLoading) {
+    return (
+      // <div className="h-[80vh] md:my-auto md:h-[70vh]">
+      //   <div className="flex h-full items-center justify-center">
+      //     <div className="text-center">Loading questions...</div>
+      //   </div>
+      // </div>
+      <PageLoader />
+    );
+  }
+
+  if (isError || !data?.questions) {
+    return (
+      <div className="h-[80vh] md:my-auto md:h-[70vh]">
+        <div className="flex h-full items-center justify-center">
+          <div className="text-center text-red-600">
+            Failed to load questions. Please try again.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-[80vh] md:my-auto md:h-[70vh]">
-      <Questions questions={questions} />
+      <Questions questions={data.questions} />
     </div>
   );
 }

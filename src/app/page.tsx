@@ -1,19 +1,33 @@
-import { TypographyH1 } from "@/components/h1";
 import PageContainer from "@/components/layout/page-container";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { FeedPage } from "@/features/feed";
+import { queryKeys } from "@/lib/api/query-keys";
+import { getProducts } from "@/server-actions/product";
 
-export default function Page() {
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+
+export const revalidate = 60;
+
+export default async function page() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.products.list({ page: 1, limit: 20 }),
+    queryFn: () =>
+      getProducts({
+        page: 1,
+        limit: 20,
+      }),
+  });
+
   return (
-    <>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <PageContainer>
-        <div className="flex h-full flex-col items-center justify-center gap-4">
-          <TypographyH1>Home</TypographyH1>
-          <Link href="/check-worth">
-            <Button size="lg">Check worth</Button>
-          </Link>
-        </div>
+        <FeedPage />
       </PageContainer>
-    </>
+    </HydrationBoundary>
   );
 }

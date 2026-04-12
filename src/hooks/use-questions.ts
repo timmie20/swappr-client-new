@@ -10,9 +10,9 @@ import { queryKeys } from "@/lib/api/query-keys";
 import type { Question, ApiResponser } from "@/types/api";
 
 /**
- * Fetch questions by model ID
+ * Fetch questions by brand ID
  */
-export function useQuestionsByModel(
+export function useQuestionsByBrand(
   brandId: string,
   options?: Omit<
     UseQueryOptions<ApiResponser<{ questions: Question[] }>>,
@@ -20,9 +20,16 @@ export function useQuestionsByModel(
   >,
 ) {
   return useQuery({
-    queryKey: queryKeys.questions.byModel(brandId),
+    queryKey: queryKeys.questions.byBrand(brandId),
     queryFn: () => questionEndpoints.getByBrand(brandId),
+    staleTime: 86400_000, // 24 hours - questions rarely change
     enabled: !!brandId,
     ...options,
   });
 }
+
+/**
+ * @deprecated Use useQuestionsByBrand instead (matches API parameter naming)
+ * Fetch questions by model ID (backward compatibility alias)
+ */
+export const useQuestionsByModel = useQuestionsByBrand;
