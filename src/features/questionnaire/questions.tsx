@@ -23,6 +23,8 @@ import { clearQuestionnaireContext } from "@/lib/cookies";
 import { useResultStore } from "@/store/result-store";
 import { useCalculateValuation } from "@/hooks/use-valuation";
 import { Question } from "@/lib/api/types";
+import { isAuthenticated } from "@/lib/auth-tokens";
+import { setPendingValuationRef } from "@/lib/pending-valuation";
 
 /**
  * Extract error message from unknown error type
@@ -106,6 +108,13 @@ export default function Questions({ questions }: QuestionsProps) {
           // Store result in result store
           if (response) {
             console.log(response);
+
+            if (!isAuthenticated()) {
+              const referenceToStore =
+                response.reference?.trim() || response.valuation_id;
+              if (referenceToStore) setPendingValuationRef(referenceToStore);
+            }
+
             setResult(response);
 
             // Clear answers and context after successful submission

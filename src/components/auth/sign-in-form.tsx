@@ -1,50 +1,80 @@
 "use client";
 
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { FormInput } from "@/components/forms/form-input";
-import { Button } from "@/components/ui/button";
-import { FieldGroup, Field } from "@/components/ui/field";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { z } from "zod";
+// import { FormInput } from "@/components/forms/form-input";
+// import { Button } from "@/components/ui/button";
+// import { FieldGroup, Field } from "@/components/ui/field";
 import { GoogleSignUpButton } from "./google-oauth";
-import { Separator } from "@/components/ui/separator";
-import { useLogin } from "@/hooks/use-auth";
+// import { Separator } from "@/components/ui/separator";
+// import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
 import { TypographyH1 } from "../typography/h1";
-import Link from "next/link";
+// import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+// import {
+//   clearPendingValuationRef,
+//   getPendingValuationRef,
+// } from "@/lib/pending-valuation";
+// import { useClaimPendingValuation } from "@/hooks/use-valuation";
+// import { toast } from "sonner";
 
-const signInSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(8, "Password must be at least 8 characters")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    ),
-});
+// const signInSchema = z.object({
+//   email: z.string().email("Please enter a valid email address"),
+//   password: z
+//     .string()
+//     .min(1, "Password is required")
+//     .min(8, "Password must be at least 8 characters")
+//     .regex(
+//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+//       "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+//     ),
+// });
 
-type SignInFormValues = z.infer<typeof signInSchema>;
+// type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
-  const login = useLogin();
+  // const login = useLogin();
+  // const { mutate: claimPendingValuation } = useClaimPendingValuation();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? undefined;
 
-  const form = useForm<SignInFormValues>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  // const router = useRouter();
 
-  function onSubmit(values: SignInFormValues) {
-    login.mutate(values);
-  }
+  // const form = useForm<SignInFormValues>({
+  //   resolver: zodResolver(signInSchema),
+  //   defaultValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  // });
+
+  // function onSubmit(values: SignInFormValues) {
+  //   login.mutate(values, {
+  //     onSuccess: () => {
+  //       const pendingRef = getPendingValuationRef();
+  //       if (pendingRef) {
+  //         claimPendingValuation(pendingRef);
+  //       }
+  //       router.push(redirect || "/");
+  //     },
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     onError: (error: any) => {
+  //       const errorMessage = error?.response?.data?.message || error?.message;
+  //       toast.error("Failed to claim valuation.", {
+  //         id: "claim-valuation",
+  //         description: errorMessage,
+  //         cancel: {
+  //           label: "Discard it!",
+  //           onClick: () => {
+  //             clearPendingValuationRef();
+  //           },
+  //         },
+  //       });
+  //     },
+  //   });
+  // }
 
   return (
     <div className="w-full space-y-6 px-4 md:px-0">
@@ -52,10 +82,10 @@ export default function SignInForm() {
         <Image
           src="/assets/images/swappr-logo-filled.png"
           alt="Swappr"
-          width={120}
+          width={200}
           height={40}
           priority
-          className="h-10 w-auto"
+          className="h-20 w-auto"
         />
       </div>
 
@@ -65,7 +95,7 @@ export default function SignInForm() {
 
       <GoogleSignUpButton redirect={redirect} />
 
-      <div className="flex items-center gap-4">
+      {/* <div className="flex items-center gap-4">
         <Separator className="flex-1" />
         <span className="text-muted-foreground text-sm">OR</span>
         <Separator className="flex-1" />
@@ -112,7 +142,7 @@ export default function SignInForm() {
             {login.isPending ? "Signing in..." : "Sign in"}
           </Button>
         </Field>
-      </form>
+      </form> */}
     </div>
   );
 }
