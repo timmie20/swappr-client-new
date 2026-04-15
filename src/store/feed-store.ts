@@ -62,6 +62,7 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
     set((state) => ({
       cartItems: state.cartItems.filter((i) => i.product.id !== productId),
     })),
+
   cartCount: () => get().cartItems.reduce((sum, i) => sum + i.quantity, 0),
 
   // bookmarks

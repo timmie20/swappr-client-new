@@ -34,8 +34,8 @@ export function AppNavbar() {
             {/* Logo */}
             <Link href="/" className="flex shrink-0 items-center gap-2">
               <Image
-                src="/assets/logos/Frame 2.png"
-                alt="Swapp-logor"
+                src="/assets/logos/logo-dark.png"
+                alt="Swapp-logo"
                 width={120}
                 height={40}
                 priority
@@ -62,7 +62,7 @@ export function AppNavbar() {
             {/* Right icons */}
             <div className="ml-auto flex items-center gap-1">
               {/* Wishlist */}
-              <Button
+              {/* <Button
                 className="relative cursor-pointer"
                 size="icon-lg"
                 variant="ghost"
@@ -73,7 +73,7 @@ export function AppNavbar() {
                     {bookMarkIds.size}
                   </span>
                 )}
-              </Button>
+              </Button> */}
 
               {/* Notifications */}
               <Button
@@ -90,7 +90,7 @@ export function AppNavbar() {
                 variant="ghost"
                 size="icon-lg"
               >
-                <Icons.product size={20} />
+                <Icons.cartCopy size={20} />
                 <AnimatePresence>
                   {cartCount > 0 && (
                     <motion.span
@@ -98,7 +98,7 @@ export function AppNavbar() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       exit={{ scale: 0 }}
-                      className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#1A6B5A] text-[10px] font-bold text-white"
+                      className="bg-primary absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] font-bold text-white"
                     >
                       {cartCount > 9 ? "9+" : cartCount}
                     </motion.span>

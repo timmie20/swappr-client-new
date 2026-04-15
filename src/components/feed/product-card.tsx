@@ -254,7 +254,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </Button>
           )}
 
-          <Button
+          {/* <Button
             variant="outline"
             size="icon"
             onClick={(e) => {
@@ -268,7 +268,7 @@ export function ProductCard({ product }: ProductCardProps) {
             ) : (
               <Icons.bookmark size={24} />
             )}
-          </Button>
+          </Button> */}
         </div>
       </div>
     </motion.article>

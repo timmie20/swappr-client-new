@@ -69,8 +69,8 @@ export function FeedFooter() {
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/assets/images/logo.png"
-                alt="Swapp-logor"
+                src="/assets/logos/logo-light.png"
+                alt="Swapp-logo"
                 width={120}
                 height={40}
                 priority
