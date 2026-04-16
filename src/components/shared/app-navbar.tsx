@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { UserNav } from "../auth/user-nav";
+import { SearchDialog } from "../search-dialog";
 
 export function AppNavbar() {
   const scrolled = useScrollDetection(10);
@@ -18,6 +19,8 @@ export function AppNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cartCount = useFeedStore((s) => s.cartCount)();
   const bookMarkIds = useFeedStore((s) => s.bookMarkIds);
+
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -74,6 +77,16 @@ export function AppNavbar() {
                   </span>
                 )}
               </Button> */}
+
+              {/* search */}
+              <Button
+                className="hidden cursor-pointer sm:flex"
+                variant="ghost"
+                size="icon-lg"
+                onClick={() => setOpen(true)}
+              >
+                <Icons.search size={20} />
+              </Button>
 
               {/* Notifications */}
               <Button
@@ -175,6 +188,8 @@ export function AppNavbar() {
 
       {/* Spacer for fixed nav */}
       <div className="h-16 md:h-16" />
+
+      <SearchDialog open={open} onOpenChange={setOpen} />
     </>
   );
 }
