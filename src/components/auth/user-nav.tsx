@@ -55,9 +55,6 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/check-worth">
-            <DropdownMenuItem>Check Phone Worth</DropdownMenuItem>
-          </Link>
           <Link href="/account">
             <DropdownMenuItem>Profile</DropdownMenuItem>
           </Link>
@@ -67,11 +64,18 @@ export function UserNav() {
       </DropdownMenuContent>
     </DropdownMenu>
   ) : (
-    <Link href="/auth/sign-in" className="ml-1 hidden sm:inline-flex">
-      <Button variant="outline" className="cursor-pointer">
+    <Link href="/auth/sign-in">
+      <Button
+        variant="outline"
+        className="hidden shrink-0 cursor-pointer lg:inline-flex"
+      >
         <Icons.user size={16} />
         Sign in
       </Button>
+
+      <button>
+        <Icons.user size={20} className="inline-flex lg:hidden" />
+      </button>
     </Link>
   );
 }
