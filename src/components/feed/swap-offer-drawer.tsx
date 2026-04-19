@@ -109,13 +109,13 @@ export function SwapOfferDrawer() {
             className="h-14 w-14 rounded-lg border border-[#E5E7EB] object-cover"
           />
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold tracking-wide text-[#9CA3AF] uppercase">
+            <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
               {product.brand}
             </p>
-            <p className="truncate text-sm font-bold text-[#1A1A1A]">
+            <p className="text-foreground truncate text-sm font-bold">
               {product.title}
             </p>
-            <p className="text-xs font-semibold text-[#1A6B5A]">
+            <p className="text-primary text-xs font-semibold">
               {formatNaira(product.price)}
             </p>
           </div>

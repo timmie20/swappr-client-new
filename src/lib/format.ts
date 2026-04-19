@@ -1,3 +1,6 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
 export function formatStorageCapacity(
   capacity: number | string | undefined,
 ): string {
@@ -47,3 +50,16 @@ export const formatDate = (dateString: string | Date) => {
     timeZone: "Africa/Lagos",
   }).format(date);
 };
+
+dayjs.extend(relativeTime);
+
+export function formatRelativeDate(date: string | Date): string {
+  const d = dayjs(date);
+  const diffInDays = dayjs().diff(d, "day");
+
+  if (diffInDays >= 7) {
+    return d.format("DD MMM"); // e.g. "14 Mar"
+  }
+
+  return d.fromNow(); // e.g. "2 hours ago", "5 days ago"
+}

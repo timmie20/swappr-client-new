@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { formatNaira } from "@/lib/format";
+import { formatDate, formatNaira, formatRelativeDate } from "@/lib/format";
 import { useFeedStore } from "@/store/feed-store";
 import type { Product } from "@/features/feed/types";
 import { cn } from "@/lib/utils";
@@ -204,8 +204,8 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Seller info */}
         <div className="flex items-center gap-1.5 pt-0.5">
           <VendorDialog product={product} />
-          <span className="text-muted-foreground ml-auto shrink-0 text-[11px]">
-            {product.listedAgo}
+          <span className="text-muted-foreground ml-auto shrink-0 text-sm">
+            {formatRelativeDate(product.listed_at)}
           </span>
         </div>
 

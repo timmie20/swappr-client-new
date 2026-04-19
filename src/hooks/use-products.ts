@@ -63,7 +63,7 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
       verified: !!product.vendor?.is_verified,
       totalSales: 0,
     },
-    listedAgo: "Recently listed",
+    listed_at: product.created_at,
     specs: product.specifications,
     isSoldOut: product.total_stock <= 0 && product.status === "out_of_stock",
   };

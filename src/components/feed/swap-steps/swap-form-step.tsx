@@ -9,6 +9,8 @@ import { EmptyState } from "@/components/empty-state";
 import { IconDeviceMobile } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/error-state";
+import { format } from "path";
+import { formatRelativeDate } from "@/lib/format";
 
 export interface SwapOffer {
   valuationId: string;
@@ -159,18 +161,6 @@ function ValuationCard({
   isSelected,
   onSelect,
 }: ValuationCardProps) {
-  const formatDate = (date: Date) => {
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - new Date(date).getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return `${Math.floor(diffDays / 30)} months ago`;
-  };
-
   return (
     <button
       onClick={onSelect}
@@ -182,19 +172,19 @@ function ValuationCard({
     >
       <div className="flex flex-col items-start gap-1">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold tracking-wide text-[#9CA3AF] uppercase">
+          <span className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
             {valuation.device.brand}
           </span>
-          <span className="text-[10px] text-[#D1D5DB]">•</span>
+          <span className="text-muted-foreground text-xs">•</span>
           <span className="text-xs text-[#6B7280]">
             {valuation.device.storage}GB
           </span>
         </div>
-        <p className="text-sm font-bold text-[#1A1A1A]">
+        <p className="text-foreground text-sm font-bold">
           {valuation.device.model}
         </p>
-        <p className="text-[11px] text-[#9CA3AF]">
-          {formatDate(valuation.created_at)}
+        <p className="text-muted-foreground text-xs">
+          {formatRelativeDate(valuation.created_at)}
         </p>
       </div>
 

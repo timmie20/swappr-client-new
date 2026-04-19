@@ -47,7 +47,7 @@ export interface Product {
   isSoldOut?: boolean;
   category: string;
   seller: Seller;
-  listedAgo: string;
+  listed_at: Date;
   specs?: Record<string, string>;
 }
 

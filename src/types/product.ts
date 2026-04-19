@@ -35,7 +35,7 @@ export interface ProductVendor {
 export interface ProductDetail {
   id: string;
   slug: string;
-  created_at?: string;
+  created_at: Date;
   updated_at?: string;
   name: string;
   model?: string;
