@@ -57,14 +57,6 @@ export default function NavActionButtons({ setOpen }: NavActionButtonsProps) {
       {/* User */}
 
       <UserNav />
-
-      {/* Mobile menu toggle */}
-      {/* <button
-        onClick={() => setMobileMenuOpen((v) => !v)}
-        className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B7280] transition-colors hover:bg-[#F8F9FA] sm:hidden"
-      >
-        {mobileMenuOpen ? <Icons.close size={20} /> : <Icons.menu size={20} />}
-      </button> */}
     </div>
   );
 }

@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
 
 import { useScrollDetection } from "@/hooks/use-scroll-detection";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { Icons } from "../../icons";
 import { SearchDialog } from "../../search-dialog";
 import NavActionButtons from "./action-buttons";
 import { NavigationLinks } from "../nav-items";
+import MobileNavMenu from "./mobile-nav-menu";
+import Logo from "@/components/shared/logo";
 
 export function AppNavbar() {
   const scrolled = useScrollDetection(10);
@@ -29,21 +29,20 @@ export function AppNavbar() {
       >
         <div className="mx-auto w-full max-w-screen-2xl px-4 lg:px-6 lg:py-4 xl:py-0">
           <div className="flex h-16 w-full items-center justify-between gap-4">
-            {/* mobile menu button */}
-            <Icons.menu size={30} className="block lg:hidden" />
+            {/* Mobile menu toggle */}
+            <button
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              className="inline-flex lg:hidden"
+            >
+              <Icons.menu size={30} />
+            </button>
 
             {/* Logo */}
             <Link
               href="/"
               className="ml-14 flex flex-none shrink-0 items-center gap-2 lg:ml-0"
             >
-              <Image
-                src="/assets/logos/logo-dark.png"
-                alt="Swapp-logo"
-                width={120}
-                height={40}
-                priority
-              />
+              <Logo variant="dark" priority />
             </Link>
 
             {/* nav links - desktop only */}
@@ -55,34 +54,7 @@ export function AppNavbar() {
         </div>
 
         {/* Mobile nav menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden border-t border-[#E5E7EB] bg-white sm:hidden"
-            >
-              <div className="flex flex-col gap-1 px-4 py-3">
-                <Link
-                  href="/auth/sign-in"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium text-[#1A1A1A] hover:bg-[#F8F9FA]"
-                >
-                  <Icons.user size={18} />
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/sign-up"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex h-10 items-center gap-2 rounded-lg bg-[#1A6B5A] px-3 text-sm font-medium text-white"
-                >
-                  Create Account
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <MobileNavMenu open={mobileMenuOpen} setOpen={setMobileMenuOpen} />
       </nav>
 
       {/* Spacer for fixed nav */}
