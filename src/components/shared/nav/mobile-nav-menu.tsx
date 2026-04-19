@@ -141,7 +141,7 @@ export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
         side="left"
         showCloseButton={false}
         forceMount
-        className="w-full! max-w-none! p-0"
+        className="w-full! max-w-none! border-0 p-0 sm:max-w-sm!"
       >
         <SheetHeader className="border-border border-b p-5">
           <SheetTitle>
