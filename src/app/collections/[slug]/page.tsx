@@ -1,15 +1,15 @@
 import PageContainer from "@/components/layout/page-container";
-import { CollectionView } from "@/features/collections/collection-view";
+import { CollectionSlug } from "@/features/collections/collection-slug-page";
 
 interface CollectionPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default async function CollectionPage({ params }: CollectionPageProps) {
+export default async function page({ params }: CollectionPageProps) {
   const { slug } = await params;
   return (
     <PageContainer>
-      <CollectionView slug={slug} />
+      <CollectionSlug slug={slug} />
     </PageContainer>
   );
 }

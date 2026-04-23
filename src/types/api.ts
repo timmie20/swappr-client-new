@@ -20,6 +20,7 @@ export interface User {
 
 export interface PaginationParams {
   brand_id?: string;
+  subcategory_id?: string;
   page?: number;
   limit?: number;
   search?: string;

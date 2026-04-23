@@ -23,7 +23,7 @@ interface FeedGridContentProps {
   loadingMore?: boolean;
   canLoadMore?: boolean;
   isError?: boolean;
-  onLoadMore: () => void;
+  onLoadMore?: () => void;
   onProductClick?: (product: Product) => void;
   cols?: Cols;
 }
@@ -43,7 +43,7 @@ export function FeedGridContent({
 
   if (loading) {
     return (
-      <div className={`grid gap-3 ${gridClass}`}>
+      <div className={`grid w-full gap-3 ${gridClass}`}>
         <SkeletonGrid count={8} />
       </div>
     );

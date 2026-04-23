@@ -3,12 +3,13 @@ type NavItem = {
   href?: string;
   description?: string;
   subItems?: NavItem[];
+  image?: string;
 };
 
 export const NAV_LINKS: NavItem[] = [
   { name: "Deals", href: "deals" },
   {
-    name: "iPhone",
+    name: "Smartphones",
     href: "#",
     subItems: [
       {
@@ -17,16 +18,21 @@ export const NAV_LINKS: NavItem[] = [
         description: "Browse our full range of iPhones.",
       },
       {
+        name: "Explore all Androids",
+        href: "/collections/iphones",
+        description: "Browse our full range of Androids",
+      },
+      {
+        name: "iPhone 17 & Air",
+        href: "/collections/iPhone-17",
+        description:
+          "Discover the latest iPhone 17 with cutting-edge features.",
+      },
+      {
         name: "iPhone SE",
         href: "/collections/iPhone-se",
         description:
           "Get the latest iPhone SE (2nd and 3rd gen) in a compact design.",
-      },
-      {
-        name: "iPhone 17",
-        href: "/collections/iPhone-17",
-        description:
-          "Discover the latest iPhone 17 with cutting-edge features.",
       },
       {
         name: "iPhone 16",
@@ -34,47 +40,40 @@ export const NAV_LINKS: NavItem[] = [
         description:
           "Explore the powerful iPhone 16 with enhanced performance.",
       },
+    ],
+  },
+  {
+    name: "Laptops",
+    href: "#",
+    subItems: [
       {
-        name: "iPhone 15",
-        href: "/collections/iPhone-15",
+        name: "Explore all MacBooks",
+        href: "/collections/macbooks",
+        description: "Browse our various collection of MacBooks",
       },
       {
-        name: "iPhone 14",
-        href: "/collections/iPhone-14",
-      },
-      {
-        name: "iPhone 13",
-        href: "/collections/iPhone-13",
-      },
-      {
-        name: "iPhone 12",
-        href: "/collections/iPhone-12",
-      },
-      {
-        name: "iPhone 11",
-        href: "/collections/iPhone-11",
-      },
-      {
-        name: "iPhone X",
-        href: "/collections/iPhone-X",
+        name: "Explore Windows",
+        href: "/collections/macbooks",
+        description: "Browse our various collection of Windows laptops",
       },
     ],
   },
   {
-    name: "Android",
+    name: "Tablets & iPads",
     href: "#",
     subItems: [
       {
-        name: "Explore all Androids",
-        href: "/collections/androids",
-        description: "Browse our full range of Android phones.",
+        name: "Explore all iPads",
+        href: "/collections/iPads",
+        description: "Browse our various collection of iPads",
       },
-      { name: "Samsung Galaxy", href: "/collections/samsung-galaxy" },
-      { name: "Google Pixel", href: "/collections/google-pixel" },
+      {
+        name: "Android Tablets",
+        href: "/collections/androids-tablets",
+        description: "Browse our various collection of android tablets",
+      },
     ],
   },
-  { name: "iPad", href: "/contact" },
-  { name: "MacBooks", href: "/collections/macbooks" },
   { name: " Watches", href: "/collections/watches" },
   { name: " Audio", href: "/collections/audios" },
   { name: " Accessories", href: "/collections/accessories" },

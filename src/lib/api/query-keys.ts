@@ -114,6 +114,17 @@ export const queryKeys = {
     details: () => [...queryKeys.products.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.products.details(), id] as const,
   },
+  // ============================================
+  // Categories
+  // ============================================
+  categories: {
+    all: ["categories"] as const,
+    lists: () => [...queryKeys.categories.all, "list"] as const,
+    list: (params?: PaginationParams) =>
+      [...queryKeys.categories.lists(), params] as const,
+    details: () => [...queryKeys.categories.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.categories.details(), id] as const,
+  },
 
   // ============================================
   // User-specific queries (if needed)

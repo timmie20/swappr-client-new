@@ -19,8 +19,9 @@ interface FeedStore {
   setFeedMode: (mode: ListingMode) => void;
 
   // Category
-  activeCategory: string;
-  setActiveCategory: (cat: string) => void;
+  activeSubCategoryId: string;
+  activeSubCategoryLabel: string;
+  setActiveSubCategory: (next: { id: string; label: string }) => void;
 
   // Swap offer
   swapOfferProduct: Product | null;
@@ -84,8 +85,10 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
   setFeedMode: (mode) => set({ feedMode: mode }),
 
   // Category
-  activeCategory: "all",
-  setActiveCategory: (cat) => set({ activeCategory: cat }),
+  activeSubCategoryId: "",
+  activeSubCategoryLabel: "All",
+  setActiveSubCategory: (next) =>
+    set({ activeSubCategoryId: next.id, activeSubCategoryLabel: next.label }),
 
   // Swap offer
   swapOfferProduct: null,

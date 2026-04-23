@@ -13,6 +13,7 @@ export interface PaginationParams {
   page?: number;
   limit?: number;
   search?: string;
+  subcategory_id?: string;
 }
 
 export type PaginatedResponse<T, K extends string = "data"> = {
