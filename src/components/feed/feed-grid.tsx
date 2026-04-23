@@ -9,8 +9,19 @@ import { ProductMode } from "@/types/product";
 import { Button } from "../ui/button";
 import { Icons } from "../icons";
 import Link from "next/link";
+import { Spinner } from "../ui/spinner";
+import { TypographyMuted } from "../typography/muted";
 
-export function FeedGrid() {
+type Props = {
+  // data: ReturnType<typeof useInfiniteProducts>["data"];
+  // isLoading: ReturnType<typeof useInfiniteProducts>["isLoading"];
+  // isError: ReturnType<typeof useInfiniteProducts>["isError"];
+  limit: number;
+  canLoadMore: boolean;
+  navigateTo?: string;
+};
+
+export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
   const feedMode = useFeedStore((s) => s.feedMode);
   const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);
 
@@ -18,11 +29,11 @@ export function FeedGrid() {
     data,
     isLoading,
     isError,
-    // hasNextPage,
-    // fetchNextPage,
-    // isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useInfiniteProducts({
-    limit: 12,
+    limit: limit,
     ...(activeSubCategoryId
       ? { subcategory_id: activeSubCategoryId }
       : undefined),
@@ -60,27 +71,48 @@ export function FeedGrid() {
         resultCount={filteredProducts.length}
         loading={isLoading}
       />
+
       <FeedGridContent
         products={filteredProducts}
         visibleCount={filteredProducts.length}
         loading={isLoading}
         isError={isError}
       />
-      {/* <FeedGridContent
-        products={filteredProducts}
-        visibleCount={filteredProducts.length}
-        loading={isLoading}
-        isError={isError}
-        canLoadMore={!!hasNextPage}
-        loadingMore={isFetchingNextPage}
-        onLoadMore={() => void fetchNextPage()}
-      /> */}
 
-      <Link href="/collections">
-        <Button className="mt-10 inline-flex cursor-pointer" variant="outline">
-          View More <Icons.arrowRight />
-        </Button>
-      </Link>
+      {canLoadMore && (
+        <div className="mt-10 flex cursor-pointer justify-center">
+          {!hasNextPage ? (
+            <TypographyMuted className="text-center">
+              That’s all we’ve got in this category (for now 👀).
+            </TypographyMuted>
+          ) : (
+            <Button
+              onClick={() => void fetchNextPage()}
+              variant="outline"
+              disabled={isFetchingNextPage}
+              size="lg"
+            >
+              {isFetchingNextPage ? "Loading..." : "Load More"}
+              {isFetchingNextPage ? (
+                <Spinner className="size-6" />
+              ) : (
+                <Icons.arrowRight size={15} />
+              )}
+            </Button>
+          )}
+        </div>
+      )}
+
+      {!canLoadMore && (
+        <Link href={navigateTo || "#"} className="w-max">
+          <Button
+            className="mt-10 inline-flex cursor-pointer"
+            variant="outline"
+          >
+            View More <Icons.arrowRight />
+          </Button>
+        </Link>
+      )}
     </section>
   );
 }

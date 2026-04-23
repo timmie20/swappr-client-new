@@ -1,5 +1,6 @@
 import CollectionCardGrid from "@/components/collection/collection-card-grid";
 import { CategoryFilterBar } from "@/components/feed/category-filter-bar";
+import { FeedGrid } from "@/components/feed/feed-grid";
 import { TypographyH1 } from "@/components/typography/h1";
 import { TypographyH2 } from "@/components/typography/h2";
 import { TypographyP } from "@/components/typography/p";
@@ -7,7 +8,7 @@ import React from "react";
 
 export default function CollectionPage() {
   return (
-    <section className="mx-auto w-full max-w-screen-2xl px-4 py-6 2xl:px-0">
+    <section className="mx-auto w-full max-w-screen-2xl py-6">
       <TypographyH1 className="mt-12">Explore All Collections</TypographyH1>
       <TypographyP className="text-center">
         Browse all devices, accessories and exclusive bundles expertly tested
@@ -18,6 +19,7 @@ export default function CollectionPage() {
         Some tech you can take a look at real quick
       </TypographyH2>
       <CategoryFilterBar />
+      <FeedGrid limit={10} canLoadMore />
     </section>
   );
 }

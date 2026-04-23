@@ -12,7 +12,7 @@ export default function Page() {
       <TrustSignalStrip />
       <DealOfWeekSection />
       <CategoryFilterBar />
-      <FeedGrid />
+      <FeedGrid limit={8} canLoadMore={false} navigateTo="/collections" />
       <SwapOfferDrawer />
     </div>
   );
