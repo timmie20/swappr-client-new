@@ -22,6 +22,7 @@ export function SafeImage({
       src={imgSrc || fallback}
       onError={() => setImgSrc(fallback)}
       alt={alt}
+      priority
     />
   );
 }

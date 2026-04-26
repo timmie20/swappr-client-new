@@ -23,7 +23,7 @@ interface FeedGridContentProps {
   loadingMore?: boolean;
   canLoadMore?: boolean;
   isError?: boolean;
-  onLoadMore: () => void;
+  onLoadMore?: () => void;
   onProductClick?: (product: Product) => void;
   cols?: Cols;
 }
@@ -32,10 +32,10 @@ export function FeedGridContent({
   products,
   visibleCount,
   loading,
-  loadingMore = false,
-  canLoadMore = false,
+  // loadingMore = false,
+  // canLoadMore = false,
   isError = false,
-  onLoadMore,
+  // onLoadMore,
   cols = 4,
 }: FeedGridContentProps) {
   const visibleProducts = products.slice(0, visibleCount);
@@ -43,7 +43,7 @@ export function FeedGridContent({
 
   if (loading) {
     return (
-      <div className={`grid gap-3 ${gridClass}`}>
+      <div className={`grid w-full gap-3 ${gridClass}`}>
         <SkeletonGrid count={8} />
       </div>
     );
@@ -75,7 +75,7 @@ export function FeedGridContent({
         ))}
       </div>
 
-      {canLoadMore && (
+      {/* {canLoadMore && (
         <div className="mt-10 flex cursor-pointer justify-center">
           <Button
             onClick={onLoadMore}
@@ -91,7 +91,7 @@ export function FeedGridContent({
             )}
           </Button>
         </div>
-      )}
+      )} */}
     </>
   );
 }

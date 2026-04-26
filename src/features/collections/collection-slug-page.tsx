@@ -19,7 +19,7 @@ const formatSlug = (slug: string) => {
     .join(" ");
 };
 
-export function CollectionView({ slug }: CollectionViewProps) {
+export function CollectionSlug({ slug }: CollectionViewProps) {
   const loading = false;
   const products = useMemo(() => MOCK_PRODUCTS, []);
 

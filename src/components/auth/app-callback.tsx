@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { saveAuthTokens } from "@/lib/auth-tokens";
-import { Spinner } from "@/components/ui/spinner";
 import { getPendingValuationRef } from "@/lib/pending-valuation";
 import { useClaimPendingValuation } from "@/hooks/use-valuation";
+import PageLoader from "../page-loader";
 
 export default function OAuthCallbackPage() {
   const router = useRouter();
@@ -65,12 +65,5 @@ export default function OAuthCallbackPage() {
     );
   }
 
-  return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
-      <Spinner className="size-8" />
-      <p className="text-muted-foreground mt-4 text-sm">
-        Please wait while we complete your sign-in...
-      </p>
-    </div>
-  );
+  return <PageLoader text="Completing sign-in..." />;
 }

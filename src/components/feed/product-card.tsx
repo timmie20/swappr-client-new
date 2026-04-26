@@ -14,6 +14,7 @@ import { VendorDialog } from "./vendor-dialog";
 import { formatStorage } from "@/lib/utils/product-helpers";
 import { isAuthenticated } from "@/lib/auth-tokens";
 import { toast } from "sonner";
+import { TypographyH3 } from "../typography/h3";
 
 interface ProductCardProps {
   product: Product;
@@ -150,12 +151,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Title */}
-        <h3
-          className="line-clamp-2 cursor-pointer text-base leading-tight font-semibold text-[#1A1A1A] transition-colors hover:text-[#1A1A1A]/75"
-          onClick={handleNavigate}
-        >
+        <TypographyH3 className="line-clamp-2 cursor-pointer text-base leading-tight font-semibold">
           {product.title}
-        </h3>
+        </TypographyH3>
 
         {/* Rating */}
         <div className="flex items-center gap-1">

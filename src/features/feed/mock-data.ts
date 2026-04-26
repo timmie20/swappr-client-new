@@ -1,8 +1,13 @@
-import { Icons } from "@/components/icons";
 import type { Product } from "./types";
 
 // Using placeholder images from Unsplash for demo purposes
 const PLACEHOLDER = "https://images.unsplash.com/photo-";
+
+const hoursAgo = (hours: number) =>
+  new Date(Date.now() - hours * 60 * 60 * 1000);
+
+const daysAgo = (days: number) =>
+  new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
 export const MOCK_PRODUCTS: Product[] = [
   {
@@ -38,7 +43,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 312,
     },
-    listedAgo: "2 days ago",
+    listed_at: daysAgo(2),
     specs: {
       Brand: "Apple",
       Model: "iPhone 13",
@@ -84,7 +89,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 88,
     },
-    listedAgo: "5 hours ago",
+    listed_at: hoursAgo(5),
     specs: {
       Brand: "Apple",
       Model: "iPhone 16 Pro Max",
@@ -131,7 +136,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 450,
     },
-    listedAgo: "1 day ago",
+    listed_at: daysAgo(1),
     specs: {
       Brand: "Samsung",
       Model: "Galaxy S24 Ultra",
@@ -174,7 +179,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 156,
     },
-    listedAgo: "3 days ago",
+    listed_at: daysAgo(3),
   },
   {
     id: "p5",
@@ -206,7 +211,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: false,
       totalSales: 42,
     },
-    listedAgo: "4 hours ago",
+    listed_at: hoursAgo(4),
   },
   {
     id: "p6",
@@ -238,7 +243,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 78,
     },
-    listedAgo: "6 hours ago",
+    listed_at: hoursAgo(6),
   },
   {
     id: "p7",
@@ -271,7 +276,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 203,
     },
-    listedAgo: "1 day ago",
+    listed_at: daysAgo(1),
   },
   {
     id: "p8",
@@ -305,7 +310,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 892,
     },
-    listedAgo: "12 hours ago",
+    listed_at: hoursAgo(12),
   },
   {
     id: "p9",
@@ -336,7 +341,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 134,
     },
-    listedAgo: "2 days ago",
+    listed_at: daysAgo(2),
   },
   {
     id: "p10",
@@ -370,7 +375,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: false,
       totalSales: 67,
     },
-    listedAgo: "3 days ago",
+    listed_at: daysAgo(3),
   },
   {
     id: "p11",
@@ -405,7 +410,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 1205,
     },
-    listedAgo: "1 day ago",
+    listed_at: daysAgo(1),
   },
   {
     id: "p12",
@@ -438,7 +443,7 @@ export const MOCK_PRODUCTS: Product[] = [
       verified: true,
       totalSales: 38,
     },
-    listedAgo: "5 days ago",
+    listed_at: daysAgo(5),
   },
 ];
 
@@ -447,15 +452,4 @@ export const DEAL_OF_WEEK_PRODUCTS: Product[] = [
   MOCK_PRODUCTS[1], // iPhone 16 Pro Max
   MOCK_PRODUCTS[3], // MacBook Pro 14
   MOCK_PRODUCTS[5], // Apple Watch Ultra 2
-];
-
-export const CATEGORIES = [
-  { label: "All", icon: Icons.flame, value: "all" },
-  { label: "iPhone", value: "iPhone" },
-  { label: "Android", value: "Android" },
-  { label: "MacBook", value: "MacBook" },
-  { label: "iPad", value: "iPad" },
-  { label: "Watches", value: "Watches" },
-  { label: "Audio", value: "Audio" },
-  { label: "Accessories", value: "Accessories" },
 ];

@@ -28,7 +28,7 @@ export function NavigationLinks() {
           link.subItems ? (
             <NavigationMenuItem key={link.name}>
               <NavigationMenuTrigger>{link.name}</NavigationMenuTrigger>
-              <NavigationMenuContent>
+              <NavigationMenuContent className="">
                 <ul className="grid w-125 md:grid-cols-2 lg:w-150">
                   {link.subItems.map((sub) => (
                     <ListItem

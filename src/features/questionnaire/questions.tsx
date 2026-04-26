@@ -183,7 +183,7 @@ export default function Questions({ questions }: QuestionsProps) {
         <QuestionRenderer />
         <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-50 block h-20 bg-linear-to-t from-white to-transparent blur-sm min-[460px]:hidden" />
       </div>
-      <div className="mt-6 flex justify-center pb-7 sm:pb-0">
+      <div className="flex justify-center md:mb-12">
         <motion.div
           className="h-16 w-62.5 cursor-pointer rounded-full text-white"
           whileTap={{ scale: isCurrentQuestionAnswered ? 0.8 : 1 }}

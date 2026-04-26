@@ -1,6 +1,6 @@
 "use client";
-
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Lottie } from "./lottie";
+import isometricLoaderAnimation from "@/lottie/Isometric Loader.json";
 
 interface PageLoaderProps {
   isLoading?: boolean;
@@ -13,11 +13,11 @@ export default function PageLoader({ text }: PageLoaderProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm">
       <div className="flex h-screen flex-col items-center justify-center gap-4">
-        <DotLottieReact
-          src="/assets/icons/Isometric Loader.json"
-          autoplay
+        <Lottie
+          animationData={isometricLoaderAnimation}
           loop
-          style={{ width: 100, height: 100 }}
+          autoPlay
+          className="size-20"
         />
         <p className="text-muted-foreground text-sm sm:text-base">{text}</p>
       </div>
