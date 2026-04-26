@@ -4,21 +4,20 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useQuestionStore } from "@/store/question-store";
 import { Progress } from "@/components/ui/progress";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Lottie } from "@/components/lottie";
 import chequeredFlag from "@/lottie/chequered-flag.json";
 
 const ProgressBar = React.memo(function ProgressBar() {
   const progress = useQuestionStore((state) => state.progress);
   const prevStep = useQuestionStore((state) => state.prevStep);
-  const questions = useQuestionStore((state) => state.questions);
+  // const questions = useQuestionStore((state) => state.questions);
 
   // Calculate the position for second to last question
   // If there are N questions, second to last is at (N-1)/N * 100%
-  const flagPosition =
-    questions.length > 1
-      ? ((questions.length - 1) / questions.length) * 100
-      : 100;
+  // const flagPosition =
+  //   questions.length > 1
+  //     ? ((questions.length - 1) / questions.length) * 100
+  //     : 100;
 
   return (
     <div className="flex items-center gap-5">
@@ -41,7 +40,7 @@ const ProgressBar = React.memo(function ProgressBar() {
         <Progress value={progress} className="h-3" />
         <div
           className="absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
-          style={{ left: `${flagPosition}%` }}
+          style={{ left: `${100}%` }}
         >
           <Lottie
             animationData={chequeredFlag}

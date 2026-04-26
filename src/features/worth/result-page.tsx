@@ -36,19 +36,6 @@ export default function ResultPage() {
       <Fireworks autorun={{ speed: 3, duration: 4500 }} />
 
       <div className="relative mx-auto mt-6 flex max-w-163.75 flex-col items-center space-y-5 pb-32 md:space-y-12">
-        {/* <Link
-          href="/check-worth"
-          className="absolute top-0 left-0 z-50 cursor-pointer"
-        >
-          <Button
-            variant="outline"
-            size="icon-lg"
-            className="rounded-full shadow-lg transition-transform hover:scale-110"
-          >
-            <IconHome size={26} />
-          </Button>
-        </Link> */}
-
         <div className="space-y-2 text-center">
           <p className="text-small text-slate-400 sm:text-lg">
             Based on your selections and answers
@@ -72,7 +59,6 @@ export default function ResultPage() {
             width={230}
             height={281}
             className="h-auto w-auto max-w-full object-contain"
-            preload
           />{" "}
         </div>
 
@@ -105,13 +91,6 @@ export default function ResultPage() {
 
       {showSaveNudge && (
         <>
-          {/* <Button
-            type="button"
-            onClick={() => setSaveDialogOpen(true)}
-            className="fixed top-1/2 right-4 z-50 -translate-y-1/2 animate-pulse"
-          >
-            Click me
-          </Button> */}
           <SaveValuationDialog
             open={saveDialogOpen}
             onOpenChange={setSaveDialogOpen}
