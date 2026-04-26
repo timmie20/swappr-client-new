@@ -43,7 +43,7 @@ export function DealOfWeekSection() {
         {/* Deals grid */}
         <div className="flex w-full items-center justify-center">
           <ErrorState
-            title="An Error Occurred"
+            title="Could not load deals"
             description="We encountered an issue while fetching the deals. Please try again later."
           />
         </div>
