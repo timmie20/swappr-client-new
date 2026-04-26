@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useQuestionStore } from "@/store/question-store";
 import { Progress } from "@/components/ui/progress";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Lottie } from "@/components/lottie";
+import chequeredFlag from "@/lottie/chequered-flag.json";
 
 const ProgressBar = React.memo(function ProgressBar() {
   const progress = useQuestionStore((state) => state.progress);
@@ -41,11 +43,11 @@ const ProgressBar = React.memo(function ProgressBar() {
           className="absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
           style={{ left: `${flagPosition}%` }}
         >
-          <DotLottieReact
-            src="/assets/icons/chequered-flag.json"
-            autoplay
+          <Lottie
+            animationData={chequeredFlag}
             loop
-            style={{ width: 40, height: 40 }}
+            autoPlay
+            className="size-10"
           />
         </div>
       </div>
