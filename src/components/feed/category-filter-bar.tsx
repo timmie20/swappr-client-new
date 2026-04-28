@@ -13,7 +13,7 @@ export function CategoryFilterBar() {
 
   const { data } = useSubCategories();
 
-  const subCategories = data?.subCategories.map((sub) => ({
+  const subCategories = data?.subCategories?.map((sub) => ({
     label: sub.name,
     value: sub.id,
   })) as Array<{

@@ -4,7 +4,6 @@ import { FeedGrid } from "@/components/feed/feed-grid";
 import { TypographyH1 } from "@/components/typography/h1";
 import { TypographyH2 } from "@/components/typography/h2";
 import { TypographyP } from "@/components/typography/p";
-import React from "react";
 
 export default function CollectionPage() {
   return (
