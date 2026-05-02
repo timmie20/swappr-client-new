@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatNaira } from "@/lib/format";
 import { Model } from "@/types/api";
-import { SafeImage } from "./safe-image";
+import { SafeImage } from "../../../components/safe-image";
 import { Lottie } from "@/components/lottie";
 import appleAnimation from "@/lottie/apple.json";
 
