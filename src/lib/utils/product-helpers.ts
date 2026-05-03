@@ -3,6 +3,7 @@ import type {
   ProductVariant,
   SelectedVariant,
 } from "@/types/product";
+import { formatStorageCapacity } from "../format";
 
 /** All unique colors available across variants */
 export function getAvailableColors(variants: ProductVariant[]): string[] {
@@ -84,7 +85,8 @@ export function buildProductTitle(
 ): string {
   const parts: string[] = [product.name];
   if (selected.color) parts.push(selected.color);
-  if (selected.storage) parts.push(`${selected.storage}GB`);
+  if (selected.storage)
+    parts.push(`${formatStorageCapacity(selected.storage)}`);
   if (product.carrier_status === "unlocked") parts.push("Unlocked");
   return parts.join(" ");
 }

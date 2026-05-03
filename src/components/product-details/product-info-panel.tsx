@@ -26,6 +26,7 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
   const defaultColor = hasVariants
     ? (product.variants[0]?.color ?? null)
     : null;
+
   const defaultStorage = hasVariants
     ? (getAvailableStorage(product.variants, defaultColor)[0] ?? null)
     : null;
@@ -77,8 +78,9 @@ export function ProductInfoPanel({ product }: ProductInfoPanelProps) {
         activeVariant={activeVariant}
         hasVariants={hasVariants}
         isSwappable={product.mode === "sale_swap"}
-        productId={product.id}
+        product={product}
         totalStock={product.total_stock}
+        title={title}
       />
 
       <VendorInfoCard vendor={product.vendor} />

@@ -4,15 +4,17 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { IconCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import type { ProductVariant } from "@/types/product";
+import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
+import { mapApiProductToCartItem, useCart } from "@/hooks/use-cart";
 
 interface ProductActionsProps {
   activeVariant: ProductVariant | null;
   hasVariants: boolean;
   isSwappable: boolean;
-  productId: string;
   totalStock: number;
+  product: ProductDetail;
+  title: string;
 }
 
 export function ProductActions({
@@ -20,9 +22,13 @@ export function ProductActions({
   hasVariants,
   isSwappable,
   totalStock,
+  product,
+  title,
 }: ProductActionsProps) {
   const [added, setAdded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+
+  const { addItem } = useCart();
 
   // Determine stock status based on whether product has variants
   const outOfStock = hasVariants
@@ -40,7 +46,17 @@ export function ProductActions({
     // Don't allow if out of stock
     if (outOfStock) return;
 
+    const itemToAdd = mapApiProductToCartItem({
+      product,
+      title: title,
+      activeVariant: activeVariant,
+      quantity: 1,
+    });
+
+    addItem(itemToAdd);
+
     setAdded(true);
+    console.log(activeVariant);
     setTimeout(() => setAdded(false), 2000);
   };
 
@@ -77,11 +93,7 @@ export function ProductActions({
               className="flex items-center gap-2"
             >
               <Icons.cartCopy size={18} />
-              {outOfStock
-                ? "Out of Stock"
-                : needsVariantSelection
-                  ? "Select a Variant"
-                  : "Add to Cart"}
+              {outOfStock ? "Out of Stock" : "Add to Cart"}
             </motion.span>
           )}
         </AnimatePresence>

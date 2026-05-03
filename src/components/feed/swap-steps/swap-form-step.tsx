@@ -9,7 +9,6 @@ import { EmptyState } from "@/components/empty-state";
 import { IconDeviceMobile } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/error-state";
-import { format } from "path";
 import { formatRelativeDate } from "@/lib/format";
 
 export interface SwapOffer {
@@ -92,12 +91,12 @@ export function SwapFormStep({
           icon={<IconDeviceMobile className="size-6" />}
           title="No valuations yet"
           description="Check your device worth to create a valuation that you can use for swap offers."
+          actions={
+            <Link href="/check-worth">
+              <Button variant="link">Check iPhone Worth</Button>
+            </Link>
+          }
         />
-        <div className="flex justify-center">
-          <Link href="/check-worth">
-            <Button variant="outline">Check Device Worth</Button>
-          </Link>
-        </div>
       </motion.div>
     );
   }

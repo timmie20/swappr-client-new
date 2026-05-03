@@ -15,6 +15,7 @@ interface EmptyStateProps {
   description: string;
   variant?: "default" | "icon";
   className?: string;
+  actions?: ReactNode;
 }
 
 export function EmptyState({
@@ -22,6 +23,7 @@ export function EmptyState({
   title,
   description,
   variant = "icon",
+  actions,
   className,
 }: EmptyStateProps) {
   return (
@@ -33,6 +35,7 @@ export function EmptyState({
       </EmptyHeader>
       <EmptyContent>
         <GhostLoading />
+        {actions && <div className="flex justify-center">{actions}</div>}
       </EmptyContent>
     </Empty>
   );
