@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { IconCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
-import { mapApiProductToCartItem, useCart } from "@/hooks/use-cart";
+import { useCart } from "@/hooks/use-cart";
+import { mapApiProductToCartItem } from "@/lib/cart";
+import { Spinner } from "../ui/spinner";
 
 interface ProductActionsProps {
   activeVariant: ProductVariant | null;
@@ -25,10 +26,9 @@ export function ProductActions({
   product,
   title,
 }: ProductActionsProps) {
-  const [added, setAdded] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
-  const { addItem } = useCart();
+  const { addItem, isAddingToServer } = useCart();
 
   // Determine stock status based on whether product has variants
   const outOfStock = hasVariants
@@ -45,6 +45,7 @@ export function ProductActions({
     if (hasVariants && !activeVariant) return;
     // Don't allow if out of stock
     if (outOfStock) return;
+    if (isAddingToServer) return;
 
     const itemToAdd = mapApiProductToCartItem({
       product,
@@ -54,10 +55,6 @@ export function ProductActions({
     });
 
     addItem(itemToAdd);
-
-    setAdded(true);
-    console.log(activeVariant);
-    setTimeout(() => setAdded(false), 2000);
   };
 
   return (
@@ -66,37 +63,28 @@ export function ProductActions({
       <Button
         size="lg"
         onClick={handleAddToCart}
-        disabled={needsVariantSelection || outOfStock || added}
-        className="w-full flex-auto py-6 text-base font-semibold"
+        disabled={needsVariantSelection || outOfStock || isAddingToServer}
+        className="w-full flex-auto cursor-pointer py-6 text-base font-semibold disabled:cursor-not-allowed disabled:opacity-50"
         aria-label={
-          needsVariantSelection ? "Select a variant first" : "Add to cart"
+          needsVariantSelection
+            ? "Select a variant first"
+            : outOfStock
+              ? "Out of stock"
+              : isAddingToServer
+                ? "Adding to cart"
+                : "Add to cart"
         }
       >
-        <AnimatePresence mode="wait">
-          {added ? (
-            <motion.span
-              key="check"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              className="flex items-center gap-2"
-            >
-              <IconCheck size={18} />
-              Added to Cart!
-            </motion.span>
-          ) : (
-            <motion.span
-              key="cart"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              className="flex items-center gap-2"
-            >
-              <Icons.cartCopy size={18} />
-              {outOfStock ? "Out of Stock" : "Add to Cart"}
-            </motion.span>
-          )}
-        </AnimatePresence>
+        <span className="flex items-center gap-2">
+          {isAddingToServer ? <Spinner /> : <Icons.cartCopy size={18} />}
+          {outOfStock
+            ? "Out of Stock"
+            : needsVariantSelection
+              ? "Select Variant"
+              : isAddingToServer
+                ? "adding to cart"
+                : "Add to Cart"}
+        </span>
       </Button>
 
       {/* Secondary row: Swap + Bookmark */}

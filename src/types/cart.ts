@@ -1,6 +1,6 @@
-import { ProductDetail } from "./product";
+import { ProductCondition } from "./product";
 
-export type CartItem = {
+export type LocalCartItem = {
   id: string;
   productId: string;
   variantId: string | null;
@@ -10,23 +10,48 @@ export type CartItem = {
   quantity: number;
   color?: string;
   storage?: number;
-  condition: "NEW" | "UK_USED" | "NIGERIAN_USED" | "REFURBISHED";
+  condition: ProductCondition;
 };
 
-export type ServerCartItem = {
+export interface CartItemProduct {
   id: string;
+  name: string;
+  slug: string;
+  condition: ProductCondition;
+  carrier_status: string | null;
+  images: string[];
+}
+
+export interface CartItemVariant {
+  id: string;
+  color: string;
+  storage: number;
+}
+
+export interface CartItem {
+  id: string;
+  cart_id: string;
   product_id: string;
   variant_id: string | null;
   quantity: number;
-  price_at_add: number | string;
-  product: ProductDetail;
-};
+  price_at_add: number;
+  title?: string | null;
+  product: CartItemProduct;
+  variant: CartItemVariant | null;
+}
 
 export interface Cart {
   id: string;
   user_id: string;
   status: string;
-  items: ServerCartItem[];
+  items: CartItem[];
   created_at: string;
   updated_at: string;
 }
+
+export type AddCartItemPayload = {
+  product_id: string;
+  variant_id: string | null;
+  quantity: number;
+  title?: string; // for syncing local cart, server doesn't require title
+};

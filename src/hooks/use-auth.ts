@@ -52,7 +52,6 @@ export function useCreateAccount() {
 
 export function useLogin() {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: (credentials: LoginCredentials) =>
@@ -97,6 +96,7 @@ export function useLogout() {
     },
     onSuccess: () => {
       clearAuthTokens();
+      // useCartStore.getState().clearCart();
       queryClient.clear();
       toast.success("Signed out successfully", { id: "logout" });
       router.push("/");
@@ -105,6 +105,7 @@ export function useLogout() {
     onError: (error: Error) => {
       // Clear tokens even if logout request fails
       clearAuthTokens();
+      // useCartStore.getState().clearCart();
       queryClient.clear();
       const message =
         (error as Error & { message?: string })?.message ||

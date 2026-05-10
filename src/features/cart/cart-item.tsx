@@ -1,3 +1,4 @@
+"use client";
 import { Icons } from "@/components/icons";
 import { SafeImage } from "@/components/safe-image";
 import { TypographyH3 } from "@/components/typography/h3";
@@ -5,12 +6,34 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { formatNaira, formatStorageCapacity } from "@/lib/format";
 import { formatCondition } from "@/lib/utils/product-helpers";
-import { CartItem } from "@/types/cart";
+import { LocalCartItem } from "@/types/cart";
+import { useEffect, useRef, useState } from "react";
 
-export default function Item({ item }: { item: CartItem }) {
+export default function Item({ item }: { item: LocalCartItem }) {
   const { updateQuantity, removeItem } = useCart();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [localQuantity, setLocalQuantity] = useState(item.quantity);
+
+  const handleQuantityChange = (next: number) => {
+    if (next < 1) return;
+
+    setLocalQuantity(next); // instant UI
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      updateQuantity(item.id, next); // server call after pause
+    }, 500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
   return (
-    <div className="flex items-start gap-4 border-[#E5E7EB] py-4 not-first:border-t">
+    <div className="flex w-full items-start gap-4 border-[#E5E7EB] py-4 not-first:border-t">
       <SafeImage
         src={item.image}
         alt={item.title}
@@ -19,7 +42,7 @@ export default function Item({ item }: { item: CartItem }) {
         className="rounded-md"
       />
 
-      <div className="space-y-2">
+      <div className="w-full space-y-2">
         <span className="inline-flex items-center gap-2">
           <TypographyH3 className="text-base leading-tight">
             {item.title}
@@ -35,37 +58,25 @@ export default function Item({ item }: { item: CartItem }) {
           <li>Condition: {formatCondition(item.condition)}</li>
         </ul>
 
-        <div className="flex shrink-0 items-center justify-between">
+        <div className="flex w-full items-center justify-between">
           <div className="inline-flex items-center gap-3">
             <Button
               variant="outline"
               size="icon-sm"
               className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={item.quantity <= 1}
-              onClick={() =>
-                updateQuantity(
-                  item.productId,
-                  item.variantId || undefined,
-                  Math.max(0, item.quantity - 1),
-                )
-              }
+              disabled={localQuantity <= 1}
+              onClick={() => handleQuantityChange(localQuantity - 1)}
             >
               <Icons.minus />
             </Button>
 
-            <span className="text-base font-semibold">{item.quantity}</span>
+            <span className="text-base font-semibold">{localQuantity}</span>
 
             <Button
               variant="outline"
               size="icon-sm"
               className="cursor-pointer"
-              onClick={() =>
-                updateQuantity(
-                  item.productId,
-                  item.variantId || undefined,
-                  item.quantity + 1,
-                )
-              }
+              onClick={() => handleQuantityChange(localQuantity + 1)}
             >
               <Icons.add />
             </Button>
@@ -75,9 +86,7 @@ export default function Item({ item }: { item: CartItem }) {
             variant="destructive"
             size="icon-lg"
             className="cursor-pointer"
-            onClick={() =>
-              removeItem(item.productId, item.variantId || undefined)
-            }
+            onClick={() => removeItem(item.id)}
           >
             <Icons.trash size={16} />
             <span className="sr-only">Remove from cart</span>

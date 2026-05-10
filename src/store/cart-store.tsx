@@ -1,34 +1,40 @@
-import { CartItem } from "@/types/cart";
+import { mapServerCartToLocal, mergeCartItems } from "@/lib/cart";
+import { CartItem, LocalCartItem } from "@/types/cart";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type CartStore = {
-  items: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (productId: string, variantId?: string) => void;
-  updateQuantity: (
-    productId: string,
-    variantId: string | undefined,
-    quantity: number,
-  ) => void;
-  mergeItems: (serverItems: CartItem[]) => void;
+  items: LocalCartItem[];
+  setItems: (items: LocalCartItem[]) => void;
+  addItem: (item: LocalCartItem) => void;
+  removeItem: (itemId: string) => void;
+  updateQuantity: (itemId: string, quantity: number) => void;
+  mergeItems: (serverItems: CartItem[]) => LocalCartItem[] | void;
   clearCart: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (v: boolean) => void;
 };
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      hasHydrated: false,
+      setHasHydrated: (v) => set({ hasHydrated: v }),
+
+      setItems: (items) => set({ items }),
 
       addItem: (item) => {
         const existing = get().items.find(
           (i) =>
-            i.productId === item.productId && i.variantId === item.variantId,
+            // i.productId === item.productId && i.variantId === item.variantId,
+            i.id === item.id,
         );
         if (existing) {
           set((s) => ({
             items: s.items.map((i) =>
-              i.productId === item.productId && i.variantId === item.variantId
+              // i.productId === item.productId && i.variantId === item.variantId
+              i.id === item.id
                 ? { ...i, quantity: i.quantity + item.quantity }
                 : i,
             ),
@@ -37,49 +43,36 @@ export const useCartStore = create<CartStore>()(
           set((s) => ({ items: [...s.items, item] }));
         }
       },
-      removeItem: (productId, variantId) =>
+
+      updateQuantity: (itemId, quantity) =>
         set((s) => ({
-          items: s.items.filter(
-            (i) => !(i.productId === productId && i.variantId === variantId),
-          ),
+          items: s.items.map((i) => (i.id === itemId ? { ...i, quantity } : i)),
         })),
 
-      updateQuantity: (productId, variantId, quantity) =>
-        set((s) => ({
-          items: s.items.map((i) =>
-            i.productId === productId && i.variantId === variantId
-              ? { ...i, quantity }
-              : i,
-          ),
-        })),
+      removeItem: (itemId) =>
+        set((s) => ({ items: s.items.filter((i) => i.id !== itemId) })),
 
       // Merge logic — combine local + server, sum quantities on conflicts
-      mergeItems: (serverItems) => {
+      mergeItems: (serverItems: CartItem[]) => {
         const localItems = get().items;
-        const merged = [...serverItems];
+        const serverMapped = mapServerCartToLocal(serverItems);
 
-        localItems.forEach((localItem) => {
-          const conflict = merged.find(
-            (s) => s.productId === localItem.productId,
-          );
-          if (conflict) {
-            // same product exists in both — sum the quantities
-            conflict.quantity += localItem.quantity;
-          } else {
-            // local-only item — add it to merged
-            merged.push(localItem);
-          }
-        });
-
-        set({ items: merged });
+        if (localItems.length === 0) {
+          set({ items: serverMapped });
+          return;
+        }
+        const merged = mergeCartItems(serverMapped, localItems);
+        return merged;
       },
 
       clearCart: () => set({ items: [] }),
     }),
     {
-      name: "swappr-cart", // localStorage key
-      // only persist what's needed — not functions
+      name: "swappr-cart",
       partialize: (s) => ({ items: s.items }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );

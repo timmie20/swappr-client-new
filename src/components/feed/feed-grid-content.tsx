@@ -60,6 +60,8 @@ export function FeedGridContent({
       <EmptyState
         title="No Listings Found"
         description="No devices match your current filters"
+        variant="lottie"
+        lottieType="ghost"
       />
     );
   }

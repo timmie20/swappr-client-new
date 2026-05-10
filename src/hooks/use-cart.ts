@@ -1,91 +1,212 @@
 import { cartEndpoints } from "@/endpoints/cart";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useCartStore } from "@/store/cart-store";
-// import { useAuthStore } from "@/store/auth-store";
-import { isAuthenticated } from "@/lib/auth-tokens";
-import { CartItem } from "@/types/cart";
-import { ProductDetail, ProductVariant } from "@/types/product";
-
-export function mapApiProductToCartItem({
-  product,
-  title,
-  activeVariant,
-  quantity,
-}: {
-  product: ProductDetail;
-  title: string;
-  activeVariant: ProductVariant | null;
-  quantity: number;
-}): CartItem {
-  return {
-    id: `${product.id}-${activeVariant ? activeVariant.id : "base"}`,
-    productId: product.id,
-    variantId: activeVariant ? activeVariant.id : null,
-    title: title,
-    price: activeVariant ? activeVariant.price : product.base_price,
-    quantity: quantity,
-    image: product.images[0] ?? "",
-    color: activeVariant ? activeVariant.color : undefined,
-    storage: activeVariant ? activeVariant.storage : undefined,
-    condition: product.condition,
-  };
-}
+import { useIsAuthenticated } from "@/hooks/use-access-token";
+import { mapServerCartItemToCartItem } from "@/lib/cart";
+import { AddCartItemPayload, LocalCartItem } from "@/types/cart";
+import { toast } from "sonner";
 
 export function useCart() {
-  // const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const loggedIn = isAuthenticated();
-  const queryClient = useQueryClient();
+  const loggedIn = useIsAuthenticated();
+
   const { items, addItem, removeItem, updateQuantity, clearCart } =
     useCartStore();
 
-  const { mutate: addToServer } = useMutation({
-    mutationFn: cartEndpoints.addToCart,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
+  // ── Add ─────────────────────────────────────────────────────────
+  const { mutate: addToServer, isPending: isAddingToServer } = useMutation({
+    mutationFn: (payload: AddCartItemPayload) =>
+      cartEndpoints.addToCart(payload),
+
+    onMutate: () => {
+      // snapshot for rollback
+      const previousItems = useCartStore.getState().items;
+      return { previousItems };
+    },
+
+    onSuccess: (res) => {
+      const incoming = mapServerCartItemToCartItem(res.data);
+      const currentItems = useCartStore.getState().items;
+      const exists = currentItems.find((i) => i.id === incoming.id);
+
+      useCartStore.setState({
+        items: exists
+          ? currentItems.map(
+              (i) => (i.id === incoming.id ? incoming : i), // update existing with server data
+            )
+          : [...currentItems, incoming], // append new item
+      });
+
+      toast.success(res.message);
+    },
+
+    onError: (_err, _payload, context) => {
+      // roll back to snapshot
+      if (context?.previousItems) {
+        useCartStore.setState({ items: context.previousItems });
+      }
+      toast.error("Failed to add item to cart.", {
+        description: _err.message,
+      });
+    },
   });
 
+  // ── Update ───────────────────────────────────────────────────────
+  const { mutate: updateOnServer } = useMutation({
+    mutationFn: ({
+      itemId,
+      increment,
+    }: {
+      itemId: string;
+      increment: number;
+    }) => cartEndpoints.updateCartItem(itemId, increment),
+
+    onMutate: ({ itemId }) => {
+      const previousItems = useCartStore.getState().items;
+      return { previousItems };
+    },
+
+    onSuccess: (res) => {
+      // server returns only the mutated item — update just that item in store
+      const updatedItem = res.data;
+      useCartStore.setState((s) => ({
+        items: s.items.map((i) =>
+          i.id === updatedItem.id
+            ? { ...i, quantity: updatedItem.quantity }
+            : i,
+        ),
+      }));
+    },
+
+    onError: (_err, _variables, context) => {
+      if (context?.previousItems) {
+        useCartStore.setState({ items: context.previousItems });
+      }
+      toast.error("Failed to update cart item.", {
+        id: "update-cart-item",
+        description: _err.message,
+      });
+    },
+  });
+
+  // ── Remove ───────────────────────────────────────────────────────
   const { mutate: removeFromServer } = useMutation({
-    mutationFn: cartEndpoints.removeCartItem,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
+    mutationFn: (itemId: string) => cartEndpoints.removeCartItem(itemId),
+
+    onMutate: (itemId) => {
+      const previousItems = useCartStore.getState().items;
+      removeItem(itemId); // optimistically pop from store
+      return { previousItems };
+    },
+
+    onSuccess: (_res, itemId) => {
+      // request succeeded — item already removed optimistically, nothing to do
+      // but confirm by filtering again in case onMutate was skipped
+      useCartStore.setState((s) => ({
+        items: s.items.filter((i) => i.id !== itemId),
+      }));
+
+      toast.success("Item removed from cart.");
+    },
+
+    onError: (_err, _itemId, context) => {
+      if (context?.previousItems) {
+        useCartStore.setState({ items: context.previousItems });
+      }
+      toast.error("Failed to remove item from cart.", {
+        description: _err.message,
+      });
+    },
   });
 
-  const handleAddItem = (item: CartItem) => {
-    addItem(item); // always update local instantly
-    if (loggedIn) addToServer(item); // sync to DB if logged in
-  };
+  // ── Clear ────────────────────────────────────────────────────────
+  const { mutate: clearOnServer, isPending: isClearingCart } = useMutation({
+    mutationFn: () => cartEndpoints.clearCart(),
 
-  const handleUpdateQuantity = (
-    productId: string,
-    variantId: string | undefined,
-    quantity: number,
-  ) => {
-    updateQuantity(productId, variantId, quantity); // update local
-    // For simplicity, let's assume we have an endpoint to update quantity directly
-    // In a real app, you might need to send the entire item or have a specific endpoint
+    onMutate: () => {
+      const previousItems = useCartStore.getState().items;
+      clearCart(); // optimistically clear store
+      return { previousItems };
+    },
+
+    onSuccess: () => {
+      // request confirmed — store already cleared, nothing to do
+    },
+
+    onError: (_err, _variables, context) => {
+      // restore if server failed
+      if (context?.previousItems) {
+        useCartStore.setState({ items: context.previousItems });
+      }
+    },
+  });
+
+  // ── Handlers ─────────────────────────────────────────────────────
+  const handleAddItem = (item: LocalCartItem) => {
     if (loggedIn) {
-      cartEndpoints.updateCartItemQuantity({ productId, variantId, quantity });
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      addToServer({
+        product_id: item.productId,
+        variant_id: item.variantId,
+        quantity: item.quantity,
+        title: item.title,
+      });
+      return;
     }
+    addItem(item); // guest — local only
   };
 
-  const handleRemoveItem = (
-    productId: string,
-    variantId: string | undefined,
-  ) => {
-    removeItem(productId, variantId);
-    if (loggedIn) removeFromServer({ productId, variantId });
+  const handleUpdateQuantity = (itemId: string, quantity: number) => {
+    const current = items.find((i) => i.id === itemId);
+    if (!current) return;
+
+    const clamped = Math.max(1, quantity);
+    const increment = clamped - current.quantity;
+
+    if (increment === 0) return;
+
+    if (!loggedIn) {
+      updateQuantity(itemId, clamped); // guest — local only
+      return;
+    }
+
+    console.log("Updating server cart:", { increment });
+
+    updateOnServer({ itemId: current.id, increment }); // logged in — server only
+  };
+
+  const handleRemoveItem = (itemId: string) => {
+    const current = items.find((i) => i.id === itemId);
+    if (!current) return;
+
+    if (!loggedIn) {
+      removeItem(itemId); // guest — local only
+      return;
+    }
+
+    removeFromServer(itemId); // optimistic remove happens in onMutate
+  };
+
+  const handleClearCart = () => {
+    if (!loggedIn) {
+      clearCart();
+      return;
+    }
+    clearOnServer();
   };
 
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
-  const totalPrice = items.reduce((acc, i) => acc + i.price * i.quantity, 0);
-
+  const totalPrice = items.reduce(
+    (acc, i) => acc + Number(i.price) * i.quantity,
+    0,
+  );
   return {
     items,
     totalItems,
     totalPrice,
+    isAddingToServer,
+    isClearingCart,
     addItem: handleAddItem,
     removeItem: handleRemoveItem,
     updateQuantity: handleUpdateQuantity,
-    clearCart,
+    clearCart: handleClearCart,
   };
 }
