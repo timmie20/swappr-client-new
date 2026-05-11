@@ -57,6 +57,7 @@ import {
   IconBrandLinkedin,
   IconError404,
   IconBuildingStore,
+  IconLogout,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -67,6 +68,7 @@ export const Icons = {
   dashboard: IconLayoutDashboard,
   logo: IconCommand,
   login: IconLogin,
+  logout: IconLogout,
   close: IconX,
   product: IconShoppingBag,
   spinner: IconLoader2,

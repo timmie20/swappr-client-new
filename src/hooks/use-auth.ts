@@ -10,6 +10,7 @@ import {
 } from "@/lib/auth-tokens";
 import { useRouter } from "next/navigation";
 import { LoginCredentials, LoginResponse } from "@/types";
+import { useCartStore } from "@/store/cart-store";
 
 export const userKeys = {
   all: ["user"] as const,
@@ -96,7 +97,7 @@ export function useLogout() {
     },
     onSuccess: () => {
       clearAuthTokens();
-      // useCartStore.getState().clearCart();
+      useCartStore.getState().clearCart();
       queryClient.clear();
       toast.success("Signed out successfully", { id: "logout" });
       router.push("/");
@@ -104,15 +105,15 @@ export function useLogout() {
     },
     onError: (error: Error) => {
       // Clear tokens even if logout request fails
-      clearAuthTokens();
+      // clearAuthTokens();
       // useCartStore.getState().clearCart();
-      queryClient.clear();
+      // queryClient.clear();
       const message =
         (error as Error & { message?: string })?.message ||
         "Failed to sign out";
       toast.error(message, { id: "logout" });
-      router.push("/");
-      router.refresh();
+      // router.push("/");
+      // router.refresh();
     },
   });
 }

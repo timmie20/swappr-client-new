@@ -82,7 +82,7 @@ export function ProductActions({
             : needsVariantSelection
               ? "Select Variant"
               : isAddingToServer
-                ? "adding to cart"
+                ? "Adding to cart"
                 : "Add to Cart"}
         </span>
       </Button>

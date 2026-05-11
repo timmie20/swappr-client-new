@@ -10,16 +10,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { UserAvatarProfile } from "../user-avatar-profile";
-import { useUserAccount, useLogout } from "@/hooks";
+import { useUserAccount } from "@/hooks";
 import { getFullName } from "@/lib/use-auth-obj";
 import { isAuthenticated } from "@/lib/auth-tokens";
 import { useState } from "react";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
+import SignoutDialog from "../signout-dialog";
 
 export function UserNav() {
   const { data: user } = useUserAccount();
-  const { mutate: logout } = useLogout();
+  const [signoutDialogOpen, setSignoutDialogOpen] = useState(false);
+
   const [isLoggedIn] = useState(() => {
     // Check auth state on mount (client-side only)
     if (typeof window !== "undefined") {
@@ -27,10 +29,6 @@ export function UserNav() {
     }
     return false;
   });
-
-  const handleSignOut = () => {
-    logout();
-  };
 
   return isLoggedIn ? (
     <DropdownMenu>
@@ -58,9 +56,12 @@ export function UserNav() {
           <Link href="/account">
             <DropdownMenuItem>Profile</DropdownMenuItem>
           </Link>
+          <DropdownMenuSeparator />
+          <SignoutDialog
+            open={signoutDialogOpen}
+            onOpenChange={setSignoutDialogOpen}
+          />
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   ) : (

@@ -118,27 +118,40 @@ export function useCart() {
     },
   });
 
-  // ── Clear ────────────────────────────────────────────────────────
-  const { mutate: clearOnServer, isPending: isClearingCart } = useMutation({
-    mutationFn: () => cartEndpoints.clearCart(),
+  // ── Clear Cart ─────────────────────────────────────────────────────
+  const { mutate: clearServerCart, isPending: isClearingCart } = useMutation({
+    mutationKey: ["clear-cart"],
 
-    onMutate: () => {
+    mutationFn: async () => {
+      return await cartEndpoints.clearCart();
+    },
+
+    onMutate: async () => {
       const previousItems = useCartStore.getState().items;
-      clearCart(); // optimistically clear store
+
       return { previousItems };
     },
 
     onSuccess: () => {
-      // request confirmed — store already cleared, nothing to do
+      useCartStore.setState({
+        items: [],
+      });
+
+      toast.success("Cart cleared.");
     },
 
-    onError: (_err, _variables, context) => {
-      // restore if server failed
+    onError: (_error, _variables, context) => {
       if (context?.previousItems) {
-        useCartStore.setState({ items: context.previousItems });
+        useCartStore.setState({
+          items: context.previousItems,
+        });
       }
+
+      toast.error("Failed to clear cart.");
     },
   });
+
+  // export function useClearCart() {}
 
   // ── Handlers ─────────────────────────────────────────────────────
   const handleAddItem = (item: LocalCartItem) => {
@@ -185,12 +198,39 @@ export function useCart() {
     removeFromServer(itemId); // optimistic remove happens in onMutate
   };
 
-  const handleClearCart = () => {
+  // const handleClearCart = () => {
+  //   if (!loggedIn) {
+  //     clearCart();
+  //     return;
+  //   }
+  //   clearServerCart();
+  // };
+
+  const handleClearCart = (options?: {
+    onSuccess?: () => void;
+    onError?: () => void;
+  }) => {
+    // guest cart
     if (!loggedIn) {
       clearCart();
+
+      toast.success("Cart cleared.");
+
+      options?.onSuccess?.();
+
       return;
     }
-    clearOnServer();
+
+    // server cart
+    clearServerCart(undefined, {
+      onSuccess: () => {
+        options?.onSuccess?.();
+      },
+
+      onError: () => {
+        options?.onError?.();
+      },
+    });
   };
 
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
@@ -203,10 +243,10 @@ export function useCart() {
     totalItems,
     totalPrice,
     isAddingToServer,
-    isClearingCart,
     addItem: handleAddItem,
     removeItem: handleRemoveItem,
     updateQuantity: handleUpdateQuantity,
     clearCart: handleClearCart,
+    isClearingCart,
   };
 }

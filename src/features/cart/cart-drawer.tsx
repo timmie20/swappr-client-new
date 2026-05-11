@@ -9,9 +9,14 @@ import { SheetFooter } from "@/components/ui/sheet";
 import { TypographyH3 } from "@/components/typography/h3";
 import { formatNaira } from "@/lib/format";
 import { TypographyMuted } from "@/components/typography/muted";
+import ClearCartDialog from "@/components/clear-cart-dialog";
+import { useState } from "react";
 
 export default function CartDrawer() {
   const { items, totalItems, totalPrice } = useCart();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const hasItems = items && items.length > 0;
 
   const header = (
     <>
@@ -41,13 +46,13 @@ export default function CartDrawer() {
     </div>
   );
   return (
-    <ReusableSheetDrawer
-      title={header}
-      description="Enjoy free shipping on every order. No minimums. No exceptions"
-      trigger={trigger}
-    >
-      {!items ||
-        (items.length === 0 && (
+    <>
+      <ReusableSheetDrawer
+        title={header}
+        description="Enjoy free shipping on every order. No minimums. No exceptions"
+        trigger={trigger}
+      >
+        {!hasItems && (
           <EmptyState
             title="No Items yet"
             description="Nothing here yet—explore products and add them to your cart."
@@ -59,37 +64,45 @@ export default function CartDrawer() {
               </Button>
             }
           />
-        ))}
+        )}
 
-      {items && items.length > 0 && (
-        <div className="overflow-y-auto px-6">
-          {items.map((item) => (
-            <Item key={`${item.id}-${item.quantity}`} item={item} />
-          ))}
-        </div>
-      )}
+        {hasItems && (
+          <div className="overflow-y-auto px-6">
+            {items.map((item) => (
+              <Item key={`${item.id}-${item.quantity}`} item={item} />
+            ))}
+          </div>
+        )}
 
-      <SheetFooter>
-        <div>
-          <TypographyH3 className="flex items-center justify-between">
-            <span>Subtotal:</span>
-            <span>{formatNaira(totalPrice)}</span>
-          </TypographyH3>
-          <TypographyMuted className="text-sm sm:text-base">
-            Taxes, discounts and shipping calculated at checkout.
-          </TypographyMuted>
-        </div>
-        {/* <button
-            onClick={handleClose}
-            className="text-muted-foreground hover:bg-muted absolute top-4 right-4 cursor-pointer rounded-full p-2 transition-colors"
-          >
-            <Icons.close size={24} />
-            <span className="sr-only">Close</span>
-          </button>  */}
-        <Button type="submit" className="mt-2">
-          Checkout
-        </Button>
-      </SheetFooter>
-    </ReusableSheetDrawer>
+        <SheetFooter>
+          <div>
+            <TypographyH3 className="flex items-center justify-between">
+              <span>Subtotal:</span>
+              <span>{formatNaira(totalPrice)}</span>
+            </TypographyH3>
+            <TypographyMuted className="text-sm sm:text-base">
+              Taxes, discounts and shipping calculated at checkout.
+            </TypographyMuted>
+          </div>
+
+          <Button type="submit" className="mt-2" disabled={!hasItems}>
+            Checkout
+          </Button>
+
+          {hasItems && (
+            <Button
+              variant="outline"
+              disabled={!hasItems}
+              onClick={() => setIsDialogOpen(true)}
+            >
+              <Icons.trash size={16} />
+              Clear Cart
+            </Button>
+          )}
+        </SheetFooter>
+      </ReusableSheetDrawer>
+
+      <ClearCartDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+    </>
   );
 }
