@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import SignUpForm from "./sign-up-form";
 import { InteractiveGridPattern } from "../interactive-grid";
-import MailSuccess from "../mail-sent-success.";
+import MailSuccess from "../mail-sent-success";
 import { useState } from "react";
 
 export const metadata: Metadata = {

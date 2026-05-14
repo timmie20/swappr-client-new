@@ -11,10 +11,39 @@ import { formatNaira } from "@/lib/format";
 import { TypographyMuted } from "@/components/typography/muted";
 import ClearCartDialog from "@/components/clear-cart-dialog";
 import { useState } from "react";
+import { useInitiateCheckout } from "@/hooks/use-checkout";
+import { useCheckoutStore } from "@/store/checkout-store";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function CartDrawer() {
   const { items, totalItems, totalPrice } = useCart();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter();
+  const initiateCheckout = useInitiateCheckout();
+  const setSession = useCheckoutStore((s) => s.setSession);
+  // const setIsInitiating = useCheckoutStore((s) => s.setIsInitiating);
+
+  const handleCheckout = () => {
+    // setIsInitiating(true);
+    initiateCheckout.mutate(undefined, {
+      onSuccess: (res) => {
+        setSession(res.data);
+        router.push(`/checkout/${res.data.id}`);
+      },
+      onError: (err) => {
+        if (err.statusCode === 400) {
+          toast.error(err.message);
+          return;
+        }
+        toast.error(err.message || "Unable to start checkout");
+      },
+      // onSettled: () => {
+      //   setIsInitiating(false);
+      // },
+    });
+  };
 
   const hasItems = items && items.length > 0;
 
@@ -85,8 +114,20 @@ export default function CartDrawer() {
             </TypographyMuted>
           </div>
 
-          <Button type="submit" className="mt-2" disabled={!hasItems}>
-            Checkout
+          <Button
+            type="button"
+            className="mt-2"
+            disabled={!hasItems || initiateCheckout.isPending}
+            onClick={handleCheckout}
+          >
+            {initiateCheckout.isPending ? (
+              <span className="inline-flex items-center gap-2">
+                <Spinner />
+                Starting…
+              </span>
+            ) : (
+              "Checkout"
+            )}
           </Button>
 
           {hasItems && (

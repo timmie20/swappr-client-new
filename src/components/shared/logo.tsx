@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type VariantType = "light" | "dark";
 
@@ -35,7 +36,7 @@ export default function Logo({
       width={width}
       height={height}
       priority={priority}
-      className={cn("h-auto w-auto", className)}
+      className={cn("h-auto w-auto cursor-pointer", className)}
     />
   );
 }

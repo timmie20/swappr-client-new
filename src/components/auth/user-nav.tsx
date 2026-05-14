@@ -12,23 +12,17 @@ import Link from "next/link";
 import { UserAvatarProfile } from "../user-avatar-profile";
 import { useUserAccount } from "@/hooks";
 import { getFullName } from "@/lib/use-auth-obj";
-import { isAuthenticated } from "@/lib/auth-tokens";
 import { useState } from "react";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import SignoutDialog from "../signout-dialog";
+import { useIsAuthenticated } from "@/hooks/use-access-token";
 
 export function UserNav() {
   const { data: user } = useUserAccount();
   const [signoutDialogOpen, setSignoutDialogOpen] = useState(false);
 
-  const [isLoggedIn] = useState(() => {
-    // Check auth state on mount (client-side only)
-    if (typeof window !== "undefined") {
-      return isAuthenticated();
-    }
-    return false;
-  });
+  const isLoggedIn = useIsAuthenticated();
 
   return isLoggedIn ? (
     <DropdownMenu>
