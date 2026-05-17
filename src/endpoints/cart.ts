@@ -1,6 +1,11 @@
 import { api } from "@/lib/api/client";
 import { ApiResponse } from "@/types/api";
-import { AddCartItemPayload, Cart, CartItem } from "@/types/cart";
+import {
+  AddCartItemPayload,
+  Cart,
+  CartItem,
+  UpdateCartQuantityPayload,
+} from "@/types/cart";
 
 export const cartEndpoints = {
   async getCart(): Promise<ApiResponse<Cart>> {
@@ -22,13 +27,16 @@ export const cartEndpoints = {
     return data;
   },
 
-  async updateCartItem(
-    itemId: string,
-    quantity: number,
-  ): Promise<ApiResponse<{ id: string; quantity: number }>> {
+  async updateCartItem({
+    itemId,
+    increment,
+  }: UpdateCartQuantityPayload): Promise<
+    ApiResponse<{ id: string; quantity: number }>
+  > {
     const { data } = await api.patch(`/cart/items/${itemId}`, {
-      increment: quantity,
+      increment,
     });
+
     return data;
   },
 

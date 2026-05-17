@@ -104,6 +104,14 @@ export const queryKeys = {
   },
 
   // ============================================
+  // Cart
+  // ============================================
+  cart: {
+    all: ["cart"] as const,
+    lists: () => [...queryKeys.cart.all, "list"] as const,
+    item: (id: string) => [...queryKeys.cart.all, "item", id] as const,
+  },
+  // ============================================
   // Products
   // ============================================
   products: {

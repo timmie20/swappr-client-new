@@ -5,7 +5,7 @@ export type LocalCartItem = {
   productId: string;
   variantId: string | null;
   title: string;
-  price: number | string;
+  price: number;
   image: string;
   quantity: number;
   color?: string;
@@ -28,16 +28,23 @@ export interface CartItemVariant {
   storage: number;
 }
 
+export interface CartItemVendor {
+  id: string;
+  business_name: string;
+}
+
 export interface CartItem {
   id: string;
   cart_id: string;
   product_id: string;
   variant_id: string | null;
+  vendor_id: string;
   quantity: number;
   price_at_add: number;
   title?: string | null;
   product: CartItemProduct;
   variant: CartItemVariant | null;
+  vendor: CartItemVendor;
 }
 
 export interface Cart {
@@ -54,4 +61,10 @@ export type AddCartItemPayload = {
   variant_id: string | null;
   quantity: number;
   title?: string; // for syncing local cart, server doesn't require title
+  vendor_id: string; // for syncing local cart, server doesn't require vendor_id
+};
+
+export type UpdateCartQuantityPayload = {
+  itemId: string;
+  increment: number;
 };

@@ -9,10 +9,10 @@ import { TypographyP } from "@/components/typography/p";
 import { Button } from "@/components/ui/button";
 
 import { formatNaira } from "@/lib/format";
-import { useCart } from "@/hooks/use-cart";
 
 import Item from "./cart-item";
 import Link from "next/link";
+import { useCart } from "@/hooks/use-cart";
 
 export default function CartPanel({
   setIsOpen,

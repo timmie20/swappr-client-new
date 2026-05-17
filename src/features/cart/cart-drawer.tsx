@@ -1,6 +1,5 @@
 import { Icons } from "@/components/icons";
 import ReusableSheetDrawer from "@/components/resuable-sheet-drawer";
-import { useCart } from "@/hooks/use-cart";
 import { AnimatePresence, motion } from "motion/react";
 import Item from "./cart-item";
 import { EmptyState } from "@/components/empty-state";
@@ -11,10 +10,12 @@ import { formatNaira } from "@/lib/format";
 import { TypographyMuted } from "@/components/typography/muted";
 import ClearCartDialog from "@/components/clear-cart-dialog";
 import { useState } from "react";
+import { useCart } from "@/hooks/use-cart";
 import Link from "next/link";
 
 export default function CartDrawer() {
-  const { items, totalItems, totalPrice } = useCart();
+  const { items, isLoading, totalItems, totalPrice } = useCart();
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const hasItems = items && items.length > 0;
@@ -53,6 +54,12 @@ export default function CartDrawer() {
         description="Enjoy free shipping on every order. No minimums. No exceptions"
         trigger={trigger}
       >
+        {isLoading && (
+          <div className="flex items-center justify-center py-10">
+            <Icons.spinner className="animate-spin" size={24} />
+          </div>
+        )}
+
         {!hasItems && (
           <EmptyState
             title="No Items yet"

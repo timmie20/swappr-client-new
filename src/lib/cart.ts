@@ -1,7 +1,7 @@
 import { AddCartItemPayload, CartItem, LocalCartItem } from "@/types/cart";
 import { ProductDetail, ProductVariant } from "@/types/product";
 
-function isSameLine(
+export function isSameLine(
   a: Pick<LocalCartItem, "productId" | "variantId">,
   b: Pick<LocalCartItem, "productId" | "variantId">,
 ) {
@@ -15,16 +15,16 @@ export function mapServerCartItemToCartItem(item: CartItem): LocalCartItem {
   const product = item.product;
 
   return {
-    id: item.id || `${item.product_id}-${item.variant_id ?? "base"}`,
+    id: item?.id,
     productId: item.product_id,
     variantId: item.variant_id,
-    title: item.title || product.name || "Unknown Product",
+    title: item.title || product?.name || "Unknown Product",
     price: item.price_at_add,
-    image: product.images?.[0] ?? "",
+    image: product?.images?.[0] ?? "",
     quantity: item.quantity,
     color: item.variant?.color,
     storage: item.variant?.storage || undefined,
-    condition: product.condition,
+    condition: product?.condition,
   };
 }
 
@@ -40,6 +40,7 @@ export function convertToServerPayload(
     variant_id: item.variantId ?? null,
     quantity: item.quantity,
     title: item.title,
+    vendor_id: "", // This would need to be determined based on the product data, which isn't included in LocalCartItem
   }));
 }
 
@@ -85,7 +86,9 @@ export function mapApiProductToCartItem({
     productId: product.id,
     variantId: activeVariant ? activeVariant.id : null,
     title: title,
-    price: activeVariant ? activeVariant.price : Number(product.base_price),
+    price: activeVariant
+      ? Number(activeVariant.price)
+      : Number(product.base_price),
     quantity: quantity,
     image: product.images[0] ?? "",
     color: activeVariant ? activeVariant.color : undefined,

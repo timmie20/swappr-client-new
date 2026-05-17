@@ -4,33 +4,58 @@ import { SafeImage } from "@/components/safe-image";
 import { TypographyH3 } from "@/components/typography/h3";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import { mutationKeys } from "@/hooks/use-cart-queries";
 import { formatNaira, formatStorageCapacity } from "@/lib/format";
-import { formatCondition } from "@/lib/utils/product-helpers";
 import { LocalCartItem } from "@/types/cart";
-import { useEffect, useRef, useState } from "react";
+import { useMutationState } from "@tanstack/react-query";
+
+// Track pending quantity mutations for individual cart items.
+// React Query stores mutation variables as `unknown` internally,
+// so we cast the variables shape here (line 31-37, with select attribute) to safely determine whether
+// the current cart item is actively being updated.
+//
+// This allows us to:
+// - disable only the active item's controls
+// - keep the rest of the cart interactive
+// - support concurrent optimistic updates cleanly
 
 export default function Item({ item }: { item: LocalCartItem }) {
   const { updateQuantity, removeItem } = useCart();
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [localQuantity, setLocalQuantity] = useState(item.quantity);
 
-  const handleQuantityChange = (next: number) => {
-    if (next < 1) return;
+  const pendingMutations = useMutationState({
+    filters: {
+      mutationKey: mutationKeys.cart.updateQuantity(),
+      status: "pending",
+    },
 
-    setLocalQuantity(next); // instant UI
+    select: (mutation) =>
+      mutation.state.variables as
+        | {
+            itemId: string;
+            increment: number;
+          }
+        | undefined,
+  });
 
-    if (timerRef.current) clearTimeout(timerRef.current);
+  const isUpdatingThisItem = pendingMutations.some(
+    (variables) => variables?.itemId === item.id,
+  );
 
-    timerRef.current = setTimeout(() => {
-      updateQuantity(item.id, next); // server call after pause
-    }, 500);
+  const handleIncrement = () => {
+    updateQuantity({
+      itemId: item.id,
+      increment: 1,
+    });
   };
 
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
+  const handleDecrement = () => {
+    if (item.quantity <= 1) return;
+
+    updateQuantity({
+      itemId: item.id,
+      increment: -1,
+    });
+  };
 
   return (
     <div className="flex w-full items-start gap-4 border-[#E5E7EB] py-4 not-first:border-t">
@@ -47,6 +72,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
           <TypographyH3 className="text-base leading-tight">
             {item.title}
           </TypographyH3>
+
           <span className="text-muted-foreground font-semibold">
             {formatNaira(item.price)}
           </span>
@@ -64,33 +90,41 @@ export default function Item({ item }: { item: LocalCartItem }) {
             <Button
               variant="outline"
               size="icon-sm"
-              className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={localQuantity <= 1}
-              onClick={() => handleQuantityChange(localQuantity - 1)}
+              disabled={item.quantity <= 1 || isUpdatingThisItem}
+              onClick={handleDecrement}
+              className="cursor-pointer"
             >
               <Icons.minus />
             </Button>
 
-            <span className="text-base font-semibold">{localQuantity}</span>
+            <span className="text-base font-semibold">{item.quantity}</span>
 
             <Button
               variant="outline"
               size="icon-sm"
+              disabled={isUpdatingThisItem}
+              onClick={handleIncrement}
               className="cursor-pointer"
-              onClick={() => handleQuantityChange(localQuantity + 1)}
             >
               <Icons.add />
             </Button>
+
+            <Icons.spinner
+              className={
+                isUpdatingThisItem
+                  ? "text-muted-foreground animate-spin"
+                  : "hidden"
+              }
+              size={16}
+            />
           </div>
 
           <Button
             variant="destructive"
             size="icon-lg"
-            className="cursor-pointer"
             onClick={() => removeItem(item.id)}
           >
             <Icons.trash size={16} />
-            <span className="sr-only">Remove from cart</span>
           </Button>
         </div>
       </div>

@@ -12,8 +12,8 @@ import {
 import { useCartStore } from "@/store/cart-store";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
-import { useCart } from "@/hooks/use-cart";
 import { Spinner } from "./ui/spinner";
+import { useCart } from "@/hooks/use-cart";
 
 type ClearCartDialogProps = {
   open: boolean;
@@ -31,9 +31,8 @@ export default function ClearCartDialog({
 
   const handleClear = () => {
     if (isClearingCart) return;
-
-    clearCart({
-      onSuccess: () => {
+    clearCart(undefined, {
+      onSuccess() {
         onOpenChange(false);
       },
     });
