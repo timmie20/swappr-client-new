@@ -2,18 +2,17 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { useVerifyCheckout } from "@/hooks/use-checkout";
+import { useVerifyPayment } from "@/hooks";
 import {
   clearPaystackReference,
   getPaystackReference,
 } from "@/lib/paystack-reference";
 import { useCartStore } from "@/store/cart-store";
-import { useCheckoutStore } from "@/store/checkout-store";
+import { Lottie } from "@/components/lottie";
+import successCheck from "@/lottie/success-check.json";
 
 export function CheckoutVerifyView() {
   const router = useRouter();
@@ -22,57 +21,38 @@ export function CheckoutVerifyView() {
   const referenceFromUrl = searchParams.get("reference");
   const reference = referenceFromUrl || getPaystackReference();
 
-  const resetCheckout = useCheckoutStore((s) => s.reset);
-
-  const verify = useVerifyCheckout(reference);
+  const verify = useVerifyPayment(reference);
 
   useEffect(() => {
     if (!reference) return;
 
     if (verify.isSuccess) {
       clearPaystackReference();
-      resetCheckout();
       useCartStore.getState().clearCart();
-
-      toast.success("Order placed successfully");
-
-      // TODO: Decide final redirect destination (e.g. /orders or confirmation page)
       return;
     }
 
     if (verify.isError) {
-      const err = verify.error;
-
-      // terminal error states should clear local reference
       clearPaystackReference();
-      resetCheckout();
-
-      if (err?.statusCode === 410) {
-        router.replace("/");
-        return;
-      }
-
-      // Keep user on page for other errors
     }
-  }, [
-    reference,
-    resetCheckout,
-    router,
-    verify.error,
-    verify.isError,
-    verify.isSuccess,
-  ]);
+  }, [reference, router, verify.error, verify.isError, verify.isSuccess]);
 
   return (
     <div className="mx-auto w-full max-w-xl px-4 py-10">
       <Card>
         <CardHeader>
           <CardTitle className="text-base font-semibold">
-            Verifying payment
+            {verify.isSuccess
+              ? "Payment confirmed"
+              : verify.isError
+                ? "Payment verification failed"
+                : "Verifying payment"}
           </CardTitle>
-          <p className="text-muted-foreground text-sm">
-            Please wait while we confirm your payment.
-          </p>
+          {!verify.isSuccess && (
+            <p className="text-muted-foreground text-sm">
+              Please wait while we confirm your payment.
+            </p>
+          )}
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {!reference && (
@@ -114,16 +94,29 @@ export function CheckoutVerifyView() {
           )}
 
           {reference && verify.isSuccess && (
-            <div className="space-y-3">
-              <p className="text-sm">
-                Payment confirmed. Your order has been placed.
-              </p>
+            <div className="flex flex-col items-center gap-4 py-2 text-center">
+              <Lottie
+                animationData={successCheck}
+                loop={false}
+                autoPlay
+                className="size-44"
+              />
+
+              <div className="space-y-2">
+                <p className="text-base font-semibold">Payment confirmed</p>
+                <p className="text-muted-foreground text-sm">
+                  Your payment has been confirmed and your order has been
+                  placed. You’ll receive follow-up information in your email
+                  concerning your order.
+                </p>
+              </div>
+
               <Button
                 type="button"
                 onClick={() => router.replace("/")}
                 className="rounded-full"
               >
-                Continue shopping
+                See my orders
               </Button>
             </div>
           )}

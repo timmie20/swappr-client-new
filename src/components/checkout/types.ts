@@ -13,7 +13,6 @@ export const checkoutDeliverySchema = z.object({
   email: z.string().email("Please enter a valid email address"),
 
   delivery_address: z.object({
-    full_address: z.string().min(3, "Address is required"),
     street: z.string().min(2, "Street is required"),
     city: z.string().min(2, "City is required"),
     state: z.string().min(2, "State is required"),
@@ -31,7 +30,6 @@ export const STEP_1_FIELDS = [
   "firstName",
   "lastName",
   "email",
-  "delivery_address.full_address",
   "delivery_address.street",
   "delivery_address.city",
   "delivery_address.state",

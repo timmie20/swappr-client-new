@@ -7,7 +7,6 @@
 "use client";
 
 import { useCartHydrate } from "@/features/cart/hooks/use-cart-hydrate";
-import { useCartSync } from "@/features/cart/hooks/use-cart-sync";
 import { useTokenRefresh } from "@/hooks/use-token-refresh";
 
 export function TokenRefreshProvider({
@@ -16,7 +15,6 @@ export function TokenRefreshProvider({
   children: React.ReactNode;
 }) {
   useTokenRefresh();
-  useCartSync();
   useCartHydrate();
 
   return <>{children}</>;

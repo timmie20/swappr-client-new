@@ -1,21 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatNaira } from "@/lib/format";
+import { getStatusColor } from "@/lib/utils";
 import { Valuation } from "@/types/api";
 import { IconEye, IconTrash, IconDeviceMobile } from "@tabler/icons-react";
-
-// const getStatusColor = (status: string) => {
-//   switch (status) {
-//     case "completed":
-//       return "bg-chart-2/10 text-chart-2 border-chart-2/20";
-//     case "pending":
-//       return "bg-yellow-light/10 text-yellow-dark border-yellow-light/20";
-//     case "expired":
-//       return "bg-destructive/10 text-destructive border-destructive/20";
-//     default:
-//       return "bg-muted text-muted-foreground";
-//   }
-// };
 
 export function ValuationItem({ valuation }: { valuation: Valuation }) {
   return (
@@ -36,12 +24,12 @@ export function ValuationItem({ valuation }: { valuation: Valuation }) {
                 <Badge variant="outline" className="text-xs">
                   {valuation.device.storage}GB
                 </Badge>
-                {/* <Badge
+                <Badge
                   variant="outline"
-                  className={`text-xs ${getStatusColor(valuation.status)}`}
+                  className={`text-xs ${getStatusColor(valuation?.status)}`}
                 >
                   {valuation.status}
-                </Badge> */}
+                </Badge>
               </div>
             </div>
 

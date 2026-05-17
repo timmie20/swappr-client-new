@@ -52,11 +52,12 @@ export default function Item({ item }: { item: LocalCartItem }) {
           </span>
         </span>
 
-        <ul className="text-muted-foreground">
-          <li>Color: {item.color}</li>
-          <li>Storage: {formatStorageCapacity(item.storage)}</li>
-          <li>Condition: {formatCondition(item.condition)}</li>
-        </ul>
+        <p className="text-muted-foreground text-sm">
+          Qty {item.quantity}
+          {item.color ? ` | ${item.color}` : ""}
+          {item.condition ? ` | ${item.condition}` : ""}
+          {item.storage ? ` | ${formatStorageCapacity(item.storage)}` : ""}
+        </p>
 
         <div className="flex w-full items-center justify-between">
           <div className="inline-flex items-center gap-3">

@@ -10,6 +10,8 @@ import { IconDeviceMobile } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/error-state";
 import { formatRelativeDate } from "@/lib/format";
+import { Badge } from "@/components/ui/badge";
+import { getStatusColor } from "@/lib/utils";
 
 export interface SwapOffer {
   valuationId: string;
@@ -88,7 +90,8 @@ export function SwapFormStep({
         className="flex flex-col gap-4"
       >
         <EmptyState
-          icon={<IconDeviceMobile className="size-6" />}
+          variant="lottie"
+          lottieType="ghost"
           title="No valuations yet"
           description="Check your device worth to create a valuation that you can use for swap offers."
           actions={
@@ -179,9 +182,18 @@ function ValuationCard({
             {valuation.device.storage}GB
           </span>
         </div>
-        <p className="text-foreground text-sm font-bold">
-          {valuation.device.model}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-foreground text-sm font-bold">
+            {valuation.device.model}
+          </p>
+          <Badge
+            variant="outline"
+            className={`text-xs ${getStatusColor(valuation?.status)}`}
+          >
+            {valuation.status}
+          </Badge>
+        </div>
+
         <p className="text-muted-foreground text-xs">
           {formatRelativeDate(valuation.created_at)}
         </p>
