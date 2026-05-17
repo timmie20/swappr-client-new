@@ -5,6 +5,8 @@ import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
 import { Spinner } from "../ui/spinner";
 import { useCart } from "@/hooks/use-cart";
+import { useIsAuthenticated } from "@/hooks/use-access-token";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ProductActionsProps {
   activeVariant: ProductVariant | null;
@@ -25,7 +27,17 @@ export function ProductActions({
 }: ProductActionsProps) {
   // const [bookmarked, setBookmarked] = useState(false);
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const { addToCart, isAddingToCart } = useCart();
+
+  const isLoggedIn = useIsAuthenticated();
+
+  const currentPath = `${pathname}${
+    searchParams.toString() ? `?${searchParams.toString()}` : ""
+  }`;
 
   // Determine stock status based on whether product has variants
   const outOfStock = hasVariants
@@ -38,6 +50,13 @@ export function ProductActions({
   const needsVariantSelection = hasVariants && !activeVariant;
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      sessionStorage.setItem("auth_redirect", currentPath);
+
+      router.replace("/auth/sign-in");
+
+      return;
+    }
     // For products with variants, require variant selection
     if (hasVariants && !activeVariant) return;
     // Don't allow if out of stock

@@ -98,7 +98,7 @@ export function useLogout() {
     },
     onSuccess: () => {
       clearAuthTokens();
-      useCartStore.getState().clearCart();
+      // useCartStore.getState().clearCart();
       queryClient.clear();
       toast.success("Signed out successfully", { id: "logout" });
       router.push("/");

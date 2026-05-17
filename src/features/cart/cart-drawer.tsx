@@ -63,7 +63,7 @@ export default function CartDrawer() {
         {!hasItems && (
           <EmptyState
             title="No Items yet"
-            description="Nothing here yet—explore products and add them to your cart."
+            description="Nothing here yet login in, explore products add them to your cart."
             variant="lottie"
             lottieType="cart"
             actions={

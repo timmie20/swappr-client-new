@@ -3,11 +3,13 @@ import { Icons } from "@/components/icons";
 import { SafeImage } from "@/components/safe-image";
 import { TypographyH3 } from "@/components/typography/h3";
 import { Button } from "@/components/ui/button";
+import { useIsAuthenticated } from "@/hooks/use-access-token";
 import { useCart } from "@/hooks/use-cart";
 import { mutationKeys } from "@/hooks/use-cart-queries";
 import { formatNaira, formatStorageCapacity } from "@/lib/format";
 import { LocalCartItem } from "@/types/cart";
 import { useMutationState } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 // Track pending quantity mutations for individual cart items.
 // React Query stores mutation variables as `unknown` internally,
@@ -21,6 +23,8 @@ import { useMutationState } from "@tanstack/react-query";
 
 export default function Item({ item }: { item: LocalCartItem }) {
   const { updateQuantity, removeItem } = useCart();
+
+  const isLoggedIn = useIsAuthenticated();
 
   const pendingMutations = useMutationState({
     filters: {
@@ -42,6 +46,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
   );
 
   const handleIncrement = () => {
+    if (!isLoggedIn) toast.error("Please log in to update your cart");
     updateQuantity({
       itemId: item.id,
       increment: 1,
@@ -49,12 +54,18 @@ export default function Item({ item }: { item: LocalCartItem }) {
   };
 
   const handleDecrement = () => {
+    if (!isLoggedIn) toast.error("Please log in to update your cart");
     if (item.quantity <= 1) return;
 
     updateQuantity({
       itemId: item.id,
       increment: -1,
     });
+  };
+
+  const handleRemove = () => {
+    if (!isLoggedIn) toast.error("Please log in to update your cart");
+    removeItem(item.id);
   };
 
   return (
@@ -119,11 +130,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
             />
           </div>
 
-          <Button
-            variant="destructive"
-            size="icon-lg"
-            onClick={() => removeItem(item.id)}
-          >
+          <Button variant="destructive" size="icon-lg" onClick={handleRemove}>
             <Icons.trash size={16} />
           </Button>
         </div>
