@@ -1,6 +1,7 @@
 import type { DeliveryAddress } from "@/types/checkout";
 
 export interface CreateOrderPayload {
+  vendor_id?: string; // optional - if not provided, creates order with items from all vendors in cart
   order_type: "purchase" | "swap";
   delivery_address: DeliveryAddress;
   contact_phone: string;

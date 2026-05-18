@@ -13,13 +13,14 @@ import Item from "./cart-item";
 import Link from "next/link";
 import { useCart } from "@/features/cart/hooks/use-cart";
 import { useMemo } from "react";
-import { useSearchParams } from "next/navigation";
 
-export default function CartPanel({}: { setIsOpen?: (open: boolean) => void }) {
+export default function CartPanel({
+  vendorId,
+}: {
+  vendorId?: string; // optional filter for showing items from a specific vendor (comes from ?vendor=xxx)
+  setIsOpen?: (open: boolean) => void;
+}) {
   const { items, totalItems, totalPrice } = useCart();
-
-  const searchParams = useSearchParams();
-  const vendorId = searchParams.get("vendor"); // comes from ?vendor=xxx
 
   const vendorItems = useMemo(() => {
     if (!vendorId) return items; // no vendor param = show all

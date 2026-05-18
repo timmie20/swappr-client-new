@@ -7,7 +7,7 @@ import { CreditCard, Lock } from "lucide-react";
 /** Blue-bordered "Pay with Paystack" badge */
 export function PaystackBadge() {
   return (
-    <div className="border-primary bg-primary/10 flex items-center justify-between rounded-xl border px-4 py-3">
+    <div className="border-primary bg-sidebar-primary-foreground flex items-center justify-between rounded-xl border px-4 py-3">
       {/* left: icon + label */}
       <div className="flex items-center gap-2.5">
         <CreditCard size={18} className="text-primary" />

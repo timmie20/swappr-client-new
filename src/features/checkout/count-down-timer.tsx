@@ -20,10 +20,10 @@ function CountdownUnit({ value, label, isLast }: CountdownUnitProps) {
     <div className="flex items-center gap-3 sm:gap-4">
       <div className="flex flex-col items-center gap-1">
         {/* digit block */}
-        <div className="relative h-18 overflow-hidden sm:h-24 sm:w-28">
+        <div className="relative h-18 sm:h-24 sm:w-28">
           <TypographyH1
             ref={ref}
-            className="absolute inset-0 flex items-center justify-center font-mono tabular-nums"
+            className="absolute inset-0 flex items-center justify-center font-mono text-2xl tabular-nums"
           >
             {pad2(value)}
           </TypographyH1>
@@ -93,7 +93,7 @@ export function CountdownTimer({
 function ProgressBar({ seconds }: { seconds: number }) {
   const pct = ((60 - seconds) / 60) * 100;
   return (
-    <div className="mt-4 h-[2px] w-40 overflow-hidden rounded-full bg-slate-100">
+    <div className="mt-4 h-0.5 w-40 overflow-hidden rounded-full bg-slate-100">
       <div
         className="h-full rounded-full bg-blue-500 transition-all duration-1000 ease-linear"
         style={{ width: `${pct}%` }}

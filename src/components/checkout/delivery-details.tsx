@@ -20,6 +20,7 @@ export type DeliveryDetailsProps = {
   submitLabel?: string;
   isSubmitting?: boolean;
   submitDisabled?: boolean;
+  hasItems?: boolean; // new prop to indicate if there are items in the cart
   onSubmit: (data: CheckoutDeliveryFormValues) => void | Promise<void>;
 };
 

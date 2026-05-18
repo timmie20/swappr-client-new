@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Nav from "@/components/checkout/nav";
 import DeliveryDetails from "@/components/checkout/delivery-details";
@@ -11,17 +11,22 @@ import type { CheckoutDeliveryFormValues } from "@/components/checkout/types";
 import ClearCartDialog from "@/components/clear-cart-dialog";
 
 import { useCreateOrder } from "@/hooks";
-import { useCartStore } from "@/store/cart-store";
 
 import CartPanel from "./cart-panel";
+import { useCart } from "./hooks/use-cart";
 
 export default function CartPage() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const vendorId = searchParams.get("vendor") || ""; // comes from ?vendor=xxx
 
   const createOrder = useCreateOrder();
 
-  const items = useCartStore((s) => s.items);
+  const { items } = useCart();
 
   const hasItems = items.length > 0;
 
@@ -29,6 +34,7 @@ export default function CartPage() {
     createOrder.mutate(
       {
         order_type: "purchase",
+        vendor_id: vendorId, // if empty string, send as undefined to create order with all vendors
         delivery_address: data.delivery_address,
         contact_phone: data.contact_phone,
       },
@@ -52,14 +58,14 @@ export default function CartPage() {
       <main className="flex-1 overflow-hidden">
         {/* Mobile Layout */}
         <div className="flex flex-col md:hidden">
-          <CartPanel setIsOpen={setIsDialogOpen} />
+          <CartPanel vendorId={vendorId} setIsOpen={setIsDialogOpen} />
 
           <div className="border-t">
             <DeliveryDetails
               submitLabel="Confirm order"
-              submitDisabled={!hasItems}
               isSubmitting={createOrder.isPending}
               onSubmit={handleConfirmOrder}
+              submitDisabled={!hasItems} // disable if there are no items in the cart
             />
           </div>
         </div>
@@ -69,13 +75,13 @@ export default function CartPage() {
           <div className="overflow-y-auto">
             <DeliveryDetails
               submitLabel="Confirm order"
-              submitDisabled={!hasItems}
               isSubmitting={createOrder.isPending}
               onSubmit={handleConfirmOrder}
+              submitDisabled={!hasItems} // disable if there are no items in the cart
             />
           </div>
 
-          <CartPanel setIsOpen={setIsDialogOpen} />
+          <CartPanel vendorId={vendorId} setIsOpen={setIsDialogOpen} />
         </div>
       </main>
 
