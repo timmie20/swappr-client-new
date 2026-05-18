@@ -4,6 +4,8 @@ export type LocalCartItem = {
   id: string;
   productId: string;
   variantId: string | null;
+  vendorId: string;
+  businessName: string;
   title: string;
   price: number;
   image: string;

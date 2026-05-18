@@ -13,7 +13,7 @@ import { useCartStore } from "@/store/cart-store";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/features/cart/hooks/use-cart";
 
 type ClearCartDialogProps = {
   open: boolean;

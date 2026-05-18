@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
 import { Spinner } from "../ui/spinner";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/features/cart/hooks/use-cart";
 import { useIsAuthenticated } from "@/hooks/use-access-token";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

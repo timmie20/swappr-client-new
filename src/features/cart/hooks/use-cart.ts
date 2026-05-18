@@ -6,7 +6,7 @@ import {
   useGetCart,
   useRemoveCartItem,
   useUpdateCartQuantity,
-} from "./use-cart-queries";
+} from "../../../hooks/use-cart-queries";
 import { mapServerCartToLocal } from "@/lib/cart";
 
 export function useCart() {

@@ -25,6 +25,8 @@ export function mapServerCartItemToCartItem(item: CartItem): LocalCartItem {
     color: item.variant?.color,
     storage: item.variant?.storage || undefined,
     condition: product?.condition,
+    vendorId: item.vendor?.id,
+    businessName: item.vendor?.business_name,
   };
 }
 
@@ -40,7 +42,7 @@ export function convertToServerPayload(
     variant_id: item.variantId ?? null,
     quantity: item.quantity,
     title: item.title,
-    vendor_id: "", // This would need to be determined based on the product data, which isn't included in LocalCartItem
+    vendor_id: item.vendorId, // This would need to be determined based on the product data, which isn't included in LocalCartItem
   }));
 }
 
@@ -94,5 +96,7 @@ export function mapApiProductToCartItem({
     color: activeVariant ? activeVariant.color : undefined,
     storage: activeVariant ? activeVariant.storage : undefined,
     condition: product.condition,
+    vendorId: product.vendor.id,
+    businessName: product.vendor.business_name,
   };
 }

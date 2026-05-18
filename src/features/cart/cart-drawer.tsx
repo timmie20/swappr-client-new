@@ -1,7 +1,6 @@
 import { Icons } from "@/components/icons";
 import ReusableSheetDrawer from "@/components/resuable-sheet-drawer";
 import { AnimatePresence, motion } from "motion/react";
-import Item from "./cart-item";
 import { EmptyState } from "@/components/empty-state";
 import { Button } from "@/components/ui/button";
 import { SheetFooter } from "@/components/ui/sheet";
@@ -10,8 +9,8 @@ import { formatNaira } from "@/lib/format";
 import { TypographyMuted } from "@/components/typography/muted";
 import ClearCartDialog from "@/components/clear-cart-dialog";
 import { useState } from "react";
-import { useCart } from "@/hooks/use-cart";
-import Link from "next/link";
+import { useCart } from "@/features/cart/hooks/use-cart";
+import { VendorCartList } from "./vendor-cart-list";
 
 export default function CartDrawer() {
   const { items, isLoading, totalItems, totalPrice } = useCart();
@@ -76,28 +75,20 @@ export default function CartDrawer() {
 
         {hasItems && (
           <div className="overflow-y-auto px-6">
-            {items.map((item) => (
-              <Item key={`${item.id}-${item.quantity}`} item={item} />
-            ))}
+            <VendorCartList />
           </div>
         )}
 
         <SheetFooter>
           <div>
-            <TypographyH3 className="flex items-center justify-between">
+            <TypographyH3 className="flex items-center justify-between text-xl">
               <span>Subtotal:</span>
               <span>{formatNaira(totalPrice)}</span>
             </TypographyH3>
-            <TypographyMuted className="text-sm sm:text-base">
+            <TypographyMuted className="text-sm">
               Taxes, discounts and shipping calculated at checkout.
             </TypographyMuted>
           </div>
-
-          <Link href="/cart" className="mt-2 w-full">
-            <Button type="button" disabled={!hasItems} className="w-full">
-              Place Order
-            </Button>
-          </Link>
 
           {hasItems && (
             <Button

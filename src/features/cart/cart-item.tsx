@@ -4,7 +4,7 @@ import { SafeImage } from "@/components/safe-image";
 import { TypographyH3 } from "@/components/typography/h3";
 import { Button } from "@/components/ui/button";
 import { useIsAuthenticated } from "@/hooks/use-access-token";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/features/cart/hooks/use-cart";
 import { mutationKeys } from "@/hooks/use-cart-queries";
 import { formatNaira, formatStorageCapacity } from "@/lib/format";
 import { LocalCartItem } from "@/types/cart";
@@ -80,7 +80,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
 
       <div className="w-full space-y-2">
         <span className="inline-flex items-center gap-2">
-          <TypographyH3 className="text-base leading-tight">
+          <TypographyH3 className="text-small leading-tight sm:text-base">
             {item.title}
           </TypographyH3>
 
@@ -89,7 +89,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
           </span>
         </span>
 
-        <p className="text-muted-foreground text-sm">
+        <p className="text-muted-foreground text-xs sm:text-sm">
           Qty {item.quantity}
           {item.color ? ` | ${item.color}` : ""}
           {item.condition ? ` | ${item.condition}` : ""}
@@ -130,7 +130,12 @@ export default function Item({ item }: { item: LocalCartItem }) {
             />
           </div>
 
-          <Button variant="destructive" size="icon-lg" onClick={handleRemove}>
+          <Button
+            variant="destructive"
+            size="icon-lg"
+            onClick={handleRemove}
+            className="cursor-pointer"
+          >
             <Icons.trash size={16} />
           </Button>
         </div>
