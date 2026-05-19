@@ -113,7 +113,7 @@ export function CheckoutVerifyView() {
 
               <Button
                 type="button"
-                onClick={() => router.replace("/")}
+                onClick={() => router.replace("/orders")}
                 className="rounded-full"
               >
                 See my orders

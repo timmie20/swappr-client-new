@@ -48,7 +48,16 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link href="/account">
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Icons.user size={14} />
+              Profile
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/orders">
+            <DropdownMenuItem>
+              <Icons.product size={14} />
+              My Orders
+            </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />
           <SignoutDialog

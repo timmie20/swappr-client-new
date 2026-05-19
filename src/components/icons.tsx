@@ -59,6 +59,7 @@ import {
   IconBuildingStore,
   IconLogout,
   IconEdit,
+  IconCopy,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -126,4 +127,5 @@ export const Icons = {
   error: IconError404,
   store: IconBuildingStore,
   edit: IconEdit,
+  copy: IconCopy,
 };

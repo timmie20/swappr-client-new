@@ -44,7 +44,7 @@ export default function SignoutDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>
         <button className="focus:bg-accent focus:text-accent-foreground hover:bg-accent inline-flex w-full cursor-default items-center gap-2.5 rounded-xl px-3 py-2 text-sm">
-          Sign Out <Icons.logout size={14} />
+          <Icons.logout size={14} /> Sign Out
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
