@@ -45,10 +45,12 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
+  order_number: string;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
   buyer_id: string;
+
   buyer: {
     first_name: string;
     last_name: string;
@@ -82,3 +84,8 @@ export interface OrderListResponse {
   page: number;
   limit: number;
 }
+
+export type CancelOrder = {
+  orderId: string;
+  cancellation_reason?: string;
+};

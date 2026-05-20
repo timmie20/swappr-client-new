@@ -169,8 +169,6 @@
 
 import { toast } from "sonner";
 
-import Nav from "@/components/checkout/nav";
-
 import { useInitiatePayment } from "@/hooks";
 import { setPaystackReference } from "@/lib/paystack-reference";
 import type { Order } from "@/types/orders";
@@ -178,6 +176,7 @@ import { useExpiryCountdown } from "@/hooks/use-expiry-countdown";
 import { CountdownTimer } from "./count-down-timer";
 import { OrderAccordion } from "./order-accordian";
 import { PayNowButton, PaystackBadge } from "./payment-actions";
+import Nav from "@/components/shared/nav/checkout-nav";
 
 interface OrderCheckoutProps {
   order: Order;

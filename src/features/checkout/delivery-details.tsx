@@ -10,11 +10,11 @@ import { useUserAccount } from "@/hooks/use-auth";
 import {
   checkoutDeliverySchema,
   type CheckoutDeliveryFormValues,
-} from "./types";
-import { TypographyP } from "../typography/p";
-import { TypographyMuted } from "../typography/muted";
-import { Separator } from "../ui/separator";
-import { Spinner } from "../ui/spinner";
+} from "../../components/checkout/types";
+import { TypographyP } from "../../components/typography/p";
+import { TypographyMuted } from "../../components/typography/muted";
+import { Separator } from "../../components/ui/separator";
+import { Spinner } from "../../components/ui/spinner";
 
 export type DeliveryDetailsProps = {
   submitLabel?: string;

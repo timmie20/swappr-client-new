@@ -5,8 +5,7 @@ import * as React from "react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import Nav from "@/components/checkout/nav";
-import DeliveryDetails from "@/components/checkout/delivery-details";
+import DeliveryDetails from "@/features/checkout/delivery-details";
 import type { CheckoutDeliveryFormValues } from "@/components/checkout/types";
 import ClearCartDialog from "@/components/clear-cart-dialog";
 
@@ -14,6 +13,7 @@ import { useCreateOrder } from "@/hooks";
 
 import CartPanel from "./cart-panel";
 import { useCart } from "./hooks/use-cart";
+import Nav from "@/components/shared/nav/checkout-nav";
 
 export default function CartPage() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
@@ -41,7 +41,7 @@ export default function CartPage() {
       {
         onSuccess: (res) => {
           toast.success(res.message || "Order confirmed");
-          router.push(`/checkout/${res?.data?.id}`);
+          router.push(`/checkout/${res?.data?.order_number}`);
         },
 
         onError: (err) => {

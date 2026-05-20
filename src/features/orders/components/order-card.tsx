@@ -27,12 +27,10 @@ export function OrderCard({ order }: { order: Order }) {
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <div className="space-y-1">
-          <p className="text-muted-foreground flex items-center gap-1 text-xs">
+          <p className="text-muted-foreground flex items-center gap-1 font-mono text-xs">
             <Icons.package size={12} />
-            Order ID{" "}
-            <span className="text-foreground font-mono text-xs">
-              {order.id}
-            </span>
+            Order ID
+            <span className="">#{order.order_number}</span>
           </p>
           <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-xs">
             <span className="text-foreground font-semibold">
@@ -43,7 +41,7 @@ export function OrderCard({ order }: { order: Order }) {
 
         <Button asChild variant="outline" size="sm" className="rounded-none">
           <Link
-            href={`/orders/${order.id}`}
+            href={`/orders/${order.order_number}`}
             className="flex items-center gap-2"
           >
             View Timeline

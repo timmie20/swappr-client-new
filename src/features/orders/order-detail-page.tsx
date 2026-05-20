@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-
 import { ErrorState } from "@/components/error-state";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -85,7 +83,7 @@ export default function OrderDetailPage({ orderId }: { orderId: string }) {
           </Button>
           <TypographyH2 className="border-b-0 pb-0">Order details</TypographyH2>
           <div className="flex items-center gap-2">
-            <TypographyMuted>Order ID: #{order.id}</TypographyMuted>
+            <TypographyMuted>Order ID: #{order.order_number}</TypographyMuted>
 
             <button
               className="text-muted-foreground hover:text-foreground cursor-pointer text-sm transition-colors"
@@ -114,7 +112,7 @@ export default function OrderDetailPage({ orderId }: { orderId: string }) {
             <Button
               className="cursor-pointer rounded-none"
               size="sm"
-              onClick={() => router.push(`/checkout/${orderId}`)}
+              onClick={() => router.push(`/checkout/${order.order_number}`)}
             >
               Pay Now
             </Button>

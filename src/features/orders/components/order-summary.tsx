@@ -1,35 +1,17 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Spinner } from "@/components/ui/spinner";
 import { formatDate, formatNaira } from "@/lib/format";
 import type { Order } from "@/types/orders";
-import { useCancelOrder } from "@/hooks/use-orders";
 import { PaymentStatusBadge, OrderStatusBadge } from "./order-status-badge";
 import { Icons } from "@/components/icons";
+import { OrderCancelDialog } from "./order-cancel-dialog";
 
 function formatOrderType(orderType: Order["order_type"]) {
   return orderType === "swap" ? "Swap" : "Purchase";
 }
 
 export function OrderSummary({ order }: { order: Order }) {
-  const cancelOrder = useCancelOrder();
-
-  const canCancel =
-    order.status === "confirmed" && order.payment_status !== "paid";
-
   const address = [
     order.delivery_address.street,
     order.delivery_address.city,
@@ -39,7 +21,9 @@ export function OrderSummary({ order }: { order: Order }) {
     .filter(Boolean)
     .join(", ");
 
-  const recipient = order.buyer.last_name + " " + order.buyer.first_name;
+  const recipient = [order.buyer?.first_name, order.buyer?.last_name]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section className="border-border border-t pt-6">
@@ -107,50 +91,7 @@ export function OrderSummary({ order }: { order: Order }) {
           </span>
         </div>
 
-        {canCancel && (
-          <div className="pt-2">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  className="w-full rounded-none"
-                  disabled={cancelOrder.isPending}
-                >
-                  Cancel order
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Cancel this order?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This order has not been paid yet. Cancelling will remove it
-                    from your active orders. This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="cursor-pointer">
-                    Keep order
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    variant="destructive"
-                    className="cursor-pointer"
-                    onClick={() => cancelOrder.mutate({ orderId: order.id })}
-                    disabled={cancelOrder.isPending}
-                  >
-                    {cancelOrder.isPending ? (
-                      <span className="inline-flex items-center gap-2">
-                        <Spinner />
-                        Cancelling...
-                      </span>
-                    ) : (
-                      "Cancel order"
-                    )}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        )}
+        <OrderCancelDialog order={order} />
       </div>
     </section>
   );

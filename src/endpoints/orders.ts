@@ -1,6 +1,7 @@
 import { api } from "@/lib/api/client";
 import type { ApiResponse, PaginationParams } from "@/types/api";
 import type {
+  CancelOrder,
   CreateOrderPayload,
   CreateOrderResponseData,
   Order,
@@ -34,8 +35,10 @@ export const ordersEndpoints = {
     return data as OrderListResponse;
   },
 
-  async cancelOrder(orderId: string): Promise<ApiResponse<Order>> {
-    const { data } = await api.post(`/orders/${orderId}/cancel`);
+  async cancelOrder(payload: CancelOrder): Promise<ApiResponse<Order>> {
+    const { data } = await api.patch(`/orders/${payload.orderId}/cancel`, {
+      cancellation_reason: payload.cancellation_reason,
+    });
     return data;
   },
 };

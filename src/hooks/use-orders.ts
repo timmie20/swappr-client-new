@@ -7,7 +7,6 @@ import {
   useQuery,
   useQueryClient,
   type InfiniteData,
-  type QueryKey,
   type UseInfiniteQueryOptions,
   type UseQueryOptions,
 } from "@tanstack/react-query";
@@ -115,105 +114,37 @@ export function useOrder(orderId: string | null | undefined) {
   });
 }
 
-type CancelContext = {
-  previousLists: Array<
-    [QueryKey, OrderListResponse | InfiniteData<OrderListResponse> | undefined]
-  >;
-  previousOrder?: ApiResponse<Order>;
-};
-
 export function useCancelOrder() {
   const queryClient = useQueryClient();
 
   return useMutation<
     ApiResponse<Order>,
     Error,
-    { orderId: string },
-    CancelContext
+    { orderId: string; cancellation_reason?: string }
   >({
     mutationKey: ordersMutationKeys.cancel(),
-    mutationFn: ({ orderId }) => ordersEndpoints.cancelOrder(orderId),
-    onMutate: async ({ orderId }) => {
-      await queryClient.cancelQueries({ queryKey: queryKeys.orders.lists() });
 
-      const previousLists = queryClient.getQueriesData<
-        OrderListResponse | InfiniteData<OrderListResponse>
-      >({ queryKey: queryKeys.orders.lists() });
+    mutationFn: ({ orderId, cancellation_reason }) =>
+      ordersEndpoints.cancelOrder({
+        orderId,
+        cancellation_reason,
+      }),
 
-      const previousOrder = queryClient.getQueryData<ApiResponse<Order>>(
-        queryKeys.orders.detail(orderId),
-      );
-
-      const markCancelled = (order: Order) => ({
-        ...order,
-        status: "cancelled",
-        cancelled_at: order.cancelled_at ?? new Date().toISOString(),
-        cancellation_reason: order.cancellation_reason ?? "Cancelled by user",
-      });
-
-      queryClient.setQueriesData<
-        OrderListResponse | InfiniteData<OrderListResponse>
-      >({ queryKey: queryKeys.orders.lists() }, (old) => {
-        if (!old) return old;
-
-        if ("pages" in old) {
-          return {
-            ...old,
-            pages: old.pages.map((page) => ({
-              ...page,
-              orders: page.orders.map((order) =>
-                order.id === orderId ? markCancelled(order) : order,
-              ),
-            })),
-          };
-        }
-
-        return {
-          ...old,
-          orders: old.orders.map((order) =>
-            order.id === orderId ? markCancelled(order) : order,
-          ),
-        };
-      });
-
-      if (previousOrder) {
-        queryClient.setQueryData<ApiResponse<Order>>(
-          queryKeys.orders.detail(orderId),
-          {
-            ...previousOrder,
-            data: markCancelled(previousOrder.data),
-          },
-        );
-      }
-
-      return { previousLists, previousOrder };
-    },
-    onError: (error, variables, context) => {
-      if (context?.previousLists) {
-        context.previousLists.forEach(([key, data]) => {
-          queryClient.setQueryData(key, data);
-        });
-      }
-
-      if (context?.previousOrder) {
-        queryClient.setQueryData(
-          queryKeys.orders.detail(variables.orderId),
-          context.previousOrder,
-        );
-      }
-
-      toast.error(error.message || "Unable to cancel order");
-    },
-    onSuccess: (res) => {
+    onSuccess: (res, variables) => {
       toast.success(res.message || "Order cancelled");
+
+      // Refetch updated order state
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.lists(),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.detail(variables.orderId),
+      });
     },
-    onSettled: (_res, _error, variables) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
-      if (variables?.orderId) {
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.orders.detail(variables.orderId),
-        });
-      }
+
+    onError: (error) => {
+      toast.error(error.message || "Unable to cancel order");
     },
   });
 }

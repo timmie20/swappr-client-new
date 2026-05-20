@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Icons } from "../icons";
-import Logo from "../shared/logo";
+import Logo from "../logo";
+import { Icons } from "@/components/icons";
 
 export default function Nav() {
   const handleLogoClick = () => {
