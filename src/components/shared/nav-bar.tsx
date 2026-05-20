@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { UserNav } from "../auth/user-nav";
 import { useScrollDetection } from "@/hooks/use-scroll-detection";
 import { cn } from "@/lib/utils";
 import { Icons } from "../icons";
+import NavActionButtons from "./nav/action-buttons";
+import Logo from "./logo";
 
 const NAV_LINKS = [
   { name: "Models", href: "/check-worth", icon: "phone" as const },
@@ -40,18 +40,21 @@ export default function Navbar() {
       >
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-4 xl:px-0">
           <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="flex shrink-0 items-center gap-2">
-              <Image
-                src="/assets/images/swappr-logo-filled.png"
-                alt="Swappr"
-                width={120}
-                height={40}
-                priority
-                className="h-8 w-auto"
-              />
-              <h1 className="text-large font-switzer font-semibold tracking-tight text-[#08161F]">
-                swappr
-              </h1>
+            {/* Mobile menu toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-[#08161F] transition-colors hover:bg-[#F8F9FA] md:hidden"
+              aria-label="Open menu"
+            >
+              <Icons.menu size={24} />
+            </button>
+
+            {/* Logo */}
+            <Link
+              href="/"
+              className="ml-14 flex flex-none shrink-0 items-center gap-2 lg:ml-0"
+            >
+              <Logo variant="dark" priority />
             </Link>
 
             <div className="hidden md:flex md:items-center md:gap-6">
@@ -71,18 +74,7 @@ export default function Navbar() {
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
-              <UserNav />
-
-              {/* Mobile menu toggle */}
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-[#08161F] transition-colors hover:bg-[#F8F9FA] md:hidden"
-                aria-label="Open menu"
-              >
-                <Icons.menu size={24} />
-              </button>
-            </div>
+            <NavActionButtons />
           </div>
         </div>
       </nav>
@@ -114,16 +106,7 @@ export default function Navbar() {
             >
               {/* Sidebar header */}
               <div className="flex h-20 items-center justify-between border-b border-[#E5E7EB] px-4">
-                <div>
-                  <Image
-                    src="/assets/images/swappr-logo-filled.png"
-                    alt="Swappr"
-                    width={120}
-                    height={40}
-                    priority
-                    className="h-10 w-auto"
-                  />
-                </div>
+                <Logo variant="dark" priority />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-[#08161F] transition-colors hover:bg-[#F8F9FA]"

@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useScrollDetection } from "@/hooks/use-scroll-detection";
 import { cn } from "@/lib/utils";
 import { Icons } from "../../icons";
-import { SearchDialog } from "../../search-dialog";
 import NavActionButtons from "./action-buttons";
 import { NavigationLinks } from "../nav-items";
 import MobileNavMenu from "./mobile-nav-menu";
@@ -15,7 +14,6 @@ import Logo from "@/components/shared/logo";
 export function AppNavbar() {
   const scrolled = useScrollDetection(10);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -49,7 +47,7 @@ export function AppNavbar() {
             <NavigationLinks />
 
             {/* Right icons */}
-            <NavActionButtons setOpen={setOpen} />
+            <NavActionButtons />
           </div>
         </div>
 
@@ -59,8 +57,6 @@ export function AppNavbar() {
 
       {/* Spacer for fixed nav */}
       <div className="h-16 md:h-16" />
-
-      <SearchDialog open={open} onOpenChange={setOpen} />
     </>
   );
 }

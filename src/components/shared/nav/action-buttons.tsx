@@ -1,16 +1,17 @@
 import { UserNav } from "@/components/auth/user-nav";
 import { Icons } from "@/components/icons";
+import { SearchDialog } from "@/components/search-dialog";
 import CartDrawer from "@/features/cart/cart-drawer";
+import { useState } from "react";
 
-type NavActionButtonsProps = {
-  setOpen: (open: boolean) => void;
-};
+export default function NavActionButtons() {
+  const [open, setOpen] = useState(false);
 
-export default function NavActionButtons({ setOpen }: NavActionButtonsProps) {
   return (
-    <div className="flex flex-none items-center gap-5">
-      {/* Wishlist */}
-      {/* <Button
+    <>
+      <div className="flex flex-none items-center gap-5">
+        {/* Wishlist */}
+        {/* <Button
                 className="relative cursor-pointer"
                 size="icon-lg"
                 variant="ghost"
@@ -23,22 +24,25 @@ export default function NavActionButtons({ setOpen }: NavActionButtonsProps) {
                 )}
               </Button> */}
 
-      {/* search */}
-      <button className="cursor-pointer" onClick={() => setOpen(true)}>
-        <Icons.search size={20} />
-      </button>
+        {/* search */}
+        <button className="cursor-pointer" onClick={() => setOpen(true)}>
+          <Icons.search size={20} />
+        </button>
 
-      {/* Notifications */}
-      <button className="hidden cursor-pointer sm:flex">
-        <Icons.bell size={20} />
-      </button>
+        {/* Notifications */}
+        <button className="hidden cursor-pointer sm:flex">
+          <Icons.bell size={20} />
+        </button>
 
-      {/* Cart */}
-      <CartDrawer />
+        {/* Cart */}
+        <CartDrawer />
 
-      {/* User */}
+        {/* User */}
 
-      <UserNav />
-    </div>
+        <UserNav />
+      </div>
+
+      <SearchDialog open={open} onOpenChange={setOpen} />
+    </>
   );
 }
