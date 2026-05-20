@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useFeedStore } from "@/store/feed-store";
 import { Button } from "../ui/button";
 import { useSubCategories } from "@/hooks/use-categories";
-import { Icons } from "../icons";
 
 export function CategoryFilterBar() {
   const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);

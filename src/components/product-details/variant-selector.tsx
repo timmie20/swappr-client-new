@@ -7,7 +7,6 @@ import {
   getAvailableStorage,
   isColorInStock,
   isStorageInStock,
-  formatStorage,
 } from "@/lib/utils/product-helpers";
 import type { ProductVariant, SelectedVariant } from "@/types/product";
 import { cn } from "@/lib/utils";

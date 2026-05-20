@@ -6,7 +6,6 @@ import type { Product } from "@/features/feed/types";
 import type { Valuation } from "@/types/api";
 import { useValuations } from "@/hooks/use-valuation";
 import { EmptyState } from "@/components/empty-state";
-import { IconDeviceMobile } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/error-state";
 import { formatRelativeDate } from "@/lib/format";

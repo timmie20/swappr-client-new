@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 type VariantType = "light" | "dark";
 

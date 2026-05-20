@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import PageContainer from "@/components/layout/page-container";
 import ProductDetailPage from "@/features/product-detail/page";
 import { generateProductMetadata } from "./metadata";
-import { getProduct } from "@/server-actions/product";
-import { queryKeys } from "@/lib/api/query-keys";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+// import { getProduct } from "@/server-actions/product";
+// import { queryKeys } from "@/lib/api/query-keys";
+// import {
+//   dehydrate,
+//   HydrationBoundary,
+//   QueryClient,
+// } from "@tanstack/react-query";
 
 type PageProps = { params: Promise<{ slug: string }> };
 

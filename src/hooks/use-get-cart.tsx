@@ -11,7 +11,7 @@ export function useGetCart() {
   const loggedIn = useIsAuthenticated();
 
   const query = useQuery({
-    queryKey: queryKeys.cart.list(),
+    queryKey: queryKeys.cart.lists(),
 
     queryFn: async () => {
       if (!loggedIn) return [];

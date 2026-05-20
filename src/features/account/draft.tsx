@@ -36,6 +36,7 @@ export default function Drafts() {
               icon={<IconDeviceMobile className="size-6" />}
               title="Unable to load valuations"
               description="There was an error loading your valuation history. Please try again."
+              variant="icon"
             />
             <div className="mt-4 flex justify-center">
               <Button
@@ -54,6 +55,7 @@ export default function Drafts() {
                   icon={<IconDeviceMobile className="size-6" />}
                   title="No valuations yet"
                   description="Start by checking the worth of your device"
+                  variant="icon"
                 />
                 <div className="flex justify-center">
                   <Link href="/check-worth">

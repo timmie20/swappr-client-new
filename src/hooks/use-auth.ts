@@ -10,8 +10,8 @@ import {
 } from "@/lib/auth-tokens";
 import { useRouter } from "next/navigation";
 import { LoginCredentials, LoginResponse } from "@/types";
-import { useCartStore } from "@/store/cart-store";
-import { useCartSync } from "@/features/cart/hooks/use-cart-sync";
+// import { useCartStore } from "@/store/cart-store";
+// import { useCartSync } from "@/features/cart/hooks/use-cart-sync";
 
 export const userKeys = {
   all: ["user"] as const,
