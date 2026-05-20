@@ -14,9 +14,10 @@ export default function Nav() {
           <Logo variant="dark" width={100} height={100} />
         </button>
         <div className="flex items-center gap-4">
-          <Link href="/cart">
-            <button className="cursor-pointer">
-              <Icons.product size={24} stroke={1.6} />
+          <Link href="/orders">
+            <button className="text-foreground hover:text-muted-foreground inline-flex cursor-pointer items-center gap-1 text-sm font-medium transition-colors">
+              <Icons.package size={24} stroke={1.6} />
+              Orders
             </button>
           </Link>
         </div>

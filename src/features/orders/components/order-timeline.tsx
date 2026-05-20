@@ -97,12 +97,12 @@ export function OrderTimeline({ order }: { order: Order }) {
                       )}
                     >
                       {STATUS_LABELS[status as Order["status"]]}
-                      {isFinal && (
-                        <span className="text-destructive ml-2 text-xs">{`(${
-                          order.cancellation_reason
-                        })`}</span>
-                      )}
                     </p>
+                    {isFinal && (
+                      <span className="text-destructive ml-2 text-xs">{`(${
+                        order.cancellation_reason
+                      })`}</span>
+                    )}
                     {isActive && !isFinal && (
                       <span className="text-muted-foreground text-xs">
                         Current

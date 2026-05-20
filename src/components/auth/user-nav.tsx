@@ -55,7 +55,7 @@ export function UserNav() {
           </Link>
           <Link href="/orders">
             <DropdownMenuItem>
-              <Icons.product size={14} />
+              <Icons.package size={14} />
               My Orders
             </DropdownMenuItem>
           </Link>
