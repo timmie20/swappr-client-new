@@ -275,7 +275,7 @@ export default function DeliveryDetails({
           <Button
             type="submit"
             size="lg"
-            className="mt-6 w-full cursor-pointer gap-2 rounded-full py-5"
+            className="my-6 w-full cursor-pointer gap-2 rounded-full py-5"
             disabled={isBusy || isDisabled}
           >
             {isBusy ? (

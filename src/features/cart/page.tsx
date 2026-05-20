@@ -52,10 +52,10 @@ export default function CartPage() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col overflow-hidden">
+    <div className="flex min-h-dvh flex-col md:overflow-hidden">
       <Nav />
 
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 md:overflow-hidden">
         {/* Mobile Layout */}
         <div className="flex flex-col md:hidden">
           <CartPanel vendorId={vendorId} setIsOpen={setIsDialogOpen} />
