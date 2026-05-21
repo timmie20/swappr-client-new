@@ -1,18 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { IconCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import type { ProductVariant } from "@/types/product";
+import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
+import { Spinner } from "../ui/spinner";
+import { useCart } from "@/features/cart/hooks/use-cart";
+import { useIsAuthenticated } from "@/hooks/use-access-token";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ProductActionsProps {
   activeVariant: ProductVariant | null;
   hasVariants: boolean;
   isSwappable: boolean;
-  productId: string;
   totalStock: number;
+  product: ProductDetail;
+  title: string;
 }
 
 export function ProductActions({
@@ -20,9 +22,22 @@ export function ProductActions({
   hasVariants,
   isSwappable,
   totalStock,
+  product,
+  title,
 }: ProductActionsProps) {
-  const [added, setAdded] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  // const [bookmarked, setBookmarked] = useState(false);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const { addToCart, isAddingToCart } = useCart();
+
+  const isLoggedIn = useIsAuthenticated();
+
+  const currentPath = `${pathname}${
+    searchParams.toString() ? `?${searchParams.toString()}` : ""
+  }`;
 
   // Determine stock status based on whether product has variants
   const outOfStock = hasVariants
@@ -35,13 +50,33 @@ export function ProductActions({
   const needsVariantSelection = hasVariants && !activeVariant;
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      sessionStorage.setItem("auth_redirect", currentPath);
+
+      router.replace("/auth/sign-in");
+
+      return;
+    }
     // For products with variants, require variant selection
     if (hasVariants && !activeVariant) return;
     // Don't allow if out of stock
     if (outOfStock) return;
+    if (isAddingToCart) return;
 
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    // const itemToAdd = mapApiProductToCartItem({
+    //   product,
+    //   title: title,
+    //   activeVariant: activeVariant,
+    //   quantity: 1,
+    // });
+
+    addToCart({
+      product_id: product.id,
+      variant_id: activeVariant ? activeVariant.id : null,
+      quantity: 1,
+      title: title,
+      vendor_id: product.vendor.id,
+    });
   };
 
   return (
@@ -50,41 +85,28 @@ export function ProductActions({
       <Button
         size="lg"
         onClick={handleAddToCart}
-        disabled={needsVariantSelection || outOfStock || added}
-        className="w-full flex-auto py-6 text-base font-semibold"
+        disabled={needsVariantSelection || outOfStock || isAddingToCart}
+        className="w-full flex-auto cursor-pointer py-6 text-base font-semibold disabled:cursor-not-allowed disabled:opacity-50"
         aria-label={
-          needsVariantSelection ? "Select a variant first" : "Add to cart"
+          needsVariantSelection
+            ? "Select a variant first"
+            : outOfStock
+              ? "Out of stock"
+              : isAddingToCart
+                ? "Adding to cart"
+                : "Add to cart"
         }
       >
-        <AnimatePresence mode="wait">
-          {added ? (
-            <motion.span
-              key="check"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              className="flex items-center gap-2"
-            >
-              <IconCheck size={18} />
-              Added to Cart!
-            </motion.span>
-          ) : (
-            <motion.span
-              key="cart"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              className="flex items-center gap-2"
-            >
-              <Icons.cartCopy size={18} />
-              {outOfStock
-                ? "Out of Stock"
-                : needsVariantSelection
-                  ? "Select a Variant"
-                  : "Add to Cart"}
-            </motion.span>
-          )}
-        </AnimatePresence>
+        <span className="flex items-center gap-2">
+          {isAddingToCart ? <Spinner /> : <Icons.cartCopy size={18} />}
+          {outOfStock
+            ? "Out of Stock"
+            : needsVariantSelection
+              ? "Select Variant"
+              : isAddingToCart
+                ? "Adding to cart"
+                : "Add to Cart"}
+        </span>
       </Button>
 
       {/* Secondary row: Swap + Bookmark */}
@@ -100,7 +122,7 @@ export function ProductActions({
             Swap Device
           </Button>
         )}
-        <Button
+        {/* <Button
           variant="outline"
           size="icon-lg"
           onClick={() => setBookmarked((b) => !b)}
@@ -125,7 +147,7 @@ export function ProductActions({
               </motion.span>
             )}
           </AnimatePresence>
-        </Button>
+        </Button> */}
       </div>
 
       {needsVariantSelection && (

@@ -25,6 +25,7 @@ import { useCalculateValuation } from "@/hooks/use-valuation";
 import { Question } from "@/lib/api/types";
 import { isAuthenticated } from "@/lib/auth-tokens";
 import { setPendingValuationRef } from "@/lib/pending-valuation";
+import { Spinner } from "@/components/ui/spinner";
 
 /**
  * Extract error message from unknown error type
@@ -46,20 +47,32 @@ type QuestionsProps = {
 export default function Questions({ questions }: QuestionsProps) {
   const router = useRouter();
   const pathname = usePathname();
+
   const { mutate: submitAnswers, isPending: isSubmitting } =
     useCalculateValuation();
-  const setResult = useResultStore((s) => s.setResult);
 
   // Extract model slug from pathname: /check-worth/[slug]/questionnaire
   const modelSlug = pathname.split("/")[2];
 
+  const setResult = useResultStore((s) => s.setResult);
   const currentQuestion = useQuestionStore((s) => s.currentQuestion);
   const currentStep = useQuestionStore((s) => s.currentStep);
   const nextStep = useQuestionStore((s) => s.nextStep);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const answers = useQuestionStore((s) => s.answers); // Subscribe to answers
   const getAnswers = useQuestionStore((s) => s.getAnswers);
   const clearAnswers = useQuestionStore((s) => s.clearAnswers);
   const storedQuestions = useQuestionStore((s) => s.questions);
+
+  const hasAnswerForQuestion = useQuestionStore((s) => s.hasAnswerForQuestion);
+
+  const isQuestionSkipped = useQuestionStore((s) => s.isQuestionSkipped);
+
+  const setQuestionSkipped = useQuestionStore((s) => s.setQuestionSkipped);
+
+  const isAnswered = hasAnswerForQuestion(currentQuestion?.id || "");
+
+  const buttonDisabled = !isAnswered && !isQuestionSkipped;
 
   // Redirect if no questions in store
   useEffect(() => {
@@ -69,16 +82,11 @@ export default function Questions({ questions }: QuestionsProps) {
     }
   }, [storedQuestions, router]);
 
-  // Check if current question has been answered (reacts to answers changes)
-  const isCurrentQuestionAnswered = currentQuestion
-    ? answers.some((a) => a.questionId === currentQuestion.id)
-    : false;
-
   // Check if we're on the last question (currentStep is 1-indexed)
   const isLastQuestion = currentStep >= storedQuestions.length;
 
   const handleNext = () => {
-    if (!isCurrentQuestionAnswered) {
+    if (buttonDisabled) {
       toast.error("Please select an answer before continuing");
       return;
     }
@@ -92,7 +100,7 @@ export default function Questions({ questions }: QuestionsProps) {
   };
 
   const handleSubmit = async () => {
-    if (!isCurrentQuestionAnswered) {
+    if (buttonDisabled) {
       toast.error("Please select an answer before submitting");
       return;
     }
@@ -105,10 +113,11 @@ export default function Questions({ questions }: QuestionsProps) {
       // Submit to API using React Query mutation
       submitAnswers(payload!, {
         onSuccess: (response) => {
-          // Store result in result store
-          if (response) {
-            console.log(response);
+          setQuestionSkipped(false); // Reset skip state for future questionnaires
 
+          // Store result in result store
+
+          if (response) {
             if (!isAuthenticated()) {
               const referenceToStore =
                 response.reference?.trim() || response.valuation_id;
@@ -155,10 +164,6 @@ export default function Questions({ questions }: QuestionsProps) {
 
   return (
     <>
-      {/* <PageLoader
-        isLoading={isSubmitting}
-        text="Hang on while we process your answers..."
-      /> */}
       <div className="my-6 flex items-center gap-4">
         <Breadcrumb className="shrink-0">
           <GoRack handleClick={handleBack} />
@@ -183,23 +188,28 @@ export default function Questions({ questions }: QuestionsProps) {
         <QuestionRenderer />
         <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-50 block h-20 bg-linear-to-t from-white to-transparent blur-sm min-[460px]:hidden" />
       </div>
-      <div className="mt-6 flex justify-center pb-7 sm:pb-0">
+      <div className="flex justify-center md:mb-12">
         <motion.div
           className="h-16 w-62.5 cursor-pointer rounded-full text-white"
-          whileTap={{ scale: isCurrentQuestionAnswered ? 0.8 : 1 }}
+          whileTap={{ scale: isAnswered ? 0.8 : 1 }}
         >
           <Button
             className="h-full w-full disabled:cursor-not-allowed"
             onClick={isLastQuestion ? handleSubmit : handleNext}
             type="button"
             size="lg"
-            disabled={!isCurrentQuestionAnswered || isSubmitting}
+            disabled={buttonDisabled || isSubmitting}
           >
-            {isSubmitting
-              ? "Submitting..."
-              : isLastQuestion
-                ? "Submit"
-                : "Next"}
+            {isSubmitting ? (
+              <span className="inline-flex items-center gap-1">
+                <Spinner />
+                Submitting...
+              </span>
+            ) : isLastQuestion ? (
+              "Submit"
+            ) : (
+              "Next"
+            )}
           </Button>
         </motion.div>
       </div>

@@ -6,10 +6,21 @@ import { FeedGridContent } from "./feed-grid-content";
 import { useFeedStore } from "@/store/feed-store";
 import { mapApiProductToFeedProduct, useInfiniteProducts } from "@/hooks";
 import { ProductMode } from "@/types/product";
+import { Button } from "../ui/button";
+import { Icons } from "../icons";
+import Link from "next/link";
+import { Spinner } from "../ui/spinner";
+import { TypographyMuted } from "../typography/muted";
 
-export function FeedGrid() {
+type Props = {
+  limit: number;
+  canLoadMore: boolean;
+  navigateTo?: string;
+};
+
+export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
   const feedMode = useFeedStore((s) => s.feedMode);
-  const activeCategory = useFeedStore((s) => s.activeCategory);
+  const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);
 
   const {
     data,
@@ -19,7 +30,10 @@ export function FeedGrid() {
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteProducts({
-    limit: 10,
+    limit: limit,
+    ...(activeSubCategoryId
+      ? { subcategory_id: activeSubCategoryId }
+      : undefined),
   });
 
   const items = useMemo(() => {
@@ -37,38 +51,65 @@ export function FeedGrid() {
 
   const filteredProducts = useMemo(() => {
     let products = items;
-    if (activeCategory !== "all") {
-      const active = activeCategory.toLowerCase();
-      products = products.filter(
-        (p) =>
-          p.category?.toLowerCase() === active ||
-          p.subCategory?.toLowerCase() === active ||
-          p.name?.toLowerCase().includes(active),
-      );
-    }
     if (feedMode === ProductMode.SALE_SWAP) {
       products = products.filter((p) => p.mode === ProductMode.SALE_SWAP);
     } else if (feedMode === ProductMode.SALE) {
       products = products.filter((p) => p.mode === ProductMode.SALE);
     }
     return products;
-  }, [activeCategory, feedMode, items]);
+  }, [feedMode, items]);
 
   return (
     <section
       id="feed"
-      className="mx-auto w-full max-w-screen-2xl px-4 py-8 lg:px-8"
+      className="mx-auto flex w-full max-w-screen-2xl flex-col items-center px-4 py-8 lg:px-8"
     >
-      <FeedGridHeader resultCount={filteredProducts.length} />
+      <FeedGridHeader
+        resultCount={filteredProducts.length}
+        loading={isLoading}
+      />
+
       <FeedGridContent
         products={filteredProducts}
         visibleCount={filteredProducts.length}
         loading={isLoading}
         isError={isError}
-        canLoadMore={!!hasNextPage}
-        loadingMore={isFetchingNextPage}
-        onLoadMore={() => void fetchNextPage()}
       />
+
+      {canLoadMore && (
+        <div className="mt-10 flex cursor-pointer justify-center">
+          {!hasNextPage ? (
+            <TypographyMuted className="text-center">
+              That’s all we’ve got in this category (for now 👀).
+            </TypographyMuted>
+          ) : (
+            <Button
+              onClick={() => void fetchNextPage()}
+              variant="outline"
+              disabled={isFetchingNextPage}
+              size="lg"
+            >
+              {isFetchingNextPage ? "Loading..." : "Load More"}
+              {isFetchingNextPage ? (
+                <Spinner className="size-6" />
+              ) : (
+                <Icons.arrowRight size={15} />
+              )}
+            </Button>
+          )}
+        </div>
+      )}
+
+      {!canLoadMore && (
+        <Link href={navigateTo || "#"} className="w-max">
+          <Button
+            className="mt-10 inline-flex cursor-pointer"
+            variant="outline"
+          >
+            View More <Icons.arrowRight />
+          </Button>
+        </Link>
+      )}
     </section>
   );
 }

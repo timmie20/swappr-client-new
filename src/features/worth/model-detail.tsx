@@ -106,6 +106,7 @@ export function ModelDetail({ slug }: ModelDetailProps) {
             width={16}
             height={16}
             className="ml-2"
+            priority
           />
           <span className="text-xs font-medium text-[#9C7E1C]">
             We&apos;re going to ask you a couple of questions to estimate how

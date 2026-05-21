@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Lottie } from "@/components/lottie";
+import lonely404Animation from "@/lottie/Lonely 404.json";
 
 export default function NotFound() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function NotFound() {
       
       </h1> */}
 
-      <DotLottieReact src="/assets/icons/Lonely 404.lottie" loop autoplay />
+      <Lottie animationData={lonely404Animation} loop autoplay />
 
       <h2 className="font-heading my-2 text-2xl font-bold">
         Something&apos;s missing

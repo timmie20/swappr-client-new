@@ -63,7 +63,7 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
       verified: !!product.vendor?.is_verified,
       totalSales: 0,
     },
-    listedAgo: "Recently listed",
+    listed_at: product.created_at,
     specs: product.specifications,
     isSoldOut: product.total_stock <= 0 && product.status === "out_of_stock",
   };
@@ -77,6 +77,7 @@ export function useProducts(
     queryKey: queryKeys.products.list(params),
     queryFn: () =>
       productEndpoints.getAll({
+        ...params,
         page: params?.page ?? 1,
         limit: params?.limit ?? 20,
       }),
@@ -115,6 +116,26 @@ export function useInfiniteProducts(
       return page < totalPages ? page + 1 : undefined;
     },
     staleTime: 60_000, // 1 minute
+    refetchOnReconnect: true,
+    ...options,
+  });
+}
+
+export function useProductSearch(
+  query: string,
+  options?: Omit<
+    UseQueryOptions<ProductListResponse, Error, Product[]>,
+    "queryKey" | "queryFn" | "select"
+  >,
+) {
+  return useQuery<ProductListResponse, Error, Product[]>({
+    queryKey: ["products", "search", query], // completely separate key from feed
+    queryFn: () => productEndpoints.search(query),
+    enabled: query.trim().length > 1, // don't fire on empty or single char
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    placeholderData: keepPreviousData,
+    select: (data) => data.products.map(mapApiProductToFeedProduct), // map to feed product shape
     ...options,
   });
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Icons } from "../icons";
+import Logo from "./logo";
 
 const FOOTER_LINKS = {
   Marketplace: [
@@ -42,39 +42,12 @@ const FOOTER_LINKS = {
 export function FeedFooter() {
   return (
     <footer className="border-t border-[#E5E7EB] bg-[#1A1A1A] text-white">
-      {/* E-waste banner */}
-      {/* <div className="to-swappr-teal-light bg-linear-to-r from-[#1A6B5A] px-4 py-4">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-1 text-center sm:flex-row sm:justify-between sm:text-left">
-          <div>
-            <p className="text-sm font-bold text-white">
-              ♻️ 1,500,000+ kg of e-waste saved through swapping
-            </p>
-            <p className="text-xs text-white/75">
-              Every swap prevents a device from landfill — thanks for being part
-              of the movement.
-            </p>
-          </div>
-          <Link
-            href="#"
-            className="mt-2 shrink-0 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/20 sm:mt-0"
-          >
-            Learn More →
-          </Link>
-        </div>
-      </div> */}
-
       <div className="mx-auto max-w-screen-2xl px-4 py-12 lg:px-6">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-5">
           {/* Brand col */}
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/assets/images/logo.png"
-                alt="Swapp-logor"
-                width={120}
-                height={40}
-                priority
-              />
+              <Logo variant="light" priority />
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-[#9CA3AF]">
               Nigeria&apos;s first peer-to-peer device marketplace. Buy, sell,

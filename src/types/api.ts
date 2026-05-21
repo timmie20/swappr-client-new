@@ -20,6 +20,7 @@ export interface User {
 
 export interface PaginationParams {
   brand_id?: string;
+  subcategory_id?: string;
   page?: number;
   limit?: number;
   search?: string;
@@ -261,6 +262,6 @@ export interface Valuation {
     storage: number;
   };
   final_value: number;
-  status?: "completed" | "pending" | "draft";
+  status?: "completed" | "pending" | "draft" | "expired";
   created_at: Date;
 }

@@ -20,6 +20,7 @@ import {
   IconDotsVertical,
   IconPizza,
   IconPlus,
+  IconMinus,
   IconSettings,
   IconSun,
   IconTrash,
@@ -56,6 +57,9 @@ import {
   IconBrandLinkedin,
   IconError404,
   IconBuildingStore,
+  IconLogout,
+  IconEdit,
+  IconCopy,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -66,6 +70,7 @@ export const Icons = {
   dashboard: IconLayoutDashboard,
   logo: IconCommand,
   login: IconLogin,
+  logout: IconLogout,
   close: IconX,
   product: IconShoppingBag,
   spinner: IconLoader2,
@@ -83,6 +88,7 @@ export const Icons = {
   billing: IconCreditCard,
   ellipsis: IconDotsVertical,
   add: IconPlus,
+  minus: IconMinus,
   warning: IconAlertTriangle,
   user: IconUser,
   arrowRight: IconArrowRight,
@@ -120,4 +126,6 @@ export const Icons = {
   linkedin: IconBrandLinkedin,
   error: IconError404,
   store: IconBuildingStore,
+  edit: IconEdit,
+  copy: IconCopy,
 };

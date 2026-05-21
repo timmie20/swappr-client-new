@@ -10,27 +10,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { UserAvatarProfile } from "../user-avatar-profile";
-import { useUserAccount, useLogout } from "@/hooks";
+import { useUserAccount } from "@/hooks";
 import { getFullName } from "@/lib/use-auth-obj";
-import { isAuthenticated } from "@/lib/auth-tokens";
 import { useState } from "react";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
+import SignoutDialog from "../signout-dialog";
+import { useIsAuthenticated } from "@/hooks/use-access-token";
 
 export function UserNav() {
   const { data: user } = useUserAccount();
-  const { mutate: logout } = useLogout();
-  const [isLoggedIn] = useState(() => {
-    // Check auth state on mount (client-side only)
-    if (typeof window !== "undefined") {
-      return isAuthenticated();
-    }
-    return false;
-  });
+  const [signoutDialogOpen, setSignoutDialogOpen] = useState(false);
 
-  const handleSignOut = () => {
-    logout();
-  };
+  const isLoggedIn = useIsAuthenticated();
 
   return isLoggedIn ? (
     <DropdownMenu>
@@ -55,23 +47,39 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/check-worth">
-            <DropdownMenuItem>Check Phone Worth</DropdownMenuItem>
-          </Link>
           <Link href="/account">
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Icons.user size={14} />
+              Profile
+            </DropdownMenuItem>
           </Link>
+          <Link href="/orders">
+            <DropdownMenuItem>
+              <Icons.package size={14} />
+              My Orders
+            </DropdownMenuItem>
+          </Link>
+          <DropdownMenuSeparator />
+          <SignoutDialog
+            open={signoutDialogOpen}
+            onOpenChange={setSignoutDialogOpen}
+          />
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   ) : (
-    <Link href="/auth/sign-in" className="ml-1 hidden sm:inline-flex">
-      <Button variant="outline" className="cursor-pointer">
+    <Link href="/auth/sign-in">
+      <Button
+        variant="outline"
+        className="hidden shrink-0 cursor-pointer lg:inline-flex"
+      >
         <Icons.user size={16} />
         Sign in
       </Button>
+
+      <button>
+        <Icons.user size={20} className="inline-flex lg:hidden" />
+      </button>
     </Link>
   );
 }

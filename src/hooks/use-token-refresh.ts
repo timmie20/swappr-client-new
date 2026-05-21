@@ -12,9 +12,11 @@ import { usePathname } from "next/navigation";
 import { isTokenExpired, isAuthenticated } from "@/lib/auth-tokens";
 import { refreshAccessToken } from "@/lib/token-refresh";
 import { isPublicPageRoute } from "@/lib/public-routes";
+import { useIsAuthenticated } from "@/hooks/use-access-token";
 
 export function useTokenRefresh() {
   const pathname = usePathname();
+  const loggedIn = useIsAuthenticated();
 
   useEffect(() => {
     // Don't refresh tokens on public routes
@@ -23,7 +25,7 @@ export function useTokenRefresh() {
     }
 
     // Only run if user is authenticated
-    if (!isAuthenticated()) {
+    if (!loggedIn) {
       return;
     }
 
@@ -48,5 +50,5 @@ export function useTokenRefresh() {
     }
 
     return () => clearInterval(interval);
-  }, [pathname]);
+  }, [pathname, loggedIn]);
 }
