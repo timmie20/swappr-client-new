@@ -1,5 +1,5 @@
 import React from "react";
-import { AppNavbar } from "../shared/app-navbar";
+import { AppNavbar } from "../shared/nav/app-navbar";
 import { FeedFooter } from "../shared/feed-footer";
 
 export default function PageContainer({

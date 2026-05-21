@@ -7,7 +7,8 @@ import {
   EmptyContent,
 } from "@/components/ui/empty";
 import { Icons } from "./icons";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Lottie } from "./lottie";
+import failAnimation from "@/lottie/fail.json";
 
 interface ErrorStateProps {
   title: string;
@@ -32,7 +33,12 @@ export function ErrorState({
         <EmptyDescription>{description}</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <DotLottieReact src="/assets/icons/fail.lottie" loop autoplay />
+        <Lottie
+          animationData={failAnimation}
+          loop
+          autoplay
+          className="size-64"
+        />
       </EmptyContent>
     </Empty>
   );

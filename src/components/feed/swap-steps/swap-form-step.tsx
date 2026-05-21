@@ -6,9 +6,11 @@ import type { Product } from "@/features/feed/types";
 import type { Valuation } from "@/types/api";
 import { useValuations } from "@/hooks/use-valuation";
 import { EmptyState } from "@/components/empty-state";
-import { IconDeviceMobile } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/error-state";
+import { formatRelativeDate } from "@/lib/format";
+import { Badge } from "@/components/ui/badge";
+import { getStatusColor } from "@/lib/utils";
 
 export interface SwapOffer {
   valuationId: string;
@@ -87,15 +89,16 @@ export function SwapFormStep({
         className="flex flex-col gap-4"
       >
         <EmptyState
-          icon={<IconDeviceMobile className="size-6" />}
+          variant="lottie"
+          lottieType="ghost"
           title="No valuations yet"
           description="Check your device worth to create a valuation that you can use for swap offers."
+          actions={
+            <Link href="/check-worth">
+              <Button variant="link">Check iPhone Worth</Button>
+            </Link>
+          }
         />
-        <div className="flex justify-center">
-          <Link href="/check-worth">
-            <Button variant="outline">Check Device Worth</Button>
-          </Link>
-        </div>
       </motion.div>
     );
   }
@@ -159,18 +162,6 @@ function ValuationCard({
   isSelected,
   onSelect,
 }: ValuationCardProps) {
-  const formatDate = (date: Date) => {
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - new Date(date).getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return `${Math.floor(diffDays / 30)} months ago`;
-  };
-
   return (
     <button
       onClick={onSelect}
@@ -182,19 +173,28 @@ function ValuationCard({
     >
       <div className="flex flex-col items-start gap-1">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold tracking-wide text-[#9CA3AF] uppercase">
+          <span className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
             {valuation.device.brand}
           </span>
-          <span className="text-[10px] text-[#D1D5DB]">•</span>
+          <span className="text-muted-foreground text-xs">•</span>
           <span className="text-xs text-[#6B7280]">
             {valuation.device.storage}GB
           </span>
         </div>
-        <p className="text-sm font-bold text-[#1A1A1A]">
-          {valuation.device.model}
-        </p>
-        <p className="text-[11px] text-[#9CA3AF]">
-          {formatDate(valuation.created_at)}
+        <div className="flex items-center gap-2">
+          <p className="text-foreground text-sm font-bold">
+            {valuation.device.model}
+          </p>
+          <Badge
+            variant="outline"
+            className={`text-xs ${getStatusColor(valuation?.status)}`}
+          >
+            {valuation.status}
+          </Badge>
+        </div>
+
+        <p className="text-muted-foreground text-xs">
+          {formatRelativeDate(valuation.created_at)}
         </p>
       </div>
 

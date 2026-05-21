@@ -1,6 +1,4 @@
-import PageContainer from "@/components/layout/container";
 import QuestionnairePage from "@/features/questionnaire/questionnaire-page";
-import React from "react";
 import { getQuestionsByBrand } from "@/server-actions/questionnaire";
 import { queryKeys } from "@/lib/api/query-keys";
 import {
@@ -8,6 +6,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import Container from "@/components/layout/container";
 
 type PageProps = {
   searchParams: Promise<{ brandId?: string }>;
@@ -38,9 +37,9 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PageContainer>
+      <Container>
         <QuestionnairePage brandId={brandId} />
-      </PageContainer>
+      </Container>
     </HydrationBoundary>
   );
 }

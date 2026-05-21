@@ -1,11 +1,8 @@
 "use client";
-import { IconArrowRight } from "@tabler/icons-react";
 import { ProductCard } from "./product-card";
 import { SkeletonGrid } from "./skeleton-card";
 import { EmptyState } from "@/components/empty-state";
 import type { Product } from "@/features/feed/types";
-import { Button } from "../ui/button";
-import { Spinner } from "../ui/spinner";
 import { ErrorState } from "../error-state";
 
 type Cols = 2 | 3 | 4;
@@ -13,7 +10,7 @@ type Cols = 2 | 3 | 4;
 const colsClass: Record<Cols, string> = {
   2: "grid-cols-1 sm:grid-cols-2",
   3: "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3",
-  4: "grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
+  4: "grid-cols-1 min-[410px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
 };
 
 interface FeedGridContentProps {
@@ -23,7 +20,7 @@ interface FeedGridContentProps {
   loadingMore?: boolean;
   canLoadMore?: boolean;
   isError?: boolean;
-  onLoadMore: () => void;
+  onLoadMore?: () => void;
   onProductClick?: (product: Product) => void;
   cols?: Cols;
 }
@@ -32,10 +29,10 @@ export function FeedGridContent({
   products,
   visibleCount,
   loading,
-  loadingMore = false,
-  canLoadMore = false,
+  // loadingMore = false,
+  // canLoadMore = false,
   isError = false,
-  onLoadMore,
+  // onLoadMore,
   cols = 4,
 }: FeedGridContentProps) {
   const visibleProducts = products.slice(0, visibleCount);
@@ -43,7 +40,7 @@ export function FeedGridContent({
 
   if (loading) {
     return (
-      <div className={`grid gap-3 ${gridClass}`}>
+      <div className={`grid w-full gap-3 ${gridClass}`}>
         <SkeletonGrid count={8} />
       </div>
     );
@@ -63,19 +60,21 @@ export function FeedGridContent({
       <EmptyState
         title="No Listings Found"
         description="No devices match your current filters"
+        variant="lottie"
+        lottieType="ghost"
       />
     );
   }
 
   return (
     <>
-      <div className={`grid gap-3 ${gridClass}`}>
+      <div className={`grid w-full gap-3 ${gridClass}`}>
         {visibleProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
-      {canLoadMore && (
+      {/* {canLoadMore && (
         <div className="mt-10 flex cursor-pointer justify-center">
           <Button
             onClick={onLoadMore}
@@ -91,7 +90,7 @@ export function FeedGridContent({
             )}
           </Button>
         </div>
-      )}
+      )} */}
     </>
   );
 }

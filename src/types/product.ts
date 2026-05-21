@@ -32,15 +32,21 @@ export interface ProductVendor {
   rating: number;
 }
 
+export type ProductCondition =
+  | "NEW"
+  | "UK_USED"
+  | "NIGERIAN_USED"
+  | "REFURBISHED";
+
 export interface ProductDetail {
   id: string;
   slug: string;
-  created_at?: string;
+  created_at: Date;
   updated_at?: string;
   name: string;
   model?: string;
   description: string;
-  condition: "NEW" | "UK_USED" | "NIGERIAN_USED" | "REFURBISHED";
+  condition: ProductCondition;
   carrier_status: "unlocked" | "locked";
   base_price: number | string;
   total_stock: number;

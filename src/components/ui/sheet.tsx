@@ -4,7 +4,6 @@ import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { IconX } from "@tabler/icons-react";
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
@@ -70,14 +69,19 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
-            <Button
+            {/* <Button
               variant="ghost"
               className="absolute top-4 right-4 z-10"
               size="icon-sm"
             >
               <IconX />
               <span className="sr-only">Close</span>
-            </Button>
+            </Button> */}
+
+            <button className="hover:bg-muted absolute top-4 right-4 cursor-pointer rounded-full p-2 transition-colors">
+              <IconX />
+              <span className="sr-only">Close</span>
+            </button>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Content>

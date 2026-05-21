@@ -1,8 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatNaira } from "@/lib/format";
 import { Model } from "@/types/api";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { SafeImage } from "./safe-image";
+import { SafeImage } from "../../../components/safe-image";
+import { Lottie } from "@/components/lottie";
+import appleAnimation from "@/lottie/apple.json";
 
 export default function WorthOverviewCard({
   model,
@@ -19,11 +20,11 @@ export default function WorthOverviewCard({
     switch (brand) {
       case "apple":
         return (
-          <DotLottieReact
-            src="/assets/icons/apple.json"
-            autoplay
+          <Lottie
+            animationData={appleAnimation}
             loop
-            style={{ width: 80, height: 80 }}
+            autoPlay
+            className="size-20"
           />
         );
 

@@ -22,7 +22,7 @@ interface FormSelectProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > extends BaseFormFieldProps<TFieldValues, TName> {
-  options: FormOption[];
+  options: FormOption[] | string[];
   placeholder?: string;
   searchable?: boolean;
 }
@@ -71,11 +71,13 @@ function FormSelect<
           <SelectContent>
             {options.map((option) => (
               <SelectItem
-                key={option.value}
-                value={option.value}
-                disabled={option.disabled}
+                key={typeof option === "string" ? option : option.value}
+                value={typeof option === "string" ? option : option.value}
+                disabled={
+                  typeof option === "string" ? undefined : option.disabled
+                }
               >
-                {option.label}
+                {typeof option === "string" ? option : option.label}
               </SelectItem>
             ))}
           </SelectContent>

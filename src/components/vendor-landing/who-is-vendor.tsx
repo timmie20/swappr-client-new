@@ -5,7 +5,8 @@ import { useInView } from "motion/react";
 import { useRef } from "react";
 import { Building2, Smartphone, MapPin, BadgeCheck, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Lottie } from "../lottie";
+import deliveryManAnimation from "@/lottie/Delivery Man.json";
 
 interface WhoIsVendorProps {
   className?: string;
@@ -139,11 +140,11 @@ export function WhoIsVendor({ className }: WhoIsVendorProps) {
           >
             {/* TODO: Replace with actual vendor/store photo */}
 
-            <DotLottieReact
-              src="/assets/icons/Delivery Man.json"
+            <Lottie
+              animationData={deliveryManAnimation}
               autoplay
               loop
-              style={{ width: 500, height: 500 }}
+              className="size-96"
             />
 
             <p className="mt-4 text-center text-xs text-gray-400">

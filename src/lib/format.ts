@@ -1,3 +1,8 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
 export function formatStorageCapacity(
   capacity: number | string | undefined,
 ): string {
@@ -44,6 +49,24 @@ export const formatDate = (dateString: string | Date) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    timeZone: "Africa/Lagos",
+    // timeZone: "Africa/Lagos",
   }).format(date);
 };
+
+dayjs.extend(relativeTime);
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+export function formatRelativeDate(date: string | Date): string {
+  const d = dayjs.utc(date).tz("Africa/Lagos");
+
+  const diffInDays = dayjs().diff(d, "day");
+
+  if (diffInDays >= 7) {
+    return d.format("DD MMM");
+  }
+
+  return d.fromNow();
+}

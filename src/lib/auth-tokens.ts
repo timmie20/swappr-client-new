@@ -20,6 +20,13 @@ const TOKEN_OPTIONS = {
   expires: 7, // 7 days for refresh token
 };
 
+const AUTH_CHANGED_EVENT = "swappr-auth-changed";
+
+function notifyAuthChanged(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -53,6 +60,8 @@ export function saveAuthTokens(
     localStorage.setItem(TOKEN_KEYS.REFRESH_TOKEN, refreshToken);
     localStorage.setItem(TOKEN_KEYS.TOKEN_EXPIRY, expiryTime.toString());
   }
+
+  notifyAuthChanged();
 }
 
 /**
@@ -136,6 +145,8 @@ export function clearAuthTokens(): void {
     localStorage.removeItem(TOKEN_KEYS.REFRESH_TOKEN);
     localStorage.removeItem(TOKEN_KEYS.TOKEN_EXPIRY);
   }
+
+  notifyAuthChanged();
 }
 
 /**
@@ -167,4 +178,6 @@ export function updateAccessToken(
     localStorage.setItem(TOKEN_KEYS.ACCESS_TOKEN, newAccessToken);
     localStorage.setItem(TOKEN_KEYS.TOKEN_EXPIRY, expiryTime.toString());
   }
+
+  notifyAuthChanged();
 }

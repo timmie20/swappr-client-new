@@ -7,10 +7,10 @@ import {
   getAvailableStorage,
   isColorInStock,
   isStorageInStock,
-  formatStorage,
 } from "@/lib/utils/product-helpers";
 import type { ProductVariant, SelectedVariant } from "@/types/product";
 import { cn } from "@/lib/utils";
+import { formatStorageCapacity } from "@/lib/format";
 
 interface VariantSelectorProps {
   variants: ProductVariant[];
@@ -92,7 +92,7 @@ export function VariantSelector({
           Storage:{" "}
           <span className="font-normal text-[#6B7280]">
             {selected.storage
-              ? formatStorage(selected.storage)
+              ? formatStorageCapacity(selected.storage)
               : "Select storage"}
           </span>
         </p>
@@ -108,14 +108,14 @@ export function VariantSelector({
               <ToggleGroupItem
                 key={gb}
                 value={gb.toString()}
-                aria-label={`Select ${formatStorage(gb)} storage`}
+                aria-label={`Select ${formatStorageCapacity(gb)} storage`}
                 disabled={!inStock}
                 className={cn(
                   "min-w-16 rounded-xl border px-4 py-1.5 text-sm font-medium transition-all",
                   !inStock && "line-through opacity-40",
                 )}
               >
-                {formatStorage(gb)}
+                {formatStorageCapacity(gb)}
               </ToggleGroupItem>
             );
           })}

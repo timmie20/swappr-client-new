@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { IconCheck } from "@tabler/icons-react";
+import { Lottie } from "@/components/lottie";
+import successCheckAnimation from "@/lottie/success-check.json";
 
 export function SwapSentStep() {
   return (
@@ -11,19 +12,12 @@ export function SwapSentStep() {
       animate={{ opacity: 1, scale: 1 }}
       className="flex flex-col items-center gap-4 py-12 text-center"
     >
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{
-          type: "spring",
-          damping: 12,
-          stiffness: 200,
-          delay: 0.1,
-        }}
-        className="flex h-20 w-20 items-center justify-center rounded-full bg-[#E8F5F1]"
-      >
-        <IconCheck size={36} className="text-[#1A6B5A]" />
-      </motion.div>
+      <Lottie
+        animationData={successCheckAnimation}
+        autoPlay
+        className="size-30"
+      />
+
       <div>
         <h3 className="font-switzer text-lg font-bold text-[#1A1A1A]">
           Swap Offer Sent! 🎉

@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { saveAuthTokens } from "@/lib/auth-tokens";
-import { Spinner } from "@/components/ui/spinner";
 import { getPendingValuationRef } from "@/lib/pending-valuation";
 import { useClaimPendingValuation } from "@/hooks/use-valuation";
+import PageLoader from "../page-loader";
 
 export default function OAuthCallbackPage() {
   const router = useRouter();
@@ -21,8 +21,7 @@ export default function OAuthCallbackPage() {
         const accessToken = searchParams.get("access_token");
         const refreshToken = searchParams.get("refresh_token");
         const expiresIn = searchParams.get("expires_in");
-        const redirect = searchParams.get("state") || "/";
-
+        const redirect = sessionStorage.getItem("auth_redirect") || "/";
         // Validate tokens are present
         if (!accessToken || !refreshToken) {
           setError("Authentication failed - missing tokens");
@@ -39,8 +38,7 @@ export default function OAuthCallbackPage() {
         if (pendingRef) {
           claimPendingValuation(pendingRef);
         }
-        // Redirect to the requested path or fall back to home
-        // Backend may return the redirect via "redirect" or "state" param
+        sessionStorage.removeItem("auth_redirect");
         router.replace(redirect);
       } catch (err) {
         console.error("OAuth callback error:", err);
@@ -65,12 +63,5 @@ export default function OAuthCallbackPage() {
     );
   }
 
-  return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
-      <Spinner className="size-8" />
-      <p className="text-muted-foreground mt-4 text-sm">
-        Please wait while we complete your sign-in...
-      </p>
-    </div>
-  );
+  return <PageLoader text="Completing sign-in..." />;
 }

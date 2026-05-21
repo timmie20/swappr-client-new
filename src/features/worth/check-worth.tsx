@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/select";
 import type { Brand } from "@/types/api";
 import { useState, Suspense } from "react";
-import Heading from "@/components/shared/heading";
 import ModelsSection from "./component/models-section";
 import ModelsListSkeleton from "@/components/skeletons/model-list-skeleton";
+import { TypographyH1 } from "@/components/typography/h1";
 
 type CheckWorthProps = {
   brands: Brand[];
@@ -23,7 +23,9 @@ export default function CheckWorth({ brands }: CheckWorthProps) {
   return (
     <div className="py-12 sm:px-6">
       <div className="text-center">
-        <Heading>Find out how much your device is worth</Heading>
+        <TypographyH1 className="text-tertiary text-xlarge sm:text-xxlarge font-switzer leading-[105%] font-semibold tracking-tight text-balance">
+          Find out how much your device is worth
+        </TypographyH1>
       </div>
 
       <div className="mt-6 flex justify-center">

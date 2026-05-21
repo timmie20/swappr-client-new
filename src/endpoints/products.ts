@@ -17,6 +17,13 @@ export const productEndpoints = {
     return data;
   },
 
+  async search(query: string): Promise<ProductListResponse> {
+    const { data } = await api.get<ProductListResponse>("/products", {
+      params: { search: query },
+    });
+    return data;
+  },
+
   async getBySlug(slug: string): Promise<ProductDetailResponse> {
     const { data } = await api.get<ProductDetailResponse>(
       `/products/slug/${slug}`,
@@ -29,6 +36,3 @@ export const productEndpoints = {
     return data;
   },
 };
-
-// ── Server version (used in ISR prefetchQuery) ──────────────────
-// Called only in Server Components / page.tsx

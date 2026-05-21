@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "motion/react";
-import { IconArrowsLeftRight, IconChevronRight } from "@tabler/icons-react";
 import {
   Sheet,
   SheetContent,
@@ -51,12 +50,12 @@ export function SwapOfferDrawer() {
     }, 400);
   };
 
-  const handleSubmit = () => {
+  const handleConfirm = () => {
     if (!offer.valuationId || !selectedValuation) return;
     setStep("confirm");
   };
 
-  const handleConfirm = () => {
+  const handleSubmit = () => {
     // TODO: Send swap offer to backend
     // Payload: { product_id: product.id, valuation_id: offer.valuationId, additional_notes: offer.additionalNote }
     console.log("Sending swap offer:", {
@@ -66,7 +65,7 @@ export function SwapOfferDrawer() {
     });
 
     setStep("sent");
-    setTimeout(handleClose, 2500);
+    // setTimeout(handleClose, 2500);
   };
 
   if (!product) return null;
@@ -78,53 +77,60 @@ export function SwapOfferDrawer() {
     <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <SheetContent
         side="right"
-        showCloseButton={false}
+        showCloseButton={true}
         forceMount
         className="w-full! sm:max-w-md!"
       >
         <SheetHeader>
-          <SheetTitle>Make a Swap Offer</SheetTitle>
-          <SheetDescription>
-            Tell the seller what you&apos;ll offer
-          </SheetDescription>
-          <Button
+          {step !== "sent" && (
+            <>
+              <SheetTitle>Make a Swap Offer</SheetTitle>
+              <SheetDescription>
+                Tell the seller what you&apos;ll offer
+              </SheetDescription>
+            </>
+          )}
+          {/* <button
             onClick={handleClose}
-            variant="outline"
-            className="absolute top-4 right-4"
-            size="icon-sm"
+            className="text-muted-foreground hover:bg-muted absolute top-4 right-4 cursor-pointer rounded-full p-2 transition-colors"
           >
-            <Icons.close size={18} />
+            <Icons.close size={24} />
             <span className="sr-only">Close</span>
-          </Button>
+          </button> */}
         </SheetHeader>
 
         {/* Target product preview */}
-        <div className="flex items-center gap-3 border-b border-[#E5E7EB] bg-[#F8F9FA] px-5 py-3">
-          <Image
-            src={product.imageUrl}
-            alt={product.title}
-            width={64}
-            height={64}
-            priority
-            className="h-14 w-14 rounded-lg border border-[#E5E7EB] object-cover"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold tracking-wide text-[#9CA3AF] uppercase">
-              {product.brand}
-            </p>
-            <p className="truncate text-sm font-bold text-[#1A1A1A]">
-              {product.title}
-            </p>
-            <p className="text-xs font-semibold text-[#1A6B5A]">
-              {formatNaira(product.price)}
-            </p>
+
+        {step !== "sent" && (
+          <div className="flex items-center gap-3 border-b border-[#E5E7EB] bg-[#F8F9FA] px-5 py-3">
+            <Image
+              src={product.imageUrl}
+              alt={product.title}
+              width={64}
+              height={64}
+              priority
+              className="h-14 w-14 rounded-lg border border-[#E5E7EB] object-cover"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                {product.brand}
+              </p>
+              <p className="text-foreground truncate text-sm font-bold">
+                {product.title}
+              </p>
+              <p className="text-primary text-xs font-semibold">
+                {formatNaira(product.price)}
+              </p>
+            </div>
+            {/* Arrow */}
+            <div className="text-muted-foreground flex flex-col items-center gap-0.5">
+              <Icons.exchange size={16} />
+              <span className="text-primary text-[9px] font-semibold">
+                SWAP
+              </span>
+            </div>
           </div>
-          {/* Arrow */}
-          <div className="text-muted-foreground flex flex-col items-center gap-0.5">
-            <Icons.exchange size={16} />
-            <span className="text-primary text-[9px] font-semibold">SWAP</span>
-          </div>
-        </div>
+        )}
 
         {/* Scroll content */}
         <div className="w-full flex-1 overflow-y-auto p-5">
@@ -161,21 +167,12 @@ export function SwapOfferDrawer() {
                 </Button>
               )}
               <Button
-                onClick={step === "form" ? handleSubmit : handleConfirm}
+                onClick={step === "form" ? handleConfirm : handleSubmit}
                 disabled={!offer.valuationId}
                 className="flex h-11 flex-1 text-sm font-semibold text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {step === "form" ? (
-                  <>
-                    Review Offer
-                    <IconChevronRight size={16} />
-                  </>
-                ) : (
-                  <>
-                    Send Swap Offer
-                    <IconArrowsLeftRight size={16} />
-                  </>
-                )}
+                {step === "form" ? "Confirm Offer" : "Send Swap Offer"}
+                <Icons.arrowRight size={16} />
               </Button>
             </div>
           </div>

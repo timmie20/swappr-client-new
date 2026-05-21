@@ -104,6 +104,25 @@ export const queryKeys = {
   },
 
   // ============================================
+  // Cart
+  // ============================================
+  cart: {
+    all: ["cart"] as const,
+    lists: () => [...queryKeys.cart.all, "list"] as const,
+    item: (id: string) => [...queryKeys.cart.all, "item", id] as const,
+  },
+  // ============================================
+  // Orders
+  // ============================================
+  orders: {
+    all: ["orders"] as const,
+    lists: () => [...queryKeys.orders.all, "list"] as const,
+    list: (params?: PaginationParams) =>
+      [...queryKeys.orders.lists(), params] as const,
+    details: () => [...queryKeys.orders.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.orders.details(), id] as const,
+  },
+  // ============================================
   // Products
   // ============================================
   products: {
@@ -113,6 +132,17 @@ export const queryKeys = {
       [...queryKeys.products.lists(), params] as const,
     details: () => [...queryKeys.products.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.products.details(), id] as const,
+  },
+  // ============================================
+  // Categories
+  // ============================================
+  categories: {
+    all: ["categories"] as const,
+    lists: () => [...queryKeys.categories.all, "list"] as const,
+    list: (params?: PaginationParams) =>
+      [...queryKeys.categories.lists(), params] as const,
+    details: () => [...queryKeys.categories.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.categories.details(), id] as const,
   },
 
   // ============================================

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "motion/react";
-import { formatNaira } from "@/lib/format";
+import { motion } from "motion/react";
+import { formatNaira, formatRelativeDate } from "@/lib/format";
 import { useFeedStore } from "@/store/feed-store";
 import type { Product } from "@/features/feed/types";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,7 @@ import { Badge } from "../ui/badge";
 import { VendorDialog } from "./vendor-dialog";
 import { formatStorage } from "@/lib/utils/product-helpers";
 import { isAuthenticated } from "@/lib/auth-tokens";
-import { toast } from "sonner";
+import { TypographyH3 } from "../typography/h3";
 
 interface ProductCardProps {
   product: Product;
@@ -34,39 +34,6 @@ function ConditionPill({ condition }: { condition: Product["condition"] }) {
   );
 }
 
-// function BadgeTag({ product }: { product: Product }) {
-//   if (!product.badge || product.badge === "sold-out") return null;
-
-//   const configs = {
-//     sale: {
-//       label: "SALE",
-//       className: "bg-[#F59E0B] text-white",
-//     },
-//     "deal-of-week": {
-//       label: "🔥 DEAL",
-//       className: "bg-[#1A6B5A] text-white",
-//     },
-//     new: {
-//       label: "NEW",
-//       className: "bg-[#7C3AED] text-white",
-//     },
-//   };
-
-//   const config = configs[product.badge as keyof typeof configs];
-//   if (!config) return null;
-
-//   return (
-//     <span
-//       className={cn(
-//         "rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wide uppercase",
-//         config.className,
-//       )}
-//     >
-//       {config.label}
-//     </span>
-//   );
-// }
-
 export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const [imgHovered, setImgHovered] = useState(false);
@@ -74,33 +41,55 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleNavigate = () => {
     router.push(`/products/${product.slug}`);
   };
+  const handleSwapTrigger = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    product: Product,
+  ) => {
+    e.stopPropagation();
 
-  const handleSwapTrigger = (product: Product) => {
     if (!isAuthenticated()) {
-      toast.warning("Hold on", {
-        description: "You need to be logged in to make a swap offer.",
-        action: {
-          label: "Sign In",
-          onClick: () => {
-            const currentUrl = window.location.pathname;
-            router.push(
-              `/auth/sign-in?redirect=${encodeURIComponent(currentUrl)}`,
-            );
-          },
-        },
-      });
+      const currentUrl = window.location.href;
+      router.push(`/auth/sign-in?redirect=${encodeURIComponent(currentUrl)}`);
       return;
     }
 
     openSwapOffer(product);
   };
 
-  const toggleBookmark = useFeedStore((s) => s.toggleBookmarks);
-  const isBookMarked = useFeedStore((s) => s.isBookMarked)(product.id);
-  const addToCart = useFeedStore((s) => s.addToCart);
-  const recentlyAddedIds = useFeedStore((s) => s.recentlyAddedIds);
   const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
-  const isAdded = recentlyAddedIds.has(product.id);
+
+  // const mapCondition = (c: Product["condition"]): ProductCondition => {
+  //   switch (c) {
+  //     case "New":
+  //       return "NEW";
+  //     case "UK Used":
+  //       return "UK_USED";
+  //     case "Nigerian Used":
+  //       return "NIGERIAN_USED";
+  //     case "Refurbished":
+  //       return "REFURBISHED";
+  //     default:
+  //       return "NEW";
+  //   }
+  // };
+
+  // const handleAddToCart = () => {
+  //   if (product.isSoldOut) return;
+
+  //   addItem({
+  //     id: `${product.id}-base`,
+  //     productId: product.id,
+  //     variantId: null,
+  //     title: product.title || product.name,
+  //     price: product.price,
+  //     quantity: 1,
+  //     image: product.imageUrl || product.images?.[0] || "",
+  //     condition: mapCondition(product.condition),
+  //   });
+
+  //   setIsAdded(true);
+  //   setTimeout(() => setIsAdded(false), 2000);
+  // };
 
   return (
     <motion.article
@@ -108,7 +97,7 @@ export function ProductCard({ product }: ProductCardProps) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25 }}
-      className="group relative flex flex-col overflow-hidden rounded-4xl border border-[#E5E7EB] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
     >
       {/* Image area */}
       <div
@@ -141,7 +130,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Card body */}
-      <div className="flex flex-1 flex-col gap-2 p-3">
+      <div className="flex flex-1 flex-col gap-2 p-3" onClick={handleNavigate}>
         {/* Brand + Condition */}
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground text-[11px] font-semibold tracking-wider uppercase">
@@ -150,12 +139,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Title */}
-        <h3
-          className="line-clamp-2 cursor-pointer text-base leading-tight font-semibold text-[#1A1A1A] transition-colors hover:text-[#1A1A1A]/75"
-          onClick={handleNavigate}
-        >
+        <TypographyH3 className="line-clamp-2 cursor-pointer text-base leading-tight font-semibold">
           {product.title}
-        </h3>
+        </TypographyH3>
 
         {/* Rating */}
         <div className="flex items-center gap-1">
@@ -204,16 +190,16 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Seller info */}
         <div className="flex items-center gap-1.5 pt-0.5">
           <VendorDialog product={product} />
-          <span className="text-muted-foreground ml-auto shrink-0 text-[11px]">
-            {product.listedAgo}
+          <span className="text-muted-foreground ml-auto shrink-0 text-sm">
+            {formatRelativeDate(product.listed_at)}
           </span>
         </div>
 
         {/* CTAs */}
         <div className="mt-auto flex gap-2 pt-1">
-          <Button
+          {/* <Button
             disabled={!!product.isSoldOut}
-            onClick={() => addToCart(product, product.colors?.[0])}
+            onClick={handleAddToCart}
             className={cn(
               "flex flex-1 cursor-pointer items-center justify-center gap-1.5 text-sm font-semibold transition-all",
             )}
@@ -241,20 +227,20 @@ export function ProductCard({ product }: ProductCardProps) {
                 </motion.div>
               )}
             </AnimatePresence>
-          </Button>
+          </Button> */}
 
           {product.mode === "sale_swap" && (
             <Button
-              variant="outline"
-              className="cursor-pointer"
-              onClick={() => handleSwapTrigger(product)}
+              variant="secondary"
+              className="w-full cursor-pointer"
+              onClick={(e) => handleSwapTrigger(e, product)}
             >
               <Icons.exchange size={13} />
               <span className="hidden sm:inline">Swap</span>
             </Button>
           )}
 
-          <Button
+          {/* <Button
             variant="outline"
             size="icon"
             onClick={(e) => {
@@ -268,7 +254,7 @@ export function ProductCard({ product }: ProductCardProps) {
             ) : (
               <Icons.bookmark size={24} />
             )}
-          </Button>
+          </Button> */}
         </div>
       </div>
     </motion.article>

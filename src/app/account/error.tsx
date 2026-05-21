@@ -24,6 +24,7 @@ export default function Error({
           icon={<IconAlertTriangle className="size-12" />}
           title="Unable to load account"
           description="We couldn't load your account information. Please try again or contact support if the problem continues."
+          variant="icon"
         />
         <div className="flex justify-center gap-4">
           <Button onClick={reset} variant="default">

@@ -14,6 +14,7 @@ interface FormState {
   currentQuestion: Question | null;
   progress: number;
   direction: "forward" | "backward";
+  isQuestionSkipped: boolean;
 
   // Actions
   initializeQuestions: (questions: Question[]) => void;
@@ -28,6 +29,7 @@ interface FormState {
   prevStep: () => void;
   resetForm: () => void;
   getCurrentProgress: () => number;
+  setQuestionSkipped: (skipped: boolean) => void;
 }
 
 export const useQuestionStore = create<FormState>()((set, get) => ({
@@ -37,6 +39,7 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
   currentQuestion: null,
   progress: 0,
   direction: "forward",
+  isQuestionSkipped: false,
 
   initializeQuestions: (questions: Question[]) => {
     set({
@@ -94,8 +97,13 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
   },
 
   hasAnswerForQuestion: (questionId: string) => {
+    if (!questionId) return false;
     const { answers } = get();
     return answers.some((a) => a.questionId === questionId);
+  },
+
+  setQuestionSkipped: (skipped: boolean) => {
+    set({ isQuestionSkipped: skipped });
   },
 
   nextStep: () => {
@@ -110,6 +118,7 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
       currentQuestion: nextQuestion,
       progress: Math.round(((state.currentStep + 1) / questions.length) * 100),
       direction: "forward",
+      isQuestionSkipped: false, // Reset skip state when moving to next question
     }));
   },
 
@@ -125,6 +134,7 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
       currentQuestion: prevQuestion,
       progress: Math.round(((state.currentStep - 1) / questions.length) * 100),
       direction: "backward",
+      isQuestionSkipped: false, // Reset skip state when moving to previous question
     }));
   },
 
@@ -135,6 +145,7 @@ export const useQuestionStore = create<FormState>()((set, get) => ({
       answers: [],
       currentQuestion: questions[0] || null,
       progress: 0,
+      isQuestionSkipped: false, // Reset skip state when resetting the form
     });
   },
 
