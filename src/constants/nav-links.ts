@@ -19,7 +19,7 @@ export const NAV_LINKS: NavItem[] = [
       },
       {
         name: "Explore all Androids",
-        href: "/collections/iphones",
+        href: "/collections/androids",
         description: "Browse our full range of Androids",
       },
       {

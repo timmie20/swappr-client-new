@@ -13,9 +13,6 @@ import { Spinner } from "../ui/spinner";
 import { TypographyMuted } from "../typography/muted";
 
 type Props = {
-  // data: ReturnType<typeof useInfiniteProducts>["data"];
-  // isLoading: ReturnType<typeof useInfiniteProducts>["isLoading"];
-  // isError: ReturnType<typeof useInfiniteProducts>["isError"];
   limit: number;
   canLoadMore: boolean;
   navigateTo?: string;

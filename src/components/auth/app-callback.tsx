@@ -21,8 +21,7 @@ export default function OAuthCallbackPage() {
         const accessToken = searchParams.get("access_token");
         const refreshToken = searchParams.get("refresh_token");
         const expiresIn = searchParams.get("expires_in");
-        const redirect = searchParams.get("state") || "/";
-
+        const redirect = sessionStorage.getItem("auth_redirect") || "/";
         // Validate tokens are present
         if (!accessToken || !refreshToken) {
           setError("Authentication failed - missing tokens");
@@ -39,8 +38,7 @@ export default function OAuthCallbackPage() {
         if (pendingRef) {
           claimPendingValuation(pendingRef);
         }
-        // Redirect to the requested path or fall back to home
-        // Backend may return the redirect via "redirect" or "state" param
+        sessionStorage.removeItem("auth_redirect");
         router.replace(redirect);
       } catch (err) {
         console.error("OAuth callback error:", err);

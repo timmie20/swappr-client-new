@@ -116,6 +116,7 @@ export function useInfiniteProducts(
       return page < totalPages ? page + 1 : undefined;
     },
     staleTime: 60_000, // 1 minute
+    refetchOnReconnect: true,
     ...options,
   });
 }

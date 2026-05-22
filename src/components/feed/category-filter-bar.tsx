@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useFeedStore } from "@/store/feed-store";
 import { Button } from "../ui/button";
 import { useSubCategories } from "@/hooks/use-categories";
-import { Icons } from "../icons";
 
 export function CategoryFilterBar() {
   const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);
@@ -13,7 +12,7 @@ export function CategoryFilterBar() {
 
   const { data } = useSubCategories();
 
-  const subCategories = data?.subCategories.map((sub) => ({
+  const subCategories = data?.subCategories?.map((sub) => ({
     label: sub.name,
     value: sub.id,
   })) as Array<{
@@ -22,10 +21,7 @@ export function CategoryFilterBar() {
     icon?: React.ComponentType<{ color?: string }>;
   }>;
 
-  const categoriesToDisplay = [
-    { label: "All", value: "", icon: Icons.flame },
-    ...subCategories,
-  ];
+  const categoriesToDisplay = [{ label: "All", value: "" }, ...subCategories];
 
   return (
     <div className="top-16 z-40 w-full py-3 sm:flex sm:items-center sm:justify-center">
@@ -44,7 +40,7 @@ export function CategoryFilterBar() {
               variant={isActive ? "default" : "outline"}
               className="shrink-0 cursor-pointer whitespace-nowrap transition-all duration-200"
             >
-              <span>{cat.icon && <cat.icon color="#F4762A" />}</span>
+              {/* <span>{cat.icon && <cat.icon color="#F4762A" />}</span> */}
               <span>{cat.label}</span>
             </Button>
           );

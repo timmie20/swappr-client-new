@@ -7,32 +7,62 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "@/components/ui/empty";
-import GhostLoading from "./ghost-loading";
+import { Lottie } from "./lottie";
+import ghost from "@/lottie/ghost.json";
+import emptyCart from "@/lottie/empty shopping bag.json";
 
-interface EmptyStateProps {
-  icon?: ReactNode;
+type LottieType = "ghost" | "cart";
+
+const lottieAnimations: Record<LottieType, object> = {
+  ghost,
+  cart: emptyCart,
+};
+
+type BaseProps = {
   title: string;
   description: string;
-  variant?: "default" | "icon";
   className?: string;
-}
+  actions?: ReactNode;
+};
 
-export function EmptyState({
-  icon,
-  title,
-  description,
-  variant = "icon",
-  className,
-}: EmptyStateProps) {
+type IconVariantProps = BaseProps & {
+  variant: "icon";
+  icon: ReactNode;
+};
+
+type LottieVariantProps = BaseProps & {
+  variant: "lottie";
+  lottieType: LottieType;
+};
+
+type EmptyStateProps = IconVariantProps | LottieVariantProps;
+
+export function EmptyState(props: EmptyStateProps) {
   return (
-    <Empty className={className}>
+    <Empty className={props.className}>
       <EmptyHeader>
-        {icon && <EmptyMedia variant={variant}>{icon}</EmptyMedia>}
-        <EmptyTitle>{title}</EmptyTitle>
-        <EmptyDescription>{description}</EmptyDescription>
+        {props.variant === "icon" && (
+          <EmptyMedia variant="icon">{props.icon}</EmptyMedia>
+        )}
+
+        <EmptyTitle>{props.title}</EmptyTitle>
+
+        <EmptyDescription>{props.description}</EmptyDescription>
       </EmptyHeader>
+
       <EmptyContent>
-        <GhostLoading />
+        {props.variant === "lottie" && (
+          <Lottie
+            animationData={lottieAnimations[props.lottieType]}
+            loop
+            autoPlay
+            className="size-40"
+          />
+        )}
+
+        {props.actions && (
+          <div className="flex justify-center">{props.actions}</div>
+        )}
       </EmptyContent>
     </Empty>
   );

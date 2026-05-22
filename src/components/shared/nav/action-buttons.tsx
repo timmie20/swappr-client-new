@@ -1,19 +1,17 @@
 import { UserNav } from "@/components/auth/user-nav";
 import { Icons } from "@/components/icons";
-import { useFeedStore } from "@/store/feed-store";
-import { AnimatePresence, motion } from "motion/react";
+import { SearchDialog } from "@/components/search-dialog";
+import CartDrawer from "@/features/cart/cart-drawer";
+import { useState } from "react";
 
-type NavActionButtonsProps = {
-  setOpen: (open: boolean) => void;
-};
-
-export default function NavActionButtons({ setOpen }: NavActionButtonsProps) {
-  const cartCount = useFeedStore((s) => s.cartCount)();
+export default function NavActionButtons() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-none items-center gap-5">
-      {/* Wishlist */}
-      {/* <Button
+    <>
+      <div className="flex flex-none items-center gap-5">
+        {/* Wishlist */}
+        {/* <Button
                 className="relative cursor-pointer"
                 size="icon-lg"
                 variant="ghost"
@@ -26,37 +24,25 @@ export default function NavActionButtons({ setOpen }: NavActionButtonsProps) {
                 )}
               </Button> */}
 
-      {/* search */}
-      <button className="cursor-pointer" onClick={() => setOpen(true)}>
-        <Icons.search size={20} />
-      </button>
+        {/* search */}
+        <button className="cursor-pointer" onClick={() => setOpen(true)}>
+          <Icons.search size={20} />
+        </button>
 
-      {/* Notifications */}
-      <button className="hidden cursor-pointer sm:flex">
-        <Icons.bell size={20} />
-      </button>
+        {/* Notifications */}
+        <button className="hidden cursor-pointer sm:flex">
+          <Icons.bell size={20} />
+        </button>
 
-      {/* Cart */}
-      <button className="relative cursor-pointer">
-        <Icons.cartCopy size={20} />
-        <AnimatePresence>
-          {cartCount > 0 && (
-            <motion.span
-              key="cart-count"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              className="bg-primary absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] font-bold text-white"
-            >
-              {cartCount > 9 ? "9+" : cartCount}
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </button>
+        {/* Cart */}
+        <CartDrawer />
 
-      {/* User */}
+        {/* User */}
 
-      <UserNav />
-    </div>
+        <UserNav />
+      </div>
+
+      <SearchDialog open={open} onOpenChange={setOpen} />
+    </>
   );
 }

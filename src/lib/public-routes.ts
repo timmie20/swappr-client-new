@@ -12,6 +12,7 @@
 export const PUBLIC_PAGE_ROUTES = [
   "/check-worth", // All check-worth pages (main, model detail, questionnaire, results)
   "/vendor", // Product listing and details (public)
+  "/products",
   "/auth/callback",
   "/auth/reset-password",
   "/auth/verify-email",

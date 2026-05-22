@@ -27,7 +27,7 @@ export function FeedGridHeader({ resultCount, loading }: FeedGridHeaderProps) {
               loading...
             </span>
           ) : (
-            `${resultCount} device${resultCount !== 1 ? "s" : ""} available`
+            `${resultCount <= 0 ? "No" : resultCount} listing${resultCount !== 1 ? "s" : ""} available`
           )}
         </p>
       </div>

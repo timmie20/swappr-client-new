@@ -35,7 +35,7 @@ export default function ProductDetailPage({ slug }: { slug: string }) {
   const { product } = data;
 
   return (
-    <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-8 px-6 py-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-[1fr_1.1fr]">
+    <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-8 px-6 py-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-[0.9fr_1.1fr]">
       {/* Left: Image gallery */}
       <div className="lg:sticky lg:top-24 lg:self-start">
         <ProductImageGallery

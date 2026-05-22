@@ -42,6 +42,7 @@ export function SaveValuationDialog({
             onClick={() => {
               clearPendingValuationRef();
               onOpenChange(false);
+              router.push("/");
             }}
           >
             Trash Anyway

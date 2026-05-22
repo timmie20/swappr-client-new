@@ -1,7 +1,7 @@
 "use client";
 
 import { IconArrowRight } from "@tabler/icons-react";
-import { useFeedStore } from "@/store/feed-store";
+// import { useFeedStore } from "@/store/feed-store";
 
 import { Icons } from "../icons";
 import { TypographyMuted } from "../typography/muted";
@@ -10,8 +10,8 @@ import { Button } from "../ui/button";
 import { ErrorState } from "../error-state";
 
 export function DealOfWeekSection() {
-  const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
-  const addToCart = useFeedStore((s) => s.addToCart);
+  // const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
+  // const addToCart = useFeedStore((s) => s.addToCart);
 
   return (
     <section className="bg-linear-to-br from-[#F0FAF7] via-white to-[#FFF7ED] py-10">

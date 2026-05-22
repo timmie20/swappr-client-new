@@ -35,7 +35,7 @@ export default function Logo({
       width={width}
       height={height}
       priority={priority}
-      className={cn("h-auto w-auto", className)}
+      className={cn("h-auto w-auto cursor-pointer", className)}
     />
   );
 }

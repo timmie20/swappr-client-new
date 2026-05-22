@@ -18,6 +18,8 @@ export default function ModelsSection({ brandId }: ModelsSectionProps) {
       <EmptyState
         title="No models yet"
         description="This brand has no registered models"
+        variant="lottie"
+        lottieType="ghost"
       />
     );
   }

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "motion/react";
-import { IconArrowsLeftRight, IconChevronRight } from "@tabler/icons-react";
 import {
   Sheet,
   SheetContent,
@@ -78,7 +77,7 @@ export function SwapOfferDrawer() {
     <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <SheetContent
         side="right"
-        showCloseButton={false}
+        showCloseButton={true}
         forceMount
         className="w-full! sm:max-w-md!"
       >
@@ -91,13 +90,13 @@ export function SwapOfferDrawer() {
               </SheetDescription>
             </>
           )}
-          <button
+          {/* <button
             onClick={handleClose}
             className="text-muted-foreground hover:bg-muted absolute top-4 right-4 cursor-pointer rounded-full p-2 transition-colors"
           >
             <Icons.close size={24} />
             <span className="sr-only">Close</span>
-          </button>
+          </button> */}
         </SheetHeader>
 
         {/* Target product preview */}

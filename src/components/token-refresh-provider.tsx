@@ -14,5 +14,6 @@ export function TokenRefreshProvider({
   children: React.ReactNode;
 }) {
   useTokenRefresh();
+
   return <>{children}</>;
 }

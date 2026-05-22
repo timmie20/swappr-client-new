@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Question } from "./api/types";
+import { Valuation } from "@/types/api";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,3 +37,16 @@ export function getNextSlug(currentSlug: string, questions: Question[]) {
   const index = questions.findIndex((q) => q.slug === currentSlug);
   return questions[index + 1]?.slug || null;
 }
+
+export const getStatusColor = (status: Valuation["status"]) => {
+  switch (status?.toLowerCase()) {
+    case "completed":
+      return "bg-chart-2/10 text-chart-2 border-chart-2/20";
+    case "pending":
+      return "bg-yellow-light/10 text-yellow-dark border-yellow-light/20";
+    case "expired":
+      return "bg-destructive/10 text-destructive border-destructive/20";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+};

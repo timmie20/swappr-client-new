@@ -1,11 +1,8 @@
 "use client";
-import { IconArrowRight } from "@tabler/icons-react";
 import { ProductCard } from "./product-card";
 import { SkeletonGrid } from "./skeleton-card";
 import { EmptyState } from "@/components/empty-state";
 import type { Product } from "@/features/feed/types";
-import { Button } from "../ui/button";
-import { Spinner } from "../ui/spinner";
 import { ErrorState } from "../error-state";
 
 type Cols = 2 | 3 | 4;
@@ -63,13 +60,15 @@ export function FeedGridContent({
       <EmptyState
         title="No Listings Found"
         description="No devices match your current filters"
+        variant="lottie"
+        lottieType="ghost"
       />
     );
   }
 
   return (
     <>
-      <div className={`grid gap-3 ${gridClass}`}>
+      <div className={`grid w-full gap-3 ${gridClass}`}>
         {visibleProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

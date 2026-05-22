@@ -262,6 +262,6 @@ export interface Valuation {
     storage: number;
   };
   final_value: number;
-  status?: "completed" | "pending" | "draft";
+  status?: "completed" | "pending" | "draft" | "expired";
   created_at: Date;
 }

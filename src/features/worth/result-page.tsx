@@ -8,7 +8,7 @@ import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useResultStore } from "@/store/result-store";
 import { useEffect, useRef, useState } from "react";
 // import { ComingSoonDialog } from "@/components/coming-soon-dialog";
-import { SafeImage } from "./component/safe-image";
+import { SafeImage } from "../../components/safe-image";
 import { isAuthenticated } from "@/lib/auth-tokens";
 import { getPendingValuationRef } from "@/lib/pending-valuation";
 import { SaveValuationDialog } from "./component/save-valuation-dialog";
