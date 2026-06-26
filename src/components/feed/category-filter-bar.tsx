@@ -3,25 +3,21 @@
 import { useRef } from "react";
 import { useFeedStore } from "@/store/feed-store";
 import { Button } from "../ui/button";
-import { useSubCategories } from "@/hooks/use-categories";
+import { usePrimaryCategories } from "@/hooks/use-categories";
 
 export function CategoryFilterBar() {
-  const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);
-  const setActiveSubCategory = useFeedStore((s) => s.setActiveSubCategory);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { data } = useSubCategories();
+  const { data } = usePrimaryCategories();
+  const { activeCategory, setActiveCategory } = useFeedStore();
 
-  const subCategories = data?.subCategories?.map((sub) => ({
-    label: sub.name,
-    value: sub.id,
-  })) as Array<{
-    label: string;
-    value: string;
-    icon?: React.ComponentType<{ color?: string }>;
-  }>;
+  const categories =
+    data?.categories?.map((sub) => ({
+      label: sub.name,
+      value: sub.id,
+    })) ?? [];
 
-  const categoriesToDisplay = [{ label: "All", value: "" }, ...subCategories];
+  const categoriesToDisplay = [{ label: "All", value: "" }, ...categories];
 
   return (
     <div className="top-16 z-40 w-full py-3 sm:flex sm:items-center sm:justify-center">
@@ -30,17 +26,16 @@ export function CategoryFilterBar() {
         className="no-scrollbar flex items-center gap-4 overflow-x-auto px-4"
       >
         {categoriesToDisplay.map((cat) => {
-          const isActive = activeSubCategoryId === cat.value;
+          const isActive = activeCategory?.id === cat.value;
           return (
             <Button
               key={cat.value || "all"}
               onClick={() =>
-                setActiveSubCategory({ id: cat.value, label: cat.label })
+                setActiveCategory({ id: cat.value, label: cat.label })
               }
               variant={isActive ? "default" : "outline"}
               className="shrink-0 cursor-pointer whitespace-nowrap transition-all duration-200"
             >
-              {/* <span>{cat.icon && <cat.icon color="#F4762A" />}</span> */}
               <span>{cat.label}</span>
             </Button>
           );

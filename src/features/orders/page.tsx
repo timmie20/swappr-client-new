@@ -23,7 +23,7 @@ export default function OrdersPage() {
     hasNextPage,
     isFetchingNextPage,
     refetch,
-  } = useInfiniteOrders({ limit: 5 });
+  } = useInfiniteOrders({ limit: 10 });
 
   const orders = useMemo(() => {
     const pages = data?.pages ?? [];
