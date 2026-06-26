@@ -10,11 +10,13 @@ import {
 import { Lottie } from "./lottie";
 import ghost from "@/lottie/ghost.json";
 import emptyCart from "@/lottie/empty shopping bag.json";
+import comingSoon from "@/lottie/coming soon.json";
 
-type LottieType = "ghost" | "cart";
+type LottieType = "ghost" | "cart" | "comingSoon";
 
 const lottieAnimations: Record<LottieType, object> = {
   ghost,
+  comingSoon,
   cart: emptyCart,
 };
 
@@ -31,8 +33,15 @@ type IconVariantProps = BaseProps & {
 };
 
 type LottieVariantProps = BaseProps & {
+  size?: "small" | "medium" | "large";
   variant: "lottie";
   lottieType: LottieType;
+};
+
+const sizeClasses = {
+  small: "size-32",
+  medium: "size-40",
+  large: "size-52",
 };
 
 type EmptyStateProps = IconVariantProps | LottieVariantProps;
@@ -56,7 +65,7 @@ export function EmptyState(props: EmptyStateProps) {
             animationData={lottieAnimations[props.lottieType]}
             loop
             autoPlay
-            className="size-40"
+            className={sizeClasses[props.size || "medium"]}
           />
         )}
 

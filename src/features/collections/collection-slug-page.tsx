@@ -6,6 +6,7 @@ import { FeedGridContent } from "@/components/feed/feed-grid-content";
 import { TypographyH1 } from "@/components/typography/h1";
 import { MOCK_PRODUCTS } from "@/features/feed/mock-data";
 import { FeedModeToggle } from "@/components/feed/feed-mode-toggle";
+import { useProducts } from "@/hooks";
 
 interface CollectionViewProps {
   slug: string;
@@ -21,7 +22,7 @@ const formatSlug = (slug: string) => {
 
 export function CollectionSlug({ slug }: CollectionViewProps) {
   const loading = false;
-  const products = useMemo(() => MOCK_PRODUCTS, []);
+  const products = useProducts({ collection_slug: slug }).data ?? [];
 
   return (
     <section className="mx-auto w-full max-w-screen-2xl px-4 py-6 xl:px-0">

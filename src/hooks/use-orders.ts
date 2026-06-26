@@ -2,6 +2,7 @@
 
 import {
   keepPreviousData,
+  QueryClient,
   useInfiniteQuery,
   useMutation,
   useQuery,
@@ -28,6 +29,8 @@ export const ordersMutationKeys = {
 };
 
 export function useCreateOrder() {
+  const queryClient = useQueryClient();
+
   return useMutation<
     ApiResponse<CreateOrderResponseData>,
     Error,
@@ -39,6 +42,18 @@ export function useCreateOrder() {
       const res = await ordersEndpoints.createOrder(payload);
 
       return res;
+    },
+
+    onSuccess: (res) => {
+      toast.success(res.message || "Order created");
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.lists(),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.cart.lists(),
+      });
     },
   });
 }
@@ -94,11 +109,9 @@ export function useInfiniteOrders(
   });
 }
 
-export function useOrder(orderId: string | null | undefined) {
+export function useOrder(orderId: string) {
   return useQuery<ApiResponse<Order>>({
-    queryKey: queryKeys.orders.detail(orderId ?? ""),
-
-    enabled: !!orderId,
+    queryKey: queryKeys.orders.detail(orderId),
 
     queryFn: async () => {
       if (!orderId) {
@@ -109,6 +122,8 @@ export function useOrder(orderId: string | null | undefined) {
 
       return res;
     },
+
+    enabled: !!orderId,
 
     retry: 0,
   });
@@ -133,13 +148,14 @@ export function useCancelOrder() {
     onSuccess: (res, variables) => {
       toast.success(res.message || "Order cancelled");
 
-      // Refetch updated order state
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.orders.lists(),
-      });
+      // Immediately refetch updated order
 
       queryClient.invalidateQueries({
         queryKey: queryKeys.orders.detail(variables.orderId),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.lists(),
       });
     },
 

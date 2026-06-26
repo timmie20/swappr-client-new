@@ -25,7 +25,7 @@ class ApiClient {
 
   constructor() {
     this.instance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api",
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
       timeout: 30000,
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +80,10 @@ class ApiClient {
             if (typeof window !== "undefined") {
               const currentPath = window.location.pathname;
               // Don't redirect if on auth pages or public routes
-              if (!currentPath.startsWith("/auth/") && !isPublicPageRoute(currentPath)) {
+              if (
+                !currentPath.startsWith("/auth/") &&
+                !isPublicPageRoute(currentPath)
+              ) {
                 window.location.href = `/auth/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`;
               }
             }

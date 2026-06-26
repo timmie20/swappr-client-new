@@ -20,7 +20,7 @@ type Props = {
 
 export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
   const feedMode = useFeedStore((s) => s.feedMode);
-  const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);
+  const activeCategory = useFeedStore((s) => s.activeCategory);
 
   const {
     data,
@@ -31,9 +31,7 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
     isFetchingNextPage,
   } = useInfiniteProducts({
     limit: limit,
-    ...(activeSubCategoryId
-      ? { subcategory_id: activeSubCategoryId }
-      : undefined),
+    ...(activeCategory?.id ? { category_id: activeCategory.id } : undefined),
   });
 
   const items = useMemo(() => {

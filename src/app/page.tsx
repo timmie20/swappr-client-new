@@ -2,7 +2,6 @@ import PageContainer from "@/components/layout/page-container";
 import { FeedPage } from "@/features/feed";
 import { queryKeys } from "@/lib/api/query-keys";
 import { getProducts } from "@/server-actions/product";
-import { getSubCategories } from "@/server-actions/category";
 import { getCart } from "@/server-actions/cart";
 
 import {
@@ -10,6 +9,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { getPrimaryCategories } from "@/server-actions/category";
 
 export const revalidate = 60;
 
@@ -18,7 +18,7 @@ export default async function page() {
 
   await queryClient.prefetchQuery({
     queryKey: queryKeys.categories.list(),
-    queryFn: () => getSubCategories(),
+    queryFn: () => getPrimaryCategories(),
   });
 
   await queryClient.prefetchQuery({
