@@ -26,15 +26,16 @@ export default async function page() {
     queryFn: () => getCart(),
   });
 
-  await queryClient.prefetchQuery({
-    queryKey: queryKeys.products.list({ page: 1, limit: 20 }),
-    queryFn: () =>
-      getProducts({
-        page: 1,
-        limit: 20,
-      }),
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: queryKeys.products.list({ limit: 20 }), // no page — matches hook's key shape
+    queryFn: ({ pageParam }) => getProducts({ page: pageParam, limit: 20 }),
+    initialPageParam: 1,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getNextPageParam: (lastPage: any) => {
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
+    },
   });
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <PageContainer>

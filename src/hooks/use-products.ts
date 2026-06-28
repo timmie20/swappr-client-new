@@ -2,8 +2,6 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  type InfiniteData,
-  type UseInfiniteQueryOptions,
   type UseQueryOptions,
 } from "@tanstack/react-query";
 import { productEndpoints } from "@/endpoints";
@@ -16,6 +14,7 @@ import {
   type ProductDetailResponse,
 } from "@/types/product";
 import type { Product } from "@/features/feed/types";
+import { useMemo } from "react";
 
 export function mapApiProductToFeedProduct(product: ProductDetail): Product {
   const variants = product.variants ?? [];
@@ -89,18 +88,9 @@ export function useProducts(
 
 export function useInfiniteProducts(
   params?: Omit<PaginationParams, "page">,
-  options?: Omit<
-    UseInfiniteQueryOptions<
-      ProductListResponse,
-      Error,
-      InfiniteData<ProductListResponse>,
-      readonly ["products", "list", PaginationParams?],
-      number
-    >,
-    "queryKey" | "queryFn" | "initialPageParam" | "getNextPageParam"
-  >,
+  options?: Parameters<typeof useInfiniteQuery<ProductListResponse>>[0],
 ) {
-  return useInfiniteQuery({
+  const query = useInfiniteQuery({
     queryKey: queryKeys.products.list(params),
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
@@ -109,16 +99,27 @@ export function useInfiniteProducts(
         page: pageParam,
         limit: params?.limit ?? 20,
       }),
-
     getNextPageParam: (lastPage) => {
-      const { page, total } = lastPage;
-      const totalPages = Math.ceil(total / lastPage.limit);
-      return page < totalPages ? page + 1 : undefined;
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
     },
-    staleTime: 60_000, // 1 minute
+    staleTime: 60_000,
     refetchOnReconnect: true,
     ...options,
   });
+
+  const products = useMemo(
+    () =>
+      query.data?.pages.flatMap((page) =>
+        page.products.map(mapApiProductToFeedProduct),
+      ) ?? [],
+    [query.data],
+  );
+
+  return {
+    ...query,
+    products,
+  };
 }
 
 export function useProductSearch(

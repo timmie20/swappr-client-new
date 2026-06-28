@@ -4,13 +4,11 @@ import { useMemo } from "react";
 import { FeedGridHeader } from "./feed-grid-header";
 import { FeedGridContent } from "./feed-grid-content";
 import { useFeedStore } from "@/store/feed-store";
-import { mapApiProductToFeedProduct, useInfiniteProducts } from "@/hooks";
+import { useInfiniteProducts } from "@/hooks";
 import { ProductMode } from "@/types/product";
 import { Button } from "../ui/button";
 import { Icons } from "../icons";
 import Link from "next/link";
-import { Spinner } from "../ui/spinner";
-import { TypographyMuted } from "../typography/muted";
 
 type Props = {
   limit: number;
@@ -23,39 +21,26 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
   const activeCategory = useFeedStore((s) => s.activeCategory);
 
   const {
-    data,
+    products,
     isLoading,
     isError,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteProducts({
-    limit: limit,
+    limit,
     ...(activeCategory?.id ? { category_id: activeCategory.id } : undefined),
   });
 
-  const items = useMemo(() => {
-    const pages = data?.pages ?? [];
-    const merged = pages.flatMap((page) => page.products);
-    const seen = new Set<string>();
-    return merged
-      .filter((product) => {
-        if (seen.has(product.id)) return false;
-        seen.add(product.id);
-        return true;
-      })
-      .map(mapApiProductToFeedProduct);
-  }, [data]);
-
   const filteredProducts = useMemo(() => {
-    let products = items;
     if (feedMode === ProductMode.SALE_SWAP) {
-      products = products.filter((p) => p.mode === ProductMode.SALE_SWAP);
-    } else if (feedMode === ProductMode.SALE) {
-      products = products.filter((p) => p.mode === ProductMode.SALE);
+      return products.filter((p) => p.mode === ProductMode.SALE_SWAP);
+    }
+    if (feedMode === ProductMode.SALE) {
+      return products.filter((p) => p.mode === ProductMode.SALE);
     }
     return products;
-  }, [feedMode, items]);
+  }, [feedMode, products]);
 
   return (
     <section
@@ -72,31 +57,11 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
         visibleCount={filteredProducts.length}
         loading={isLoading}
         isError={isError}
+        canLoadMore={canLoadMore}
+        hasNextPage={hasNextPage}
+        loadingMore={isFetchingNextPage}
+        onLoadMore={fetchNextPage}
       />
-
-      {canLoadMore && (
-        <div className="mt-10 flex cursor-pointer justify-center">
-          {!hasNextPage ? (
-            <TypographyMuted className="text-center">
-              That’s all we’ve got in this category (for now 👀).
-            </TypographyMuted>
-          ) : (
-            <Button
-              onClick={() => void fetchNextPage()}
-              variant="outline"
-              disabled={isFetchingNextPage}
-              size="lg"
-            >
-              {isFetchingNextPage ? "Loading..." : "Load More"}
-              {isFetchingNextPage ? (
-                <Spinner className="size-6" />
-              ) : (
-                <Icons.arrowRight size={15} />
-              )}
-            </Button>
-          )}
-        </div>
-      )}
 
       {!canLoadMore && (
         <Link href={navigateTo || "#"} className="w-max">
