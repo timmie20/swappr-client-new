@@ -205,7 +205,7 @@ export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
 
         <div className="border-border border-t p-5">
           <Button asChild className="w-full">
-            <Link href="/auth/sign-in" onClick={handleNavigate}>
+            <Link href="/sign-in" onClick={handleNavigate}>
               <Icons.user size={18} />
               Sign In
             </Link>

@@ -22,7 +22,7 @@ export function FinalCta({ className }: FinalCtaProps) {
   }
 
   function handleSignIn() {
-    router.push("/auth/sign-in");
+    router.push("/sign-in");
   }
 
   return (

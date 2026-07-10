@@ -124,7 +124,7 @@ export default function SignInForm() {
 
           <div className="flex justify-end">
             <Link
-              href="/auth/reset-password"
+              href="/reset-password"
               className="text-primary hover:text-primary/80 text-sm font-medium hover:cursor-pointer"
             >
               Forgot password?

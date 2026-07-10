@@ -2,9 +2,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { cartEndpoints } from "@/endpoints/cart";
 import { queryKeys } from "@/lib/api/query-keys";
-import { useIsAuthenticated } from "./use-access-token";
 import { CartItem } from "@/types/cart";
 import { toast } from "sonner";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 
 export const isIdenticalItem = (
   a: CartItem,
@@ -31,12 +31,12 @@ export const mutationKeys = {
 };
 
 export function useGetCart() {
-  const loggedIn = useIsAuthenticated();
+  const isAuth = useIsAuthenticated();
 
   return useQuery({
     queryKey: queryKeys.cart.lists(),
 
-    enabled: loggedIn,
+    enabled: !!isAuth,
 
     staleTime: Infinity,
 

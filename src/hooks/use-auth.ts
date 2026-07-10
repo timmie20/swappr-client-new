@@ -3,11 +3,7 @@ import { CreateAccount } from "@/types";
 import { User } from "@/types/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  getRefreshToken,
-  clearAuthTokens,
-  saveAuthTokens,
-} from "@/lib/auth-tokens";
+
 import { useRouter } from "next/navigation";
 import { LoginCredentials, LoginResponse } from "@/types";
 // import { useCartStore } from "@/store/cart-store";
@@ -52,69 +48,53 @@ export function useCreateAccount() {
   });
 }
 
-export function useLogin() {
-  const queryClient = useQueryClient();
+// export function useLogin() {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (credentials: LoginCredentials) =>
-      authEndpoints.login(credentials),
-    onMutate: () => {
-      toast.loading("Signing in...", { id: "login" });
-    },
-    onSuccess: async (response: LoginResponse) => {
-      const { access_token, refresh_token, expires_in } = response;
+//   return useMutation({
+//     mutationFn: (credentials: LoginCredentials) =>
+//       authEndpoints.login(credentials),
+//     onMutate: () => {
+//       toast.loading("Signing in...", { id: "login" });
+//     },
+//     onSuccess: async (response: LoginResponse) => {
+//       const { access_token, refresh_token, expires_in } = response;
 
-      // Save tokens with expiry
-      saveAuthTokens(access_token, refresh_token, expires_in);
+//       // Save tokens with expiry
+//       saveAuthTokens(access_token, refresh_token, expires_in);
 
-      toast.success("Signed in successfully", { id: "login" });
+//       toast.success("Signed in successfully", { id: "login" });
 
-      // Invalidate user queries to fetch fresh data
-      queryClient.invalidateQueries({ queryKey: userKeys.all });
-    },
-    onError: (error: Error) => {
-      const message =
-        (error as Error & { message?: string })?.message || "Failed to sign in";
-      toast.error(message, { id: "login" });
-      console.log(error);
-    },
-  });
-}
+//       // Invalidate user queries to fetch fresh data
+//       queryClient.invalidateQueries({ queryKey: userKeys.all });
+//     },
+//     onError: (error: Error) => {
+//       const message =
+//         (error as Error & { message?: string })?.message || "Failed to sign in";
+//       toast.error(message, { id: "login" });
+//       console.log(error);
+//     },
+//   });
+// }
 
 export function useLogout() {
-  const queryClient = useQueryClient();
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: async () => {
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
-        throw new Error("No refresh token found");
-      }
-      return authEndpoints.logout(refreshToken);
-    },
-    onMutate: () => {
-      toast.loading("Signing out...", { id: "logout" });
-    },
-    onSuccess: () => {
-      clearAuthTokens();
-      // useCartStore.getState().clearCart();
-      queryClient.clear();
-      toast.success("Signed out successfully", { id: "logout" });
-      router.push("/");
-      router.refresh();
+    mutationFn: () => authEndpoints.logout(),
+
+    onSuccess: async (res) => {
+      toast.success(res.message || "Logged out successfully");
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
+      router.push("/sign-in");
     },
     onError: (error: Error) => {
-      // Clear tokens even if logout request fails
-      // clearAuthTokens();
-      // useCartStore.getState().clearCart();
-      // queryClient.clear();
-      const message =
-        (error as Error & { message?: string })?.message ||
-        "Failed to sign out";
-      toast.error(message, { id: "logout" });
-      // router.push("/");
-      // router.refresh();
+      // toast.error(getErrorMessage (error));
+      toast.error(
+        (error as Error & { message?: string })?.message || "Failed to log out",
+      );
     },
   });
 }

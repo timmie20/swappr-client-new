@@ -47,7 +47,7 @@ export default function VerifyEmail() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Link href="/auth/sign-in">
+            <Link href="/sign-in">
               <Button className="w-full">Go to Sign In</Button>
             </Link>
           </CardFooter>
@@ -94,13 +94,13 @@ export default function VerifyEmail() {
           </CardHeader>
           <CardFooter className="flex-col gap-2">
             <Button
-              onClick={() => router.push("/auth/sign-up")}
+              onClick={() => router.push("/sign-up")}
               className="w-full"
             >
               Sign Up Again
             </Button>
             <Button
-              onClick={() => router.push("/auth/sign-in")}
+              onClick={() => router.push("/sign-in")}
               variant="outline"
               className="w-full"
             >
@@ -135,7 +135,7 @@ export default function VerifyEmail() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Link href="/auth/sign-in">
+            <Link href="/sign-in">
               <Button className="w-full">Continue to Sign In</Button>
             </Link>
           </CardFooter>

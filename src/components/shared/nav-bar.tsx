@@ -141,7 +141,7 @@ export default function Navbar() {
 
               {/* Sign In button - pushed to bottom */}
               <Link
-                href="/auth/sign-in"
+                href="/sign-in"
                 onClick={() => setMobileMenuOpen(false)}
                 className="font-switzer border-muted-foreground mt-auto flex items-center gap-3 border-t px-6 py-4 text-xl font-semibold text-[#08161F] transition-colors hover:bg-[#F8F9FA]"
               >

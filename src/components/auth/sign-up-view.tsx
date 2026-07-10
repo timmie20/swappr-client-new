@@ -55,7 +55,7 @@ export default function SignUpViewPage() {
               <p className="text-muted-foreground text-center text-sm">
                 Already have an account?{" "}
                 <Link
-                  href="/auth/sign-in"
+                  href="/sign-in"
                   className="hover:text-primary font-medium underline underline-offset-4"
                 >
                   Sign in

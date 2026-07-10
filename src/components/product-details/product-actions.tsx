@@ -53,7 +53,7 @@ export function ProductActions({
     if (!isLoggedIn) {
       sessionStorage.setItem("auth_redirect", currentPath);
 
-      router.replace("/auth/sign-in");
+      router.replace("/sign-in");
 
       return;
     }

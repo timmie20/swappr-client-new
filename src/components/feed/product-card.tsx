@@ -12,8 +12,8 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { VendorDialog } from "./vendor-dialog";
 import { formatStorage } from "@/lib/utils/product-helpers";
-import { isAuthenticated } from "@/lib/auth-tokens";
 import { TypographyH3 } from "../typography/h3";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +37,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const [imgHovered, setImgHovered] = useState(false);
 
+  const isAuth = useIsAuthenticated();
+
   const handleNavigate = () => {
     router.push(`/products/${product.slug}`);
   };
@@ -46,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
   ) => {
     e.stopPropagation();
 
-    if (!isAuthenticated()) {
+    if (!isAuth) {
       const currentUrl = window.location.href;
       router.push(`/auth/sign-in?redirect=${encodeURIComponent(currentUrl)}`);
       return;
@@ -56,21 +58,6 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
-
-  // const mapCondition = (c: Product["condition"]): ProductCondition => {
-  //   switch (c) {
-  //     case "New":
-  //       return "NEW";
-  //     case "UK Used":
-  //       return "UK_USED";
-  //     case "Nigerian Used":
-  //       return "NIGERIAN_USED";
-  //     case "Refurbished":
-  //       return "REFURBISHED";
-  //     default:
-  //       return "NEW";
-  //   }
-  // };
 
   // const handleAddToCart = () => {
   //   if (product.isSoldOut) return;

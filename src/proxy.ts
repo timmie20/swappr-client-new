@@ -1,32 +1,118 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isPublicPageRoute, isAuthRoute } from "@/lib/public-routes";
+import { isPublicRoute, isAuthRoute } from "@/lib/public-routes";
 
-export default function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const accessToken = req.cookies.get("swappr_access_token");
+import { RefreshResponse } from "./types/auth";
+import {
+  clearAuthCookies,
+  COOKIE_NAMES,
+  updateAccessTokenCookie,
+} from "./lib/auth/cookies";
 
-  // Allow public routes first — no auth needed
-  if (isPublicPageRoute(pathname)) {
+function getTokensFromRequest(request: NextRequest) {
+  const accessToken = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
+  const refreshToken = request.cookies.get(COOKIE_NAMES.REFRESH_TOKEN)?.value;
+  const expiresAtRaw = request.cookies.get(COOKIE_NAMES.EXPIRES_AT)?.value;
+  const expiresAt = expiresAtRaw ? Number(expiresAtRaw) : null;
+
+  return { accessToken, refreshToken, expiresAt };
+}
+
+function isExpired(expiresAt: number | null, bufferMs = 60_000): boolean {
+  if (!expiresAt || isNaN(expiresAt)) return true;
+  return Date.now() >= expiresAt - bufferMs;
+}
+
+export async function attemptRefresh(
+  refreshToken: string,
+): Promise<RefreshResponse | null> {
+  try {
+    const res = await fetch(`${process.env.API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+
+    if (!data.access_token || !data.expires_at) return null;
+
+    return {
+      access_token: data.access_token,
+      expires_at: new Date(data.expires_at).getTime(),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function handleTokenRefresh(
+  refreshToken: string,
+  request: NextRequest,
+): Promise<NextResponse> {
+  const newTokens = await attemptRefresh(refreshToken);
+
+  if (!newTokens) {
+    const response = NextResponse.redirect(
+      new URL("/sign-in", request.url),
+    );
+    clearAuthCookies(response.cookies);
+    return response;
+  }
+
+  const response = NextResponse.next();
+  updateAccessTokenCookie(response.cookies, newTokens);
+  return response;
+}
+
+export default async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  const { accessToken, refreshToken, expiresAt } =
+    getTokensFromRequest(request);
+
+  const hasSession = !!accessToken;
+  const sessionExpired = isExpired(expiresAt);
+
+  // ── 1. Authenticated user hitting a login/register page ───────────────
+  // Redirect them to the dashboard — they're already in
+  if (hasSession && !sessionExpired && isAuthRoute(pathname)) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  // ── 2. Public route — let it through unconditionally ──────────────────
+  if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
+  // ── 3. No access token cookie ─────────────────────────────────────────
+  if (!hasSession) {
+    if (!refreshToken) {
+      const loginUrl = new URL("/sign-in", request.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
 
-  // Redirect authenticated users away from auth pages
-  if (isAuthRoute(pathname) && accessToken) {
-    return NextResponse.redirect(new URL("/", req.url));
+    // Access token gone but refresh token exists — attempt recovery
+    return handleTokenRefresh(refreshToken, request);
   }
 
-  // Allow unauthenticated users to access auth pages
-  if (isAuthRoute(pathname)) {
-    return NextResponse.next();
+  // ── 4. Session exists but token is expired — attempt silent refresh ───
+  if (sessionExpired) {
+    if (!refreshToken) {
+      // No refresh token available — full logout
+      const response = NextResponse.redirect(
+        new URL("/sign-in", request.url),
+      );
+      clearAuthCookies(response.cookies);
+      return response;
+    }
+
+    // Attempt to refresh tokens and continue if successful
+    return handleTokenRefresh(refreshToken, request);
   }
 
-  // Everything else requires auth
-  if (!accessToken) {
-    const signInUrl = new URL("/auth/sign-in", req.url);
-    signInUrl.searchParams.set("redirect_url", pathname);
-    return NextResponse.redirect(signInUrl);
-  }
-
+  // ── 5. Valid session — proceed ─────────────────────────────────────────
   return NextResponse.next();
 }
 
