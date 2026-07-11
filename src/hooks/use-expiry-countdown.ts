@@ -1,5 +1,4 @@
-import { useAnimate } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
@@ -33,40 +32,4 @@ export function useExpiryCountdown(expiresAt: string) {
   const seconds = Math.floor((remainingMs % MINUTE) / SECOND);
 
   return { hours, minutes, seconds, remainingMs, isExpired };
-}
-
-/**
- * Framer Motion shift animation for a single time unit.
- * Animates exit (slide up + fade) then entrance (slide in from below).
- */
-export function useUnitAnimation(value: number) {
-  const [ref, animate] = useAnimate();
-  const prevRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (prevRef.current === null) {
-      prevRef.current = value;
-      return;
-    }
-
-    if (prevRef.current === value) return;
-
-    const run = async () => {
-      await animate(
-        ref.current,
-        { y: ["0%", "-60%"], opacity: [1, 0] },
-        { duration: 0.28, ease: "easeIn" },
-      );
-      prevRef.current = value;
-      await animate(
-        ref.current,
-        { y: ["60%", "0%"], opacity: [0, 1] },
-        { duration: 0.28, ease: "easeOut" },
-      );
-    };
-
-    run();
-  }, [value]);
-
-  return ref;
 }

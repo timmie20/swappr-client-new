@@ -16,8 +16,9 @@ export const ordersEndpoints = {
     return data;
   },
 
-  async getOrderById(orderId: string): Promise<ApiResponse<Order>> {
-    const { data } = await api.get(`/orders/${orderId}`);
+  // backend resolves GET /orders/:id by order_number, not uuid
+  async getOrderByNumber(orderNumber: string): Promise<ApiResponse<Order>> {
+    const { data } = await api.get(`/orders/${orderNumber}`);
     return data;
   },
 

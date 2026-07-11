@@ -31,6 +31,9 @@ export default function CartPage() {
   const hasItems = items.length > 0;
 
   const handleConfirmOrder = async (data: CheckoutDeliveryFormValues) => {
+    // guard against rapid double-clicks landing before the button disables
+    if (createOrder.isPending) return;
+
     createOrder.mutate(
       {
         order_type: "purchase",
@@ -40,7 +43,6 @@ export default function CartPage() {
       },
       {
         onSuccess: (res) => {
-          toast.success(res.message || "Order confirmed");
           router.push(`/checkout/${res?.data?.order_number}`);
         },
 

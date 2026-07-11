@@ -23,7 +23,8 @@ export default async function page() {
 
   await queryClient.prefetchQuery({
     queryKey: queryKeys.cart.lists(),
-    queryFn: () => getCart(),
+    // must match the shape useGetCart caches under this key: CartItem[]
+    queryFn: async () => (await getCart()).data.items ?? [],
   });
 
   await queryClient.prefetchInfiniteQuery({

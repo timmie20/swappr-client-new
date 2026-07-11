@@ -1,29 +1,17 @@
 import { authEndpoints } from "@/endpoints/auth";
 import { CreateAccount } from "@/types";
-import { User } from "@/types/api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
 import { LoginCredentials, LoginResponse } from "@/types";
-// import { useCartStore } from "@/store/cart-store";
+import { useCartStore } from "@/store/cart-store";
 // import { useCartSync } from "@/features/cart/hooks/use-cart-sync";
 
 export const userKeys = {
   all: ["user"] as const,
   detail: () => [...userKeys.all, "detail"] as const,
 };
-
-export function useUserAccount() {
-  return useQuery({
-    queryKey: userKeys.detail(),
-    queryFn: async () => {
-      const response = await authEndpoints.getProfile();
-      return response.user as User;
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
-}
 
 export function useCreateAccount() {
   const queryClient = useQueryClient();
@@ -87,7 +75,11 @@ export function useLogout() {
 
     onSuccess: async (res) => {
       toast.success(res.message || "Logged out successfully");
-      queryClient.invalidateQueries({ queryKey: userKeys.all });
+      // wipe the entire query cache — nothing user-specific (cart, session,
+      // profile) may survive into the next session
+      queryClient.clear();
+      // also clear the persisted local cart (localStorage: "swappr-cart")
+      useCartStore.getState().clearCart();
       router.push("/sign-in");
     },
     onError: (error: Error) => {

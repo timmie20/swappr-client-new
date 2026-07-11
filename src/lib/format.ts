@@ -49,7 +49,7 @@ export const formatDate = (dateString: string | Date) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    // timeZone: "Africa/Lagos",
+    timeZone: "Africa/Lagos",
   }).format(date);
 };
 

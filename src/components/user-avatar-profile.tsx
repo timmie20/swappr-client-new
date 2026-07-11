@@ -5,7 +5,7 @@ import { UserSession } from "@/types/auth";
 interface UserAvatarProfileProps {
   className?: string;
   showInfo?: boolean;
-  user: UserSession;
+  user: UserSession | null | undefined;
 }
 
 export function UserAvatarProfile({

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/forms/form-input";
-import { useUserAccount } from "@/hooks/use-auth";
+import { useSession } from "@/lib/auth/session-client";
 import {
   checkoutDeliverySchema,
   type CheckoutDeliveryFormValues,
@@ -61,7 +61,7 @@ export default function DeliveryDetails({
   submitDisabled,
   onSubmit,
 }: DeliveryDetailsProps) {
-  const { data: user } = useUserAccount();
+  const { user } = useSession();
   const [saveDeliveryInfo, setSaveDeliveryInfo] = useState(false);
   const [savedDeliveryInfo, setSavedDeliveryInfo] =
     useState<StoredDeliveryInfo | null>(() => loadSavedDeliveryInfo());

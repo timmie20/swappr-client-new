@@ -38,7 +38,9 @@ export function useGetCart() {
 
     enabled: !!isAuth,
 
-    staleTime: Infinity,
+    // modest freshness window so the cart self-heals on focus/remount
+    // (changes from other tabs/devices, stock changes, bad hydration)
+    staleTime: 1000 * 60 * 2,
 
     queryFn: async () => {
       const res = await cartEndpoints.getCart();

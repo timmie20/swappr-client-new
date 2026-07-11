@@ -18,12 +18,16 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
 
-export default function OrderDetailPage({ orderId }: { orderId: string }) {
-  const { data, isLoading, isError, error } = useOrder(orderId);
+export default function OrderDetailPage({
+  orderNumber,
+}: {
+  orderNumber: string;
+}) {
+  const { data, isLoading, isError, error } = useOrder(orderNumber);
   const [copied, setCopied] = useState(false);
 
   const handleCopyOrderId = () => {
-    navigator.clipboard.writeText(orderId);
+    navigator.clipboard.writeText(orderNumber);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
