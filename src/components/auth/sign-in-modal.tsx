@@ -55,11 +55,12 @@ export default function SignInModal({ open, onOpenChange }: SignInModalProps) {
         <div className="space-y-6 p-6 pt-5">
           <div className="space-y-1.5 text-center">
             <DialogTitle className="font-switzer text-xl font-semibold tracking-tight">
-              Your next device is waiting
+              Sign in, your next device is waiting
             </DialogTitle>
             <DialogDescription className="text-balance">
-              Sign in to buy, swap and track pre-owned tech from verified
-              vendors — one click and you&apos;re in.
+              Your next phone doesn&apos;t have to be new. Buy or swap with
+              vendors who are actually verified — because &quot;trust me
+              bro&quot; isn&apos;t a business model.
             </DialogDescription>
           </div>
 

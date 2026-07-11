@@ -9,7 +9,7 @@ import { useResultStore } from "@/store/result-store";
 import { useEffect, useRef, useState } from "react";
 // import { ComingSoonDialog } from "@/components/coming-soon-dialog";
 import { SafeImage } from "../../components/safe-image";
-import { isAuthenticated } from "@/lib/auth-tokens";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 import { getPendingValuationRef } from "@/lib/pending-valuation";
 import { SaveValuationDialog } from "./component/save-valuation-dialog";
 import { cn } from "@/lib/utils";
@@ -18,9 +18,10 @@ export default function ResultPage() {
   const result = useResultStore((s) => s.result);
   const audioRef = useRef<HTMLAudioElement>(null);
   // const [showComingSoon, setShowComingSoon] = useState(false);
-  const [showSaveNudge] = useState(
-    () => !isAuthenticated() && !!getPendingValuationRef(),
-  );
+  const isLoggedIn = useIsAuthenticated();
+  const [hasPendingRef] = useState(() => !!getPendingValuationRef());
+  // only nudge once the session has resolved to "not logged in"
+  const showSaveNudge = isLoggedIn === false && hasPendingRef;
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
 
   useEffect(() => {

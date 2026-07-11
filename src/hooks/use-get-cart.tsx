@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { queryKeys } from "@/lib/api/query-keys";
-import { useIsAuthenticated } from "./use-access-token";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 import { cartEndpoints } from "@/endpoints/cart";
 import { mapServerCartToLocal } from "@/lib/cart";
 import { useCartStore } from "@/store/cart-store";
@@ -21,7 +21,7 @@ export function useGetCart() {
       return mapServerCartToLocal(res.data.items);
     },
 
-    enabled: loggedIn,
+    enabled: loggedIn === true,
 
     staleTime: Infinity,
   });

@@ -1,6 +1,6 @@
 import { useCartStore } from "@/store/cart-store";
 import { cartEndpoints } from "@/endpoints/cart";
-import { useIsAuthenticated } from "@/hooks/use-access-token";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 import { convertToServerPayload, mapServerCartToLocal } from "@/lib/cart";
 import { useQuery } from "@tanstack/react-query";
 
@@ -31,7 +31,7 @@ export function useCartSync() {
 
       return mapped;
     },
-    enabled: isAuthenticated && hasHydrated,
+    enabled: isAuthenticated === true && hasHydrated,
     staleTime: Infinity,
     refetchOnWindowFocus: false, // ← prevent sync on tab refocus
     refetchOnMount: false, // ← prevent sync on every page mount
