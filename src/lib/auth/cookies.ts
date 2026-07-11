@@ -3,9 +3,9 @@ import type { ResponseCookies } from "next/dist/compiled/@edge-runtime/cookies";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 const COOKIE_NAMES = {
-  ACCESS_TOKEN: "swappr_access",
-  REFRESH_TOKEN: "swappr_refresh",
-  EXPIRES_AT: "swappr_expires_at",
+  ACCESS_TOKEN: "swappr_client_access",
+  REFRESH_TOKEN: "swappr_client_refresh",
+  EXPIRES_AT: "swappr_client_expires_at",
 } as const;
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
@@ -13,7 +13,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const BASE_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: IS_PRODUCTION,
-  sameSite: IS_PRODUCTION ? "lax" : "lax",
+  sameSite: "lax",
   path: "/",
   ...(IS_PRODUCTION && { domain: ".swappr.com.ng" }),
 } as const;
@@ -42,30 +42,43 @@ export function setAuthCookies(
   });
 }
 
+// Access token lifetime — matches backend (50 minutes)
+const ACCESS_TOKEN_MAX_AGE = 60 * 50;
+
 export function updateAccessTokenCookie(
   cookieStore: ResponseCookies | ReadonlyRequestCookies,
   tokens: RefreshResponse,
 ) {
   cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, tokens.access_token, {
     ...BASE_COOKIE_OPTIONS,
-    maxAge: 60 * 15,
+    maxAge: ACCESS_TOKEN_MAX_AGE,
   });
 
   cookieStore.set(COOKIE_NAMES.EXPIRES_AT, String(tokens.expires_at), {
+    ...BASE_COOKIE_OPTIONS,
     httpOnly: false,
-    secure: IS_PRODUCTION,
-    sameSite: "strict",
-    path: "/",
-    maxAge: 60 * 15,
+    maxAge: ACCESS_TOKEN_MAX_AGE,
   });
 }
 
+// Deletion only matches a cookie whose domain/path attributes match the ones
+// it was set with, so reuse BASE_COOKIE_OPTIONS here
 export function clearAuthCookies(
   cookieStore: ResponseCookies | ReadonlyRequestCookies,
 ): void {
-  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, "", { maxAge: 0, path: "/" });
-  cookieStore.set(COOKIE_NAMES.REFRESH_TOKEN, "", { maxAge: 0, path: "/" });
-  cookieStore.set(COOKIE_NAMES.EXPIRES_AT, "", { maxAge: 0, path: "/" });
+  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, "", {
+    ...BASE_COOKIE_OPTIONS,
+    maxAge: 0,
+  });
+  cookieStore.set(COOKIE_NAMES.REFRESH_TOKEN, "", {
+    ...BASE_COOKIE_OPTIONS,
+    maxAge: 0,
+  });
+  cookieStore.set(COOKIE_NAMES.EXPIRES_AT, "", {
+    ...BASE_COOKIE_OPTIONS,
+    httpOnly: false,
+    maxAge: 0,
+  });
 }
 
 // ─── Getters ──────────────────────────────────────────────────────────────────

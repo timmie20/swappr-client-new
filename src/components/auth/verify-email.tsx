@@ -17,7 +17,11 @@ import {
   IconLoader2,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Lottie } from "@/components/lottie";
+import successCheckAnimation from "@/lottie/success-check.json";
+
+const VENDOR_APP_URL =
+  process.env.NEXT_PUBLIC_VENDOR_APP_URL || "https://vendor.swappr.com.ng";
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
@@ -94,10 +98,10 @@ export default function VerifyEmail() {
           </CardHeader>
           <CardFooter className="flex-col gap-2">
             <Button
-              onClick={() => router.push("/sign-up")}
+              onClick={() => router.push("/vendor/apply")}
               className="w-full"
             >
-              Sign Up Again
+              Back to Vendor Application
             </Button>
             <Button
               onClick={() => router.push("/sign-in")}
@@ -117,8 +121,8 @@ export default function VerifyEmail() {
       <div className="flex min-h-screen items-center justify-center px-4">
         <Card className="w-full max-w-md">
           <div className="flex items-center justify-center">
-            <DotLottieReact
-              src="/assets/icons/success-check.json"
+            <Lottie
+              animationData={successCheckAnimation}
               loop
               autoplay
               className="size-24"
@@ -130,14 +134,16 @@ export default function VerifyEmail() {
               <CardTitle>Email Verified!</CardTitle>
             </div>
             <CardDescription>
-              Your email has been successfully verified. You can now sign in to
-              your account.
+              Your email has been successfully verified. Head over to your
+              vendor dashboard to log in and continue your onboarding —
+              business verification, identity check and store profile all
+              happen there.
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Link href="/sign-in">
-              <Button className="w-full">Continue to Sign In</Button>
-            </Link>
+            <a href={VENDOR_APP_URL} className="w-full">
+              <Button className="w-full">Go to Vendor Dashboard</Button>
+            </a>
           </CardFooter>
         </Card>
       </div>

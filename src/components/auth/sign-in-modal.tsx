@@ -12,6 +12,7 @@ import { InteractiveGridPattern } from "../interactive-grid";
 import { GoogleSignUpButton } from "./google-oauth";
 import { Icons } from "../icons";
 import { cn } from "@/lib/utils";
+import { ASSETS } from "@/constants/assets";
 
 type SignInModalProps = {
   open: boolean;
@@ -42,7 +43,7 @@ export default function SignInModal({ open, onOpenChange }: SignInModalProps) {
             squaresClassName="stroke-primary/15"
           />
           <Image
-            src="/assets/images/swappr-logo-filled.png"
+            src={ASSETS.LOGO_FILLED}
             alt="Swappr"
             width={200}
             height={40}

@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { ProgressIndicator } from "./progress-indicator";
 import { StepAgreement } from "./step-agreement";
 import { StepBasicInfo } from "./step-basic-info";
-// import { StepDocuments } from "./step-documents"; // reserved for later
 import { StepAccountDetails } from "./step-account-details";
 import { SuccessScreen } from "./success-screen";
 import { applicationSchema, ApplicationFormData, buildPayload } from "./types";
@@ -21,7 +20,6 @@ const DEFAULT_VALUES: Partial<ApplicationFormData> = {
   state: "",
   city: "",
   contactNumber: "",
-  rcNumber: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -32,7 +30,6 @@ const DEFAULT_VALUES: Partial<ApplicationFormData> = {
 export function ApplicationWizard() {
   const [currentStep, setCurrentStep] = useState(1); // 1–4
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
-  const [applicationId, setApplicationId] = useState<string | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ApplicationFormData>({
@@ -61,17 +58,15 @@ export function ApplicationWizard() {
     setIsSubmitting(true);
     try {
       const data = form.getValues();
-      const payload = buildPayload(data);
-      const result = await vendorApplicationEndpoints.create(payload);
-      setApplicationId(result.id);
+      await vendorApplicationEndpoints.signup(buildPayload(data));
       setDirection(1);
       setCurrentStep(4);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: unknown) {
       const message =
-        err instanceof Error
-          ? err.message
-          : "Submission failed. Please try again.";
+        err && typeof err === "object" && "message" in err
+          ? String((err as { message: unknown }).message)
+          : "Signup failed. Please try again.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -86,8 +81,8 @@ export function ApplicationWizard() {
       : currentStep === 2
         ? "Business Information"
         : currentStep === 3
-          ? "Account Details"
-          : "Application Submitted";
+          ? "Create Your Account"
+          : "Account Created";
 
   /* ── Render ────────────────────────────────────────────────────── */
 
@@ -96,7 +91,7 @@ export function ApplicationWizard() {
       {/* Header */}
       <div className="mb-8 flex flex-col gap-1">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-          Vendor Application
+          Become a Swappr Vendor
         </h1>
         {currentStep <= 3 && (
           <p className="text-sm text-gray-500" aria-live="polite">
@@ -126,14 +121,6 @@ export function ApplicationWizard() {
         )}
 
         {currentStep === 3 && (
-          // <StepDocuments
-          //   key="step-3"
-          //   form={form}
-          //   onNext={handleSubmit}
-          //   onBack={goBack}
-          //   direction={direction}
-          //   isSubmitting={isSubmitting}
-          // />
           <StepAccountDetails
             key="step-3"
             form={form}
@@ -144,9 +131,7 @@ export function ApplicationWizard() {
           />
         )}
 
-        {currentStep === 4 && (
-          <SuccessScreen key="step-4" applicationId={applicationId} />
-        )}
+        {currentStep === 4 && <SuccessScreen key="step-4" />}
       </AnimatePresence>
     </div>
   );

@@ -5,7 +5,7 @@ import { UseFormReturn } from "react-hook-form";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/forms/form-input";
 import { ApplicationFormData, STEP_3_FIELDS } from "./types";
@@ -59,13 +59,15 @@ export function StepAccountDetails({
       animate="center"
       exit="exit"
     >
-      <Card>
+      <div>
         <CardHeader>
           <CardTitle className="text-base font-semibold text-gray-900">
             Create your account
           </CardTitle>
           <p className="text-sm text-gray-500">
-            You&apos;ll use these credentials to log in to your vendor account.
+            You&apos;ll use these credentials to log in to your vendor
+            dashboard. Use your real name — it must match the BVN or NIN
+            you&apos;ll verify your identity with later.
           </p>
         </CardHeader>
 
@@ -139,12 +141,12 @@ export function StepAccountDetails({
               className="flex-1 gap-2 rounded-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Submitting…" : "Submit Application"}
+              {isSubmitting ? "Creating account…" : "Create Account"}
               {!isSubmitting && <ArrowRight size={16} />}
             </Button>
           </div>
         </CardContent>
-      </Card>
+      </div>
     </motion.div>
   );
 }

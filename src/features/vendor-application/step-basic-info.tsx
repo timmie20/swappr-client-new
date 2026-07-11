@@ -6,7 +6,7 @@ import { UseFormReturn } from "react-hook-form";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { FieldGroup } from "@/components/ui/field";
 
@@ -29,8 +29,6 @@ export function StepBasicInfo({
 }: StepBasicInfoProps) {
   const {
     formState: { isSubmitting },
-    // setValue,
-    // watch,
     trigger,
   } = form;
 
@@ -40,18 +38,10 @@ export function StepBasicInfo({
     el?.focus();
   }, []);
 
-  // Format phone as user types — strip non-digits, max 11 chars
-  // const handlePhoneInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const raw = e.target.value.replace(/\D/g, "").slice(0, 11);
-  //   setValue("contactNumber", raw, { shouldValidate: true });
-  // };
-
   const handleNext = async () => {
     const valid = await trigger([...STEP_2_FIELDS]);
     if (valid) onNext();
   };
-
-  // const selectedState = watch("state");
 
   const slideVariants = {
     enter: { opacity: 0, x: direction > 0 ? 60 : -60 },
@@ -80,11 +70,16 @@ export function StepBasicInfo({
       animate="center"
       exit="exit"
     >
-      <Card>
+      <div>
         <CardHeader>
           <CardTitle className="text-base font-semibold text-gray-900">
             Tell us about your business
           </CardTitle>
+          <p className="text-sm text-gray-500">
+            Use your CAC-registered business name — it will be checked against
+            the CAC registry when you verify your business from your vendor
+            dashboard.
+          </p>
         </CardHeader>
 
         <CardContent className="flex flex-col gap-5">
@@ -92,21 +87,15 @@ export function StepBasicInfo({
             <FormInput
               control={form.control}
               name="businessName"
-              label=" Registered Business Name"
+              label="Registered Business Name"
               placeholder="Enter your CAC registered business name"
               required
             />
-            <FormInput
-              control={form.control}
-              name="rcNumber"
-              label="RC Number"
-              placeholder="Enter your CAC registered RC number "
-              required
-            />
+
             <FormInput
               control={form.control}
               name="businessAddress"
-              label=" Registered Business Address"
+              label="Business Address"
               placeholder="Full physical address of your store"
               required
             />
@@ -140,6 +129,7 @@ export function StepBasicInfo({
               type="tel"
               label="Business Contact Number"
               placeholder="08012345678"
+              required
             />
           </FieldGroup>
 
@@ -168,7 +158,7 @@ export function StepBasicInfo({
             </Button>
           </div>
         </CardContent>
-      </Card>
+      </div>
     </motion.div>
   );
 }

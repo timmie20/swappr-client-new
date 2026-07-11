@@ -12,7 +12,7 @@ interface Step {
 const STEPS: Step[] = [
   { number: 1, label: "Requirements" },
   { number: 2, label: "Business Info" },
-  { number: 3, label: "Documents" },
+  { number: 3, label: "Account Info" },
 ];
 
 interface ProgressIndicatorProps {

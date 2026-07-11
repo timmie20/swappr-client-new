@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Logo from "../logo";
+import Image from "next/image";
+import { ASSETS } from "@/constants/assets";
 import { Icons } from "@/components/icons";
 
 export default function Nav() {
@@ -11,7 +12,13 @@ export default function Nav() {
       <div className="mx-auto flex max-w-5xl items-center justify-between">
         <div />
         <button onClick={handleLogoClick}>
-          <Logo variant="dark" width={100} height={100} />
+          <Image
+            src={ASSETS.LOGO_DARK}
+            alt="Swappr logo"
+            width={100}
+            height={100}
+            className="h-auto w-auto cursor-pointer"
+          />
         </button>
         <div className="flex items-center gap-4">
           <Link href="/orders">

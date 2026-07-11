@@ -11,7 +11,7 @@ import { GoogleSignUpButton } from "./google-oauth";
 // import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
 import { TypographyH1 } from "../typography/h1";
-// import Link from "next/link";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 // import {
 //   clearPendingValuationRef,

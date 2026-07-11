@@ -15,7 +15,6 @@ export function UserAvatarProfile({
 }: UserAvatarProfileProps) {
   const fullName = getFullName(user);
 
-  console.log("UserAvatarProfile user:", user);
   return (
     <div className="flex items-center gap-2">
       <Avatar className={className}>
