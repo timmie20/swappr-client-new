@@ -13,6 +13,7 @@ import { useCreateOrder } from "@/hooks";
 
 import CartPanel from "./cart-panel";
 import { useCart } from "./hooks/use-cart";
+import { useVendorGroups } from "./hooks/use-vendor-cart";
 import Nav from "@/components/shared/nav/checkout-nav";
 
 export default function CartPage() {
@@ -28,6 +29,10 @@ export default function CartPage() {
 
   const { items } = useCart();
 
+  const vendorGroups = useVendorGroups();
+
+  const activeGroup = vendorGroups.find((group) => group.vendorId === vendorId);
+
   const hasItems = items.length > 0;
 
   const handleConfirmOrder = async (data: CheckoutDeliveryFormValues) => {
@@ -40,6 +45,7 @@ export default function CartPage() {
         vendor_id: vendorId, // if empty string, send as undefined to create order with all vendors
         delivery_address: data.delivery_address,
         contact_phone: data.contact_phone,
+        fulfillment_type: data.fulfillment_type,
       },
       {
         onSuccess: (res) => {
@@ -68,6 +74,8 @@ export default function CartPage() {
               isSubmitting={createOrder.isPending}
               onSubmit={handleConfirmOrder}
               submitDisabled={!hasItems} // disable if there are no items in the cart
+              pickupEnabled={activeGroup?.pickupEnabled}
+              operationHours={activeGroup?.operationHours}
             />
           </div>
         </div>
@@ -80,6 +88,8 @@ export default function CartPage() {
               isSubmitting={createOrder.isPending}
               onSubmit={handleConfirmOrder}
               submitDisabled={!hasItems} // disable if there are no items in the cart
+              pickupEnabled={activeGroup?.pickupEnabled}
+              operationHours={activeGroup?.operationHours}
             />
           </div>
 

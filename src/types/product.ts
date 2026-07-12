@@ -1,3 +1,5 @@
+import type { OperatingHours } from "./checkout";
+
 export interface ProductVariant {
   id: string;
   created_at?: string;
@@ -30,6 +32,8 @@ export interface ProductVendor {
   business_name: string;
   is_verified: boolean;
   rating: number;
+  pickup_enabled?: boolean;
+  operating_hours?: OperatingHours | null;
 }
 
 export type ProductCondition =

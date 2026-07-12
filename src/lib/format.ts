@@ -3,6 +3,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
+import type { OperatingHours } from "@/types/checkout";
+
 export function formatStorageCapacity(
   capacity: number | string | undefined,
 ): string {
@@ -58,6 +60,81 @@ dayjs.extend(relativeTime);
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+const WEEK_ORDER = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+
+const DAY_ABBREVIATIONS: Record<string, string> = {
+  monday: "Mon",
+  tuesday: "Tue",
+  wednesday: "Wed",
+  thursday: "Thu",
+  friday: "Fri",
+  saturday: "Sat",
+  sunday: "Sun",
+};
+
+function formatDayRanges(days: string[]): string {
+  const weekIndices = WEEK_ORDER.map((day) =>
+    days.some((d) => d.toLowerCase() === day) ? true : false,
+  );
+
+  const ranges: [number, number][] = [];
+  let rangeStart: number | null = null;
+
+  weekIndices.forEach((isActive, index) => {
+    if (isActive && rangeStart === null) {
+      rangeStart = index;
+    } else if (!isActive && rangeStart !== null) {
+      ranges.push([rangeStart, index - 1]);
+      rangeStart = null;
+    }
+  });
+
+  if (rangeStart !== null) {
+    ranges.push([rangeStart, weekIndices.length - 1]);
+  }
+
+  return ranges
+    .map(([start, end]) =>
+      start === end
+        ? DAY_ABBREVIATIONS[WEEK_ORDER[start]]
+        : `${DAY_ABBREVIATIONS[WEEK_ORDER[start]]}–${DAY_ABBREVIATIONS[WEEK_ORDER[end]]}`,
+    )
+    .join(", ");
+}
+
+function formatTime12h(time: string): string {
+  const [hourStr, minuteStr = "00"] = time.split(":");
+  const hour = parseInt(hourStr, 10);
+
+  if (isNaN(hour)) return time;
+
+  const period = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+
+  return `${hour12}:${minuteStr.padStart(2, "0")} ${period}`;
+}
+
+export function formatOperatingHours(
+  hours: OperatingHours | null | undefined,
+): string | null {
+  if (!hours?.days?.length || !hours.open_time || !hours.close_time) {
+    return null;
+  }
+
+  const dayRanges = formatDayRanges(hours.days);
+  if (!dayRanges) return null;
+
+  return `${dayRanges}, ${formatTime12h(hours.open_time)} – ${formatTime12h(hours.close_time)}`;
+}
 
 export function formatRelativeDate(date: string | Date): string {
   const d = dayjs.utc(date).tz("Africa/Lagos");

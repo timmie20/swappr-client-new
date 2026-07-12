@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/features/cart/hooks/use-cart";
 import { mutationKeys } from "@/hooks/use-cart-queries";
 import { useIsAuthenticated } from "@/lib/auth/session-client";
-import { formatNaira, formatStorageCapacity } from "@/lib/format";
+import { deslug, formatNaira, formatStorageCapacity } from "@/lib/format";
 import { LocalCartItem } from "@/types/cart";
 import { useMutationState } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -92,7 +92,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
         <p className="text-muted-foreground text-xs sm:text-sm">
           Qty {item.quantity}
           {item.color ? ` | ${item.color}` : ""}
-          {item.condition ? ` | ${item.condition}` : ""}
+          {item.condition ? ` | ${deslug(item.condition)}` : ""}
           {item.storage ? ` | ${formatStorageCapacity(item.storage)}` : ""}
         </p>
 

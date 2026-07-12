@@ -12,6 +12,18 @@ const STATUS_LABELS: Record<Order["status"], string> = {
   rejected: "Rejected",
 };
 
+const PICKUP_STATUS_LABELS: Partial<Record<Order["status"], string>> = {
+  shipped: "Ready for pickup",
+  delivered: "Picked up",
+};
+
+function getStatusLabel(status: Order["status"], order: Order) {
+  if (order.fulfillment_type === "pickup") {
+    return PICKUP_STATUS_LABELS[status] ?? STATUS_LABELS[status];
+  }
+  return STATUS_LABELS[status];
+}
+
 const BASE_FLOW: Order["status"][] = [
   "pending",
   "confirmed",
@@ -56,7 +68,9 @@ export function OrderTimeline({ order }: { order: Order }) {
       <div className="mb-4">
         <h3 className="text-base font-semibold">Order Timeline</h3>
         <p className="text-muted-foreground text-sm">
-          Track your order progress from confirmation to delivery.
+          {order.fulfillment_type === "pickup"
+            ? "Track your order progress from confirmation to pickup."
+            : "Track your order progress from confirmation to delivery."}
         </p>
       </div>
 
@@ -96,7 +110,7 @@ export function OrderTimeline({ order }: { order: Order }) {
                             : "text-muted-foreground",
                       )}
                     >
-                      {STATUS_LABELS[status as Order["status"]]}
+                      {getStatusLabel(status as Order["status"], order)}
                     </p>
                     {isFinal && (
                       <span className="text-destructive ml-2 text-xs">{`(${

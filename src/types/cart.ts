@@ -1,4 +1,5 @@
 import { ProductCondition } from "./product";
+import type { OperatingHours } from "./checkout";
 
 export type LocalCartItem = {
   id: string;
@@ -13,6 +14,8 @@ export type LocalCartItem = {
   color?: string;
   storage?: number;
   condition: ProductCondition;
+  pickupEnabled?: boolean;
+  operationHours?: string | null;
 };
 
 export interface CartItemProduct {
@@ -33,6 +36,8 @@ export interface CartItemVariant {
 export interface CartItemVendor {
   id: string;
   business_name: string;
+  pickup_enabled?: boolean;
+  operating_hours?: OperatingHours | null;
 }
 
 export interface CartItem {

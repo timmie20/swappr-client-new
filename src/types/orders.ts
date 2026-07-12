@@ -1,10 +1,11 @@
-import type { DeliveryAddress } from "@/types/checkout";
+import type { DeliveryAddress, FulfillmentType } from "@/types/checkout";
 
 export interface CreateOrderPayload {
   vendor_id?: string; // optional - if not provided, creates order with items from all vendors in cart
   order_type: "purchase" | "swap";
   delivery_address: DeliveryAddress;
   contact_phone: string;
+  fulfillment_type: FulfillmentType;
 }
 
 type OrderStatus =
@@ -43,6 +44,17 @@ export interface OrderItem {
   } | null;
 }
 
+export interface OrderFulfillment {
+  pickup_location: string | null;
+  pickup_date: string | null;
+  pickup_time_slot: string | null;
+  rider_name: string | null;
+  rider_phone: string | null;
+  delivery_fee: number | null;
+  estimated_arrival: string | null;
+  tracking_number: string | null;
+}
+
 export interface Order {
   id: string;
   order_number: string;
@@ -66,9 +78,14 @@ export interface Order {
   delivery_address: DeliveryAddress;
   contact_phone: string;
   tracking_number: string | null;
+  fulfillment_type: FulfillmentType;
+
+  // fulfillment, populated once status reaches "shipped"
+  fulfillment: OrderFulfillment | null;
+
   confirmed_at: string | null;
   processing_at?: string | null;
-  shipped_at?: string | null;
+  fulfillment_ready_at?: string | null;
   delivered_at: string | null;
   cancelled_at?: string | null;
   rejected_at?: string | null;

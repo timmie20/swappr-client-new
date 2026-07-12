@@ -7,6 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { TypographyH2 } from "@/components/typography/h2";
 import { TypographyMuted } from "@/components/typography/muted";
 import { useOrder } from "@/hooks";
+import { OrderFulfillment } from "./components/order-fulfillment";
 import { OrderItems } from "./components/order-items";
 import { OrderSummary } from "./components/order-summary";
 import { OrderTimeline } from "./components/order-timeline";
@@ -127,6 +128,7 @@ export default function OrderDetailPage({
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
           <OrderTimeline order={order} />
+          <OrderFulfillment fulfillment={order.fulfillment || null} />
           <OrderItems items={order.items} />
         </div>
 
