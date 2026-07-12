@@ -47,7 +47,7 @@ function getTimestamp(order: Order, status: Order["status"]) {
     case "processing":
       return order.processing_at ?? null;
     case "shipped":
-      return order.shipped_at ?? null;
+      return order.fulfillment_ready_at ?? null;
     case "delivered":
       return order.delivered_at;
     case "cancelled":

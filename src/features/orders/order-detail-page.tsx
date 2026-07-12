@@ -128,7 +128,7 @@ export default function OrderDetailPage({
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
           <OrderTimeline order={order} />
-          <OrderFulfillment fulfillment={order.fulfillment || null} />
+          <OrderFulfillment order={order} />
           <OrderItems items={order.items} />
         </div>
 

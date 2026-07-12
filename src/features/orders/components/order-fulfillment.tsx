@@ -1,17 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { formatDate, formatNaira } from "@/lib/format";
+import { deslug, formatDate, formatNaira } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Order } from "@/types/orders";
-import {
-  Clock,
-  Hash,
-  MapPin,
-  Phone,
-  Store,
-  Truck,
-  User,
-} from "lucide-react";
+import { Clock, Hash, MapPin, Phone, Store, Truck, User } from "lucide-react";
 
 const NOT_YET_AVAILABLE = "Not yet available";
 
@@ -38,8 +30,10 @@ function DetailRow({
 }
 
 export function OrderFulfillment({ order }: { order: Order }) {
-  const isPickup = order.fulfillment_type === "pickup";
-  const hasShipped = order.status === "shipped" || order.status === "delivered";
+  const { fulfillment, tracking_number, fulfillment_type, status } = order;
+
+  const isPickup = fulfillment_type === "pickup";
+  const hasShipped = status === "shipped" || order.status === "delivered";
 
   return (
     <section className="border-border border-t pt-6">
@@ -61,15 +55,19 @@ export function OrderFulfillment({ order }: { order: Order }) {
               : "border-indigo-200 bg-indigo-50 text-indigo-700",
           )}
         >
-          {isPickup ? <Store className="size-3" /> : <Truck className="size-3" />}
+          {isPickup ? (
+            <Store className="size-3" />
+          ) : (
+            <Truck className="size-3" />
+          )}
           {isPickup ? "Pickup" : "Delivery"}
         </Badge>
       </div>
 
       {!hasShipped ? (
         <p className="text-muted-foreground border-border border p-4 text-xs">
-          {isPickup ? "Pickup" : "Delivery"} details will appear here once
-          this order ships.
+          {isPickup ? "Pickup" : "Delivery"} details will appear here once this
+          order ships.
         </p>
       ) : (
         <div className="border-border space-y-4 border p-4">
@@ -78,15 +76,17 @@ export function OrderFulfillment({ order }: { order: Order }) {
               <DetailRow
                 icon={MapPin}
                 label="Pickup location"
-                value={order.pickup_location}
+                value={fulfillment?.pickup_location || NOT_YET_AVAILABLE}
               />
               <Separator />
               <DetailRow
                 icon={Clock}
                 label="Pickup date & time slot"
                 value={
-                  order.pickup_date && order.pickup_time_slot
-                    ? `${formatDate(order.pickup_date)} · ${order.pickup_time_slot}`
+                  fulfillment?.estimated_arrival &&
+                  fulfillment?.pickup_time_slot &&
+                  fulfillment?.pickup_date
+                    ? `${formatDate(fulfillment.pickup_date)} · ${fulfillment.pickup_time_slot}`
                     : null
                 }
               />
@@ -102,21 +102,21 @@ export function OrderFulfillment({ order }: { order: Order }) {
               <DetailRow
                 icon={User}
                 label="Rider"
-                value={order.rider_name}
+                value={fulfillment?.rider_name || NOT_YET_AVAILABLE}
               />
               <Separator />
               <DetailRow
                 icon={Phone}
                 label="Rider phone"
-                value={order.rider_phone}
+                value={fulfillment?.rider_phone || NOT_YET_AVAILABLE}
               />
               <Separator />
               <DetailRow
                 icon={Truck}
                 label="Delivery fee"
                 value={
-                  order.delivery_fee !== null
-                    ? formatNaira(order.delivery_fee)
+                  fulfillment?.delivery_fee !== null
+                    ? formatNaira(fulfillment?.delivery_fee)
                     : null
                 }
               />
@@ -125,8 +125,8 @@ export function OrderFulfillment({ order }: { order: Order }) {
                 icon={Clock}
                 label="Estimated arrival"
                 value={
-                  order.estimated_arrival
-                    ? formatDate(order.estimated_arrival)
+                  fulfillment?.estimated_arrival
+                    ? deslug(fulfillment.estimated_arrival)
                     : null
                 }
               />
@@ -134,7 +134,7 @@ export function OrderFulfillment({ order }: { order: Order }) {
               <DetailRow
                 icon={Hash}
                 label="Tracking number"
-                value={order.tracking_number}
+                value={tracking_number || NOT_YET_AVAILABLE}
               />
             </>
           )}

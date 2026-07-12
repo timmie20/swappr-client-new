@@ -51,6 +51,7 @@ export const formatDate = (dateString: string | Date) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    hour12: true,
     timeZone: "Africa/Lagos",
   }).format(date);
 };
@@ -146,4 +147,14 @@ export function formatRelativeDate(date: string | Date): string {
   }
 
   return d.fromNow();
+}
+
+export function deslug(slug: string, uppercase: string[] = []): string {
+  return slug
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w+/g, (word) => {
+      if (uppercase.includes(word.toUpperCase())) return word.toUpperCase();
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .trim();
 }
