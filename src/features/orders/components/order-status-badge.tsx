@@ -1,74 +1,67 @@
+import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Order } from "@/types/orders";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Package,
-  Truck,
-  XCircle,
-} from "lucide-react";
 
 const ORDER_STATUS_META: Record<
   Order["status"],
-  { label: string; className: string; icon: typeof Clock }
+  { label: string; className: string; icon: typeof Icons.clock }
 > = {
   pending: {
     label: "Pending",
     className: "border-amber-200 bg-amber-50 text-amber-700",
-    icon: Clock,
+    icon: Icons.clock,
   },
   confirmed: {
     label: "Confirmed",
     className: "border-blue-200 bg-blue-50 text-blue-700",
-    icon: CheckCircle2,
+    icon: Icons.checkCircle,
   },
   processing: {
     label: "Processing",
     className: "border-sky-200 bg-sky-50 text-sky-700",
-    icon: Package,
+    icon: Icons.package,
   },
   shipped: {
     label: "Shipped",
     className: "border-indigo-200 bg-indigo-50 text-indigo-700",
-    icon: Truck,
+    icon: Icons.truck,
   },
   delivered: {
     label: "Delivered",
     className: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    icon: CheckCircle2,
+    icon: Icons.checkCircle,
   },
   cancelled: {
     label: "Cancelled",
     className: "border-red-200 bg-red-50 text-red-700",
-    icon: XCircle,
+    icon: Icons.xCircle,
   },
   rejected: {
     label: "Rejected",
     className: "border-rose-200 bg-rose-50 text-rose-700",
-    icon: AlertTriangle,
+    icon: Icons.warning,
   },
 };
 
 const PAYMENT_STATUS_META: Record<
   Order["payment_status"],
-  { label: string; className: string; icon: typeof Clock }
+  { label: string; className: string; icon: typeof Icons.clock }
 > = {
   unpaid: {
     label: "Unpaid",
     className: "border-amber-200 bg-amber-50 text-amber-700",
-    icon: Clock,
+    icon: Icons.clock,
   },
   paid: {
     label: "Paid",
     className: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    icon: CheckCircle2,
+    icon: Icons.checkCircle,
   },
   failed: {
     label: "Failed",
     className: "border-red-200 bg-red-50 text-red-700",
-    icon: XCircle,
+    icon: Icons.xCircle,
   },
 };
 

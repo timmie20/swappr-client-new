@@ -45,9 +45,11 @@ export interface OrderItem {
 }
 
 export interface OrderFulfillment {
+  fulfillment_type: FulfillmentType;
   pickup_location: string | null;
   pickup_date: string | null;
   pickup_time_slot: string | null;
+  pickup_code: string | null;
   rider_name: string | null;
   rider_phone: string | null;
   delivery_fee: number | null;
@@ -78,7 +80,6 @@ export interface Order {
   delivery_address: DeliveryAddress;
   contact_phone: string;
   tracking_number: string | null;
-  fulfillment_type: FulfillmentType;
 
   // fulfillment, populated once status reaches "shipped"
   fulfillment: OrderFulfillment | null;

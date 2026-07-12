@@ -18,7 +18,7 @@ const PICKUP_STATUS_LABELS: Partial<Record<Order["status"], string>> = {
 };
 
 function getStatusLabel(status: Order["status"], order: Order) {
-  if (order.fulfillment_type === "pickup") {
+  if (order.fulfillment?.fulfillment_type === "pickup") {
     return PICKUP_STATUS_LABELS[status] ?? STATUS_LABELS[status];
   }
   return STATUS_LABELS[status];
@@ -68,7 +68,7 @@ export function OrderTimeline({ order }: { order: Order }) {
       <div className="mb-4">
         <h3 className="text-base font-semibold">Order Timeline</h3>
         <p className="text-muted-foreground text-sm">
-          {order.fulfillment_type === "pickup"
+          {order.fulfillment?.fulfillment_type === "pickup"
             ? "Track your order progress from confirmation to pickup."
             : "Track your order progress from confirmation to delivery."}
         </p>

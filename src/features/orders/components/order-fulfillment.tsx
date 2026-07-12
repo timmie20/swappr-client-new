@@ -1,24 +1,26 @@
+import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { deslug, formatDate, formatNaira } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Order } from "@/types/orders";
-import { Clock, Hash, MapPin, Phone, Store, Truck, User } from "lucide-react";
 
 const NOT_YET_AVAILABLE = "Not yet available";
 
 function DetailRow({
-  icon: Icon,
+  icon,
   label,
   value,
 }: {
-  icon: typeof Clock;
+  icon: React.ReactNode;
   label: string;
   value: string | null;
 }) {
   return (
     <div className="flex items-start gap-3">
-      <Icon className="text-muted-foreground mt-0.5 size-4" />
+      <span className="text-muted-foreground mt-0.5 [&>svg]:size-4">
+        {icon}
+      </span>
       <div className="space-y-1">
         <p className="text-sm font-semibold">{label}</p>
         <p className="text-muted-foreground text-xs">
@@ -30,9 +32,9 @@ function DetailRow({
 }
 
 export function OrderFulfillment({ order }: { order: Order }) {
-  const { fulfillment, tracking_number, fulfillment_type, status } = order;
+  const { fulfillment, tracking_number, status } = order;
 
-  const isPickup = fulfillment_type === "pickup";
+  const isPickup = fulfillment?.fulfillment_type === "pickup";
   const hasShipped = status === "shipped" || order.status === "delivered";
 
   return (
@@ -56,9 +58,9 @@ export function OrderFulfillment({ order }: { order: Order }) {
           )}
         >
           {isPickup ? (
-            <Store className="size-3" />
+            <Icons.store className="size-3" />
           ) : (
-            <Truck className="size-3" />
+            <Icons.truck className="size-3" />
           )}
           {isPickup ? "Pickup" : "Delivery"}
         </Badge>
@@ -74,45 +76,43 @@ export function OrderFulfillment({ order }: { order: Order }) {
           {isPickup ? (
             <>
               <DetailRow
-                icon={MapPin}
+                icon={<Icons.mapPin />}
                 label="Pickup location"
                 value={fulfillment?.pickup_location || NOT_YET_AVAILABLE}
               />
               <Separator />
               <DetailRow
-                icon={Clock}
+                icon={<Icons.clock />}
                 label="Pickup date & time slot"
                 value={
-                  fulfillment?.estimated_arrival &&
-                  fulfillment?.pickup_time_slot &&
-                  fulfillment?.pickup_date
+                  fulfillment?.pickup_date && fulfillment?.pickup_time_slot
                     ? `${formatDate(fulfillment.pickup_date)} · ${fulfillment.pickup_time_slot}`
                     : null
                 }
               />
               <Separator />
               <DetailRow
-                icon={Hash}
+                icon={<Icons.hash />}
                 label="Pickup code"
-                value={order.tracking_number}
+                value={fulfillment?.pickup_code || NOT_YET_AVAILABLE}
               />
             </>
           ) : (
             <>
               <DetailRow
-                icon={User}
+                icon={<Icons.user />}
                 label="Rider"
                 value={fulfillment?.rider_name || NOT_YET_AVAILABLE}
               />
               <Separator />
               <DetailRow
-                icon={Phone}
+                icon={<Icons.phone />}
                 label="Rider phone"
                 value={fulfillment?.rider_phone || NOT_YET_AVAILABLE}
               />
               <Separator />
               <DetailRow
-                icon={Truck}
+                icon={<Icons.truck />}
                 label="Delivery fee"
                 value={
                   fulfillment?.delivery_fee !== null
@@ -122,7 +122,7 @@ export function OrderFulfillment({ order }: { order: Order }) {
               />
               <Separator />
               <DetailRow
-                icon={Clock}
+                icon={<Icons.clock />}
                 label="Estimated arrival"
                 value={
                   fulfillment?.estimated_arrival
@@ -132,7 +132,7 @@ export function OrderFulfillment({ order }: { order: Order }) {
               />
               <Separator />
               <DetailRow
-                icon={Hash}
+                icon={<Icons.hash />}
                 label="Tracking number"
                 value={tracking_number || NOT_YET_AVAILABLE}
               />

@@ -185,6 +185,7 @@ interface OrderCheckoutProps {
 export default function OrderCheckout({ order }: OrderCheckoutProps) {
   const { hours, minutes, seconds, isExpired } = useExpiryCountdown(
     order.expires_at,
+    order.payment_status === "unpaid" && order.status === "pending",
   );
 
   const payment = useInitiatePayment();
