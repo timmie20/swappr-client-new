@@ -21,6 +21,7 @@ type PaymentStatus = "unpaid" | "paid" | "failed";
 
 export interface OrderVendor {
   id: string;
+  trading_name: string | null;
   business_name: string;
 }
 
@@ -70,6 +71,7 @@ export interface Order {
     last_name: string;
     email: string;
   };
+
   vendor_id: string;
   vendor: OrderVendor;
   items: OrderItem[];

@@ -27,7 +27,7 @@ export function mapServerCartItemToCartItem(item: CartItem): LocalCartItem {
     storage: item.variant?.storage || undefined,
     condition: product?.condition,
     vendorId: item.vendor?.id,
-    businessName: item.vendor?.business_name,
+    businessName: item.vendor?.trading_name || item.vendor?.business_name,
     pickupEnabled: item.vendor?.pickup_enabled,
     operationHours: formatOperatingHours(item.vendor?.operating_hours),
   };

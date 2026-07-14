@@ -35,6 +35,7 @@ export interface CartItemVariant {
 
 export interface CartItemVendor {
   id: string;
+  trading_name: string | null;
   business_name: string;
   pickup_enabled?: boolean;
   operating_hours?: OperatingHours | null;

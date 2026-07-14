@@ -2,7 +2,6 @@
 
 import {
   keepPreviousData,
-  QueryClient,
   useInfiniteQuery,
   useMutation,
   useQuery,

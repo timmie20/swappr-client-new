@@ -57,7 +57,10 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
     subCategory: product.subcategory ? product.subcategory.name : undefined,
     seller: {
       id: product.vendor?.id ?? "",
-      username: product.vendor?.business_name ?? "vendor",
+      username:
+        product.vendor.trading_name ??
+        product.vendor?.business_name ??
+        "vendor",
       rating: Number(product.vendor?.rating ?? 0),
       verified: !!product.vendor?.is_verified,
       totalSales: 0,

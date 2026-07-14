@@ -7,7 +7,10 @@ import { OrderStatusBadge, PaymentStatusBadge } from "./order-status-badge";
 import { Icons } from "@/components/icons";
 
 export function OrderCard({ order }: { order: Order }) {
-  const vendorName = order.vendor?.business_name || "Unknown Vendor";
+  const vendorName =
+    order.vendor.trading_name ||
+    order.vendor?.business_name ||
+    "Unknown Vendor";
 
   return (
     <div className="border-border bg-background/60 hover:bg-muted/30 border-b px-4 py-5 transition-colors">
