@@ -11,12 +11,11 @@ interface Step {
 
 const STEPS: Step[] = [
   { number: 1, label: "Requirements" },
-  { number: 2, label: "Business Info" },
-  { number: 3, label: "Account Info" },
+  { number: 2, label: "Account Info" },
 ];
 
 interface ProgressIndicatorProps {
-  currentStep: number; // 1–3 (step 4 = success, passes 3)
+  currentStep: number; // 1–2 (step 3 = success, passes 2)
   className?: string;
 }
 
@@ -24,7 +23,7 @@ export function ProgressIndicator({
   currentStep,
   className,
 }: ProgressIndicatorProps) {
-  const clampedStep = Math.min(currentStep, 3);
+  const clampedStep = Math.min(currentStep, 2);
 
   return (
     <div
@@ -32,8 +31,8 @@ export function ProgressIndicator({
       role="progressbar"
       aria-valuenow={clampedStep}
       aria-valuemin={1}
-      aria-valuemax={3}
-      aria-label={`Step ${clampedStep} of 3`}
+      aria-valuemax={2}
+      aria-label={`Step ${clampedStep} of 2`}
     >
       {STEPS.map((step, i) => {
         const isComplete = clampedStep > step.number;

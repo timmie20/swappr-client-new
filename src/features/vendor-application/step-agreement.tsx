@@ -19,7 +19,6 @@ const requirements = [
 
 const whatYouNeed = [
   "Your personal details — first name, last name, email and a secure password",
-  "Your CAC-registered business name, business address (state and city) and a business contact number",
 ];
 
 const nextSteps = [

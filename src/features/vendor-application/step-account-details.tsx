@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/forms/form-input";
-import { ApplicationFormData, STEP_3_FIELDS } from "./types";
+import { ApplicationFormData, ACCOUNT_FIELDS } from "./types";
 
 interface StepAccountDetailsProps {
   form: UseFormReturn<ApplicationFormData>;
@@ -28,7 +28,7 @@ export function StepAccountDetails({
   const { trigger } = form;
 
   const handleNext = async () => {
-    const valid = await trigger([...STEP_3_FIELDS]);
+    const valid = await trigger([...ACCOUNT_FIELDS]);
     if (valid) await onNext();
   };
 

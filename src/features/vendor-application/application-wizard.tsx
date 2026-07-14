@@ -8,18 +8,12 @@ import { toast } from "sonner";
 
 import { ProgressIndicator } from "./progress-indicator";
 import { StepAgreement } from "./step-agreement";
-import { StepBasicInfo } from "./step-basic-info";
 import { StepAccountDetails } from "./step-account-details";
 import { SuccessScreen } from "./success-screen";
 import { applicationSchema, ApplicationFormData, buildPayload } from "./types";
 import { vendorApplicationEndpoints } from "@/endpoints/vendor-application";
 
 const DEFAULT_VALUES: Partial<ApplicationFormData> = {
-  businessName: "",
-  businessAddress: "",
-  state: "",
-  city: "",
-  contactNumber: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -28,7 +22,7 @@ const DEFAULT_VALUES: Partial<ApplicationFormData> = {
 };
 
 export function ApplicationWizard() {
-  const [currentStep, setCurrentStep] = useState(1); // 1–4
+  const [currentStep, setCurrentStep] = useState(1); // 1–3
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -60,7 +54,7 @@ export function ApplicationWizard() {
       const data = form.getValues();
       await vendorApplicationEndpoints.signup(buildPayload(data));
       setDirection(1);
-      setCurrentStep(4);
+      setCurrentStep(3);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: unknown) {
       const message =
@@ -79,10 +73,8 @@ export function ApplicationWizard() {
     currentStep === 1
       ? "Review Requirements"
       : currentStep === 2
-        ? "Business Information"
-        : currentStep === 3
-          ? "Create Your Account"
-          : "Account Created";
+        ? "Create Your Account"
+        : "Account Created";
 
   /* ── Render ────────────────────────────────────────────────────── */
 
@@ -93,16 +85,16 @@ export function ApplicationWizard() {
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           Become a Swappr Vendor
         </h1>
-        {currentStep <= 3 && (
+        {currentStep <= 2 && (
           <p className="text-sm text-gray-500" aria-live="polite">
-            Step {currentStep} of 3 &mdash;{" "}
+            Step {currentStep} of 2 &mdash;{" "}
             <span className="font-medium text-gray-700">{stepLabel}</span>
           </p>
         )}
       </div>
 
       {/* Progress indicator (hidden on success screen) */}
-      {currentStep <= 3 && (
+      {currentStep <= 2 && (
         <ProgressIndicator currentStep={currentStep} className="mb-8" />
       )}
 
@@ -111,18 +103,8 @@ export function ApplicationWizard() {
         {currentStep === 1 && <StepAgreement key="step-1" onNext={goNext} />}
 
         {currentStep === 2 && (
-          <StepBasicInfo
-            key="step-2"
-            form={form}
-            onNext={goNext}
-            onBack={goBack}
-            direction={direction}
-          />
-        )}
-
-        {currentStep === 3 && (
           <StepAccountDetails
-            key="step-3"
+            key="step-2"
             form={form}
             onNext={handleSubmit}
             onBack={goBack}
@@ -131,7 +113,7 @@ export function ApplicationWizard() {
           />
         )}
 
-        {currentStep === 4 && <SuccessScreen key="step-4" />}
+        {currentStep === 3 && <SuccessScreen key="step-3" />}
       </AnimatePresence>
     </div>
   );
