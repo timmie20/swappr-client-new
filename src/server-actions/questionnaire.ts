@@ -8,7 +8,6 @@ export const getQuestionsByBrand = async (
 ): Promise<QuestionsByBrandResponse> => {
   return serverFetch<QuestionsByBrandResponse>(
     `/questions/brand/${brandId}/with-general`,
-    undefined,
     { revalidate: 86400 }, // 24 hours - questions rarely change
   );
 };

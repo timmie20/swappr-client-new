@@ -66,7 +66,9 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
       totalSales: 0,
     },
     listed_at: product.created_at,
-    specs: product.specifications,
+    specs: Object.fromEntries(
+      (product.specifications ?? []).map((spec) => [spec.key, spec.value]),
+    ),
     isSoldOut: product.total_stock <= 0 && product.status === "out_of_stock",
   };
 }
@@ -99,7 +101,10 @@ export function useInfiniteProducts(
     queryFn: ({ pageParam }) =>
       productEndpoints.getAll({
         ...params,
-        page: pageParam,
+        // pageParam is typed unknown because the options param widens the
+        // TPageParam generic; initialPageParam and getNextPageParam only
+        // ever produce numbers
+        page: pageParam as number,
         limit: params?.limit ?? 20,
       }),
     getNextPageParam: (lastPage) => {
