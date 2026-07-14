@@ -4,11 +4,6 @@ export interface AuthTokens {
   expires_at: number; // Unix timestamp in ms — converted from ISO at login
 }
 
-export interface RefreshResponse {
-  access_token: string;
-  expires_at: number;
-}
-
 export interface ApiReject {
   message?: string | string[];
   error?: string;

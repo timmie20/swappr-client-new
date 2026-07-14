@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   // If any required token is missing, the OAuth flow failed upstream
   if (!accessToken || !refreshToken || !expiresAt) {
     return NextResponse.redirect(
-      new URL("/auth/sign-in?error=oauth_failed", request.url),
+      new URL("/sign-in?error=oauth_failed", request.url),
     );
   }
 

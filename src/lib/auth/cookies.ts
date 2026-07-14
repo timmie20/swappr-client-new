@@ -1,4 +1,4 @@
-import { AuthTokens, RefreshResponse } from "@/types/auth";
+import { AuthTokens } from "@/types/auth";
 import type { ResponseCookies } from "next/dist/compiled/@edge-runtime/cookies";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
@@ -18,14 +18,24 @@ const BASE_COOKIE_OPTIONS = {
   ...(IS_PRODUCTION && { domain: ".swappr.com.ng" }),
 } as const;
 
-// ─── Setters (used in Route Handlers after login / refresh) ───────────────
+// ─── Setters (used after login / refresh) ─────────────────────────────────
+// Refresh tokens rotate on every /auth/refresh call, so the token pair is
+// always written together — never persist a new access token without the
+// refresh token it was rotated with.
 export function setAuthCookies(
   cookieStore: ResponseCookies | ReadonlyRequestCookies,
   tokens: AuthTokens,
 ): void {
+  // Access-token lifetime comes from the backend's expires_at — never
+  // hardcode the TTL here (it changed from 50m to 15m once already)
+  const accessMaxAge = Math.max(
+    0,
+    Math.ceil((tokens.expires_at - Date.now()) / 1000),
+  );
+
   cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, tokens.access_token, {
     ...BASE_COOKIE_OPTIONS,
-    maxAge: 60 * 50, // 50 minutes — matches backend
+    maxAge: accessMaxAge,
   });
 
   cookieStore.set(COOKIE_NAMES.REFRESH_TOKEN, tokens.refresh_token, {
@@ -33,31 +43,13 @@ export function setAuthCookies(
     maxAge: 60 * 60 * 24 * 7,
   });
 
-  cookieStore.set(COOKIE_NAMES.EXPIRES_AT, String(tokens.expires_at), {
-    httpOnly: false,
-    secure: IS_PRODUCTION,
-    sameSite: "strict" as const,
-    path: "/",
-    maxAge: 60 * 50, // must match access token
-  });
-}
-
-// Access token lifetime — matches backend (50 minutes)
-const ACCESS_TOKEN_MAX_AGE = 60 * 50;
-
-export function updateAccessTokenCookie(
-  cookieStore: ResponseCookies | ReadonlyRequestCookies,
-  tokens: RefreshResponse,
-) {
-  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, tokens.access_token, {
-    ...BASE_COOKIE_OPTIONS,
-    maxAge: ACCESS_TOKEN_MAX_AGE,
-  });
-
+  // Readable by client JS, but must share BASE domain/path attributes so
+  // every writer and clearAuthCookies target the exact same cookie — a
+  // mismatched Domain leaves a stale duplicate
   cookieStore.set(COOKIE_NAMES.EXPIRES_AT, String(tokens.expires_at), {
     ...BASE_COOKIE_OPTIONS,
     httpOnly: false,
-    maxAge: ACCESS_TOKEN_MAX_AGE,
+    maxAge: accessMaxAge, // must match access token
   });
 }
 
