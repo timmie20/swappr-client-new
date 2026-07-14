@@ -60,6 +60,11 @@ import {
   IconLogout,
   IconEdit,
   IconCopy,
+  IconClock,
+  IconHash,
+  IconTruckDelivery,
+  IconCircleCheck,
+  IconCircleX,
 } from "@tabler/icons-react";
 
 import AppleIcon from "./apple-icon";
@@ -128,4 +133,9 @@ export const Icons = {
   store: IconBuildingStore,
   edit: IconEdit,
   copy: IconCopy,
+  clock: IconClock,
+  hash: IconHash,
+  truck: IconTruckDelivery,
+  checkCircle: IconCircleCheck,
+  xCircle: IconCircleX,
 };

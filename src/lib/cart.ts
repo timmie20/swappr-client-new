@@ -1,5 +1,6 @@
 import { AddCartItemPayload, CartItem, LocalCartItem } from "@/types/cart";
 import { ProductDetail, ProductVariant } from "@/types/product";
+import { formatOperatingHours } from "@/lib/format";
 
 export function isSameLine(
   a: Pick<LocalCartItem, "productId" | "variantId">,
@@ -26,7 +27,9 @@ export function mapServerCartItemToCartItem(item: CartItem): LocalCartItem {
     storage: item.variant?.storage || undefined,
     condition: product?.condition,
     vendorId: item.vendor?.id,
-    businessName: item.vendor?.business_name,
+    businessName: item.vendor?.trading_name || item.vendor?.business_name,
+    pickupEnabled: item.vendor?.pickup_enabled,
+    operationHours: formatOperatingHours(item.vendor?.operating_hours),
   };
 }
 
@@ -98,5 +101,7 @@ export function mapApiProductToCartItem({
     condition: product.condition,
     vendorId: product.vendor.id,
     businessName: product.vendor.business_name,
+    pickupEnabled: product.vendor.pickup_enabled,
+    operationHours: formatOperatingHours(product.vendor.operating_hours),
   };
 }

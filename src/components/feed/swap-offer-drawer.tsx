@@ -21,9 +21,11 @@ import { Button } from "../ui/button";
 import { Icons } from "../icons";
 import Image from "next/image";
 import type { Valuation } from "@/types/api";
-import { isAuthenticated } from "@/lib/auth-tokens";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 
 export function SwapOfferDrawer() {
+  const isAuth = useIsAuthenticated();
+
   const product = useFeedStore((s) => s.swapOfferProduct);
   const closeSwapOffer = useFeedStore((s) => s.closeSwapOffer);
 
@@ -71,7 +73,7 @@ export function SwapOfferDrawer() {
   if (!product) return null;
 
   // Don't render if not authenticated (will redirect via useEffect)
-  if (!isAuthenticated()) return null;
+  if (!isAuth) return null;
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>

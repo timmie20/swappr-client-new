@@ -12,12 +12,11 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { VendorDialog } from "./vendor-dialog";
 import { formatStorage } from "@/lib/utils/product-helpers";
-import { isAuthenticated } from "@/lib/auth-tokens";
 import { TypographyH3 } from "../typography/h3";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 
 interface ProductCardProps {
   product: Product;
-  // onProductClick?: (product: Product) => void;
 }
 
 function ConditionPill({ condition }: { condition: Product["condition"] }) {
@@ -38,6 +37,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const [imgHovered, setImgHovered] = useState(false);
 
+  const isAuth = useIsAuthenticated();
+
   const handleNavigate = () => {
     router.push(`/products/${product.slug}`);
   };
@@ -47,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
   ) => {
     e.stopPropagation();
 
-    if (!isAuthenticated()) {
+    if (!isAuth) {
       const currentUrl = window.location.href;
       router.push(`/auth/sign-in?redirect=${encodeURIComponent(currentUrl)}`);
       return;
@@ -57,21 +58,6 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
-
-  // const mapCondition = (c: Product["condition"]): ProductCondition => {
-  //   switch (c) {
-  //     case "New":
-  //       return "NEW";
-  //     case "UK Used":
-  //       return "UK_USED";
-  //     case "Nigerian Used":
-  //       return "NIGERIAN_USED";
-  //     case "Refurbished":
-  //       return "REFURBISHED";
-  //     default:
-  //       return "NEW";
-  //   }
-  // };
 
   // const handleAddToCart = () => {
   //   if (product.isSoldOut) return;
@@ -197,38 +183,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* CTAs */}
         <div className="mt-auto flex gap-2 pt-1">
-          {/* <Button
-            disabled={!!product.isSoldOut}
-            onClick={handleAddToCart}
-            className={cn(
-              "flex flex-1 cursor-pointer items-center justify-center gap-1.5 text-sm font-semibold transition-all",
-            )}
-          >
-            <AnimatePresence mode="wait">
-              {isAdded ? (
-                <motion.div
-                  key="added"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="flex items-center gap-1"
-                >
-                  <Icons.check size={13} />
-                  Added
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="cart"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="flex items-center gap-1"
-                >
-                  <Icons.cartCopy size={13} />
-                  {product.isSoldOut ? "Sold Out" : "Add to Cart"}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </Button> */}
-
           {product.mode === "sale_swap" && (
             <Button
               variant="secondary"
@@ -236,25 +190,9 @@ export function ProductCard({ product }: ProductCardProps) {
               onClick={(e) => handleSwapTrigger(e, product)}
             >
               <Icons.exchange size={13} />
-              <span className="hidden sm:inline">Swap</span>
+              <span className="">Swap</span>
             </Button>
           )}
-
-          {/* <Button
-            variant="outline"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleBookmark(product.id);
-            }}
-            className="cursor-pointer"
-          >
-            {isBookMarked ? (
-              <Icons.bookmarkFilled size={24} className="text-primary" />
-            ) : (
-              <Icons.bookmark size={24} />
-            )}
-          </Button> */}
         </div>
       </div>
     </motion.article>

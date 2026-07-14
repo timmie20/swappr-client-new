@@ -23,7 +23,7 @@ import { clearQuestionnaireContext } from "@/lib/cookies";
 import { useResultStore } from "@/store/result-store";
 import { useCalculateValuation } from "@/hooks/use-valuation";
 import { Question } from "@/lib/api/types";
-import { isAuthenticated } from "@/lib/auth-tokens";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 import { setPendingValuationRef } from "@/lib/pending-valuation";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -47,6 +47,7 @@ type QuestionsProps = {
 export default function Questions({ questions }: QuestionsProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const isLoggedIn = useIsAuthenticated();
 
   const { mutate: submitAnswers, isPending: isSubmitting } =
     useCalculateValuation();
@@ -118,7 +119,7 @@ export default function Questions({ questions }: QuestionsProps) {
           // Store result in result store
 
           if (response) {
-            if (!isAuthenticated()) {
+            if (isLoggedIn !== true) {
               const referenceToStore =
                 response.reference?.trim() || response.valuation_id;
               if (referenceToStore) setPendingValuationRef(referenceToStore);

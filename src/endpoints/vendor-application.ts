@@ -1,9 +1,9 @@
 import { api } from "@/lib/api/client";
-import { VendorApplicationPayload } from "@/features/vendor-application/types";
+import { VendorSignupPayload } from "@/features/vendor-application/types";
 
 export const vendorApplicationEndpoints = {
-  async create(payload: VendorApplicationPayload) {
+  async signup(payload: VendorSignupPayload) {
     const { data } = await api.post("/auth/vendor/signup", payload);
-    return data as { id: string; message: string };
+    return data as { message?: string };
   },
 };

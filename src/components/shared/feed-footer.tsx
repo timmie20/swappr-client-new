@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icons } from "../icons";
-import Logo from "./logo";
+import Image from "next/image";
+import { ASSETS } from "@/constants/assets";
 
 const FOOTER_LINKS = {
   Marketplace: [
@@ -47,7 +48,13 @@ export function FeedFooter() {
           {/* Brand col */}
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <Logo variant="light" priority />
+              <Image
+                src={ASSETS.LOGO_LIGHT}
+                alt="Swappr logo"
+                width={120}
+                height={40}
+                className="h-auto w-auto cursor-pointer"
+              />
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-[#9CA3AF]">
               Nigeria&apos;s first peer-to-peer device marketplace. Buy, sell,

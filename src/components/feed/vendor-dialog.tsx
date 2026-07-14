@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Product } from "@/features/feed/types";
 import { Icons } from "../icons";
 import Image from "next/image";
+import { getInitials } from "@/lib/format";
 
 // Placeholder store photos — replace with real vendor.store_photos when available
 const PLACEHOLDER_PHOTOS = [
@@ -20,11 +21,7 @@ const PLACEHOLDER_PHOTOS = [
 
 export function VendorDialog({ product }: { product: Product }) {
   const { seller } = product;
-  const initials = seller.username
-    .split(/[^a-zA-Z]+/)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
+  const initials = getInitials(seller.username);
 
   return (
     <Dialog>

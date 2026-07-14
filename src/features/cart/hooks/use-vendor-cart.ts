@@ -8,6 +8,8 @@ export interface VendorGroup {
   items: LocalCartItem[];
   subtotal: number;
   totalItems: number;
+  pickupEnabled: boolean;
+  operationHours: string | null;
 }
 
 /** Groups flat cart items by vendor, memoized. */
@@ -31,6 +33,8 @@ export function useVendorGroups(): VendorGroup[] {
           items: [item],
           subtotal: item.price * item.quantity,
           totalItems: item.quantity,
+          pickupEnabled: item.pickupEnabled ?? false,
+          operationHours: item.operationHours ?? null,
         });
       }
     }

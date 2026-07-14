@@ -4,13 +4,13 @@ import OrderDetailPage from "@/features/orders/order-detail-page";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ orderId: string }>;
+  params: Promise<{ orderNumber: string }>;
 }) {
-  const { orderId } = await params;
+  const { orderNumber } = await params;
 
   return (
     <PageContainer>
-      <OrderDetailPage orderId={orderId} />
+      <OrderDetailPage orderNumber={orderNumber} />
     </PageContainer>
   );
 }

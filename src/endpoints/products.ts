@@ -1,7 +1,3 @@
-/**
- * Product API Endpoints
- */
-
 import { api } from "@/lib/api/client";
 import type { PaginationParams } from "@/types/api";
 import type {

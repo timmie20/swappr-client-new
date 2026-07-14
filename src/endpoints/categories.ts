@@ -1,15 +1,17 @@
 import { api } from "@/lib/api/client";
-import { ProductSubcategory } from "@/types/product";
-
-const getSubCategories = async (): Promise<{
-  subCategories: ProductSubcategory[];
-}> => {
-  const { data } = await api.get<{
-    subCategories: ProductSubcategory[];
-  }>("/categories/subcategories");
-  return data;
-};
+import { Category } from "@/types/categories";
 
 export const categoriesEndpoints = {
-  getSubCategories,
+  /**
+   *
+   * @returns All primary categories for easy product discovery
+   */
+  async getPrimaryCategories(): Promise<{
+    categories: Category[];
+  }> {
+    const { data } = await api.get<{
+      categories: Category[];
+    }>("/categories/primary");
+    return data;
+  },
 };

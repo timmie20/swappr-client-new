@@ -109,7 +109,7 @@ export default function ResetPassword() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Link href="/auth/sign-in" className="w-full">
+            <Link href="/sign-in" className="w-full">
               <Button className="w-full">Continue to Sign In</Button>
             </Link>
           </CardFooter>
@@ -134,7 +134,7 @@ export default function ResetPassword() {
             </CardDescription>
           </CardHeader>
           <CardFooter className="flex-col gap-2">
-            <Link href="/auth/sign-in" className="w-full">
+            <Link href="/sign-in" className="w-full">
               <Button variant="outline" className="w-full">
                 Back to Sign In
               </Button>
@@ -219,7 +219,7 @@ export default function ResetPassword() {
           <p className="text-muted-foreground text-center text-sm">
             Remember your password?{" "}
             <Link
-              href="/auth/sign-in"
+              href="/sign-in"
               className="hover:text-primary font-medium underline underline-offset-4"
             >
               Sign In
@@ -283,7 +283,7 @@ export default function ResetPassword() {
         <p className="text-muted-foreground text-center text-sm">
           Remember your password?{" "}
           <Link
-            href="/auth/sign-in"
+            href="/sign-in"
             className="hover:text-primary font-medium underline underline-offset-4"
           >
             Sign In

@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useUserAccount } from "@/hooks";
+import { useSession } from "@/lib/auth/session-client";
 import { UserAvatarProfile } from "@/components/user-avatar-profile";
 
 interface ProfileFormData {
@@ -20,7 +20,7 @@ interface ProfileFormData {
 }
 
 export default function Profile() {
-  const { data: user } = useUserAccount();
+  const { user } = useSession();
   const { register, handleSubmit } = useForm<ProfileFormData>({
     values: {
       firstname: user?.firstName || "",

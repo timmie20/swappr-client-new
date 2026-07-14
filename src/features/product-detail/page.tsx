@@ -3,21 +3,13 @@
 import { ProductImageGallery } from "@/components/product-details/product-image-gallery";
 import { ProductInfoPanel } from "@/components/product-details/product-info-panel";
 import { useProduct } from "@/hooks/use-products";
+import { ProductDetailSkeleton } from "./product-detail-skeleton";
 
 export default function ProductDetailPage({ slug }: { slug: string }) {
   const { data, isLoading, isError } = useProduct(slug);
 
   if (isLoading) {
-    return (
-      <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-8 px-4 py-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-[1fr_1.1fr] xl:px-0">
-        <div className="h-96 animate-pulse rounded-lg bg-gray-200" />
-        <div className="space-y-4">
-          <div className="h-8 animate-pulse rounded-lg bg-gray-200" />
-          <div className="h-4 animate-pulse rounded-lg bg-gray-200" />
-          <div className="h-4 animate-pulse rounded-lg bg-gray-200" />
-        </div>
-      </div>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   if (isError || !data?.product) {

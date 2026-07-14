@@ -1,19 +1,19 @@
-/**
- * Token Refresh Provider
- *
- * Client component wrapper that enables token refresh monitoring
- */
+// /**
+//  * Token Refresh Provider
+//  *
+//  * Client component wrapper that enables token refresh monitoring
+//  */
 
-"use client";
+// "use client";
 
-import { useTokenRefresh } from "@/hooks/use-token-refresh";
+// import { useTokenRefresh } from "@/hooks/use-token-refresh";
 
-export function TokenRefreshProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  useTokenRefresh();
+// export function TokenRefreshProvider({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   useTokenRefresh();
 
-  return <>{children}</>;
-}
+//   return <>{children}</>;
+// }

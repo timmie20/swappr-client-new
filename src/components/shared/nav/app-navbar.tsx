@@ -9,7 +9,8 @@ import { Icons } from "../../icons";
 import NavActionButtons from "./action-buttons";
 import { NavigationLinks } from "../nav-items";
 import MobileNavMenu from "./mobile-nav-menu";
-import Logo from "@/components/shared/logo";
+import Image from "next/image";
+import { ASSETS } from "@/constants/assets";
 
 export function AppNavbar() {
   const scrolled = useScrollDetection(10);
@@ -40,7 +41,14 @@ export function AppNavbar() {
               href="/"
               className="ml-14 flex flex-none shrink-0 items-center gap-2 lg:ml-0"
             >
-              <Logo variant="dark" priority />
+              <Image
+                src={ASSETS.LOGO_DARK}
+                alt="Swappr logo"
+                width={120}
+                height={40}
+                priority
+                className="h-auto w-auto cursor-pointer"
+              />
             </Link>
 
             {/* nav links - desktop only */}

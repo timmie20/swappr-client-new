@@ -7,6 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { TypographyH2 } from "@/components/typography/h2";
 import { TypographyMuted } from "@/components/typography/muted";
 import { useOrder } from "@/hooks";
+import { OrderFulfillment } from "./components/order-fulfillment";
 import { OrderItems } from "./components/order-items";
 import { OrderSummary } from "./components/order-summary";
 import { OrderTimeline } from "./components/order-timeline";
@@ -18,12 +19,16 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
 
-export default function OrderDetailPage({ orderId }: { orderId: string }) {
-  const { data, isLoading, isError, error } = useOrder(orderId);
+export default function OrderDetailPage({
+  orderNumber,
+}: {
+  orderNumber: string;
+}) {
+  const { data, isLoading, isError, error } = useOrder(orderNumber);
   const [copied, setCopied] = useState(false);
 
   const handleCopyOrderId = () => {
-    navigator.clipboard.writeText(orderId);
+    navigator.clipboard.writeText(orderNumber);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -123,6 +128,7 @@ export default function OrderDetailPage({ orderId }: { orderId: string }) {
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
           <OrderTimeline order={order} />
+          <OrderFulfillment order={order} />
           <OrderItems items={order.items} />
         </div>
 

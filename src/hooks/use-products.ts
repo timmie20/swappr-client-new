@@ -2,8 +2,6 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  type InfiniteData,
-  type UseInfiniteQueryOptions,
   type UseQueryOptions,
 } from "@tanstack/react-query";
 import { productEndpoints } from "@/endpoints";
@@ -16,6 +14,7 @@ import {
   type ProductDetailResponse,
 } from "@/types/product";
 import type { Product } from "@/features/feed/types";
+import { useMemo } from "react";
 
 export function mapApiProductToFeedProduct(product: ProductDetail): Product {
   const variants = product.variants ?? [];
@@ -58,13 +57,18 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
     subCategory: product.subcategory ? product.subcategory.name : undefined,
     seller: {
       id: product.vendor?.id ?? "",
-      username: product.vendor?.business_name ?? "vendor",
+      username:
+        product.vendor.trading_name ??
+        product.vendor?.business_name ??
+        "vendor",
       rating: Number(product.vendor?.rating ?? 0),
       verified: !!product.vendor?.is_verified,
       totalSales: 0,
     },
     listed_at: product.created_at,
-    specs: product.specifications,
+    specs: Object.fromEntries(
+      (product.specifications ?? []).map((spec) => [spec.key, spec.value]),
+    ),
     isSoldOut: product.total_stock <= 0 && product.status === "out_of_stock",
   };
 }
@@ -89,36 +93,41 @@ export function useProducts(
 
 export function useInfiniteProducts(
   params?: Omit<PaginationParams, "page">,
-  options?: Omit<
-    UseInfiniteQueryOptions<
-      ProductListResponse,
-      Error,
-      InfiniteData<ProductListResponse>,
-      readonly ["products", "list", PaginationParams?],
-      number
-    >,
-    "queryKey" | "queryFn" | "initialPageParam" | "getNextPageParam"
-  >,
+  options?: Parameters<typeof useInfiniteQuery<ProductListResponse>>[0],
 ) {
-  return useInfiniteQuery({
+  const query = useInfiniteQuery({
     queryKey: queryKeys.products.list(params),
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       productEndpoints.getAll({
         ...params,
-        page: pageParam,
+        // pageParam is typed unknown because the options param widens the
+        // TPageParam generic; initialPageParam and getNextPageParam only
+        // ever produce numbers
+        page: pageParam as number,
         limit: params?.limit ?? 20,
       }),
-
     getNextPageParam: (lastPage) => {
-      const { page, total } = lastPage;
-      const totalPages = Math.ceil(total / lastPage.limit);
-      return page < totalPages ? page + 1 : undefined;
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
     },
-    staleTime: 60_000, // 1 minute
+    staleTime: 60_000,
     refetchOnReconnect: true,
     ...options,
   });
+
+  const products = useMemo(
+    () =>
+      query.data?.pages.flatMap((page) =>
+        page.products.map(mapApiProductToFeedProduct),
+      ) ?? [],
+    [query.data],
+  );
+
+  return {
+    ...query,
+    products,
+  };
 }
 
 export function useProductSearch(

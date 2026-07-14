@@ -14,7 +14,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import Logo from "../logo";
+import Image from "next/image";
+import { ASSETS } from "@/constants/assets";
 
 type MobileNavMenuProps = {
   open: boolean;
@@ -145,7 +146,14 @@ export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
       >
         <SheetHeader className="border-border border-b p-5">
           <SheetTitle>
-            <Logo variant="dark" priority />
+            <Image
+              src={ASSETS.LOGO_DARK}
+              alt="Swappr logo"
+              width={120}
+              height={40}
+              priority
+              className="h-auto w-auto cursor-pointer"
+            />
           </SheetTitle>
           <SheetDescription className="sr-only">
             Mobile navigation menu
@@ -205,7 +213,7 @@ export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
 
         <div className="border-border border-t p-5">
           <Button asChild className="w-full">
-            <Link href="/auth/sign-in" onClick={handleNavigate}>
+            <Link href="/sign-in" onClick={handleNavigate}>
               <Icons.user size={18} />
               Sign In
             </Link>

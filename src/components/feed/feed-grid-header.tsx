@@ -10,21 +10,20 @@ interface FeedGridHeaderProps {
 }
 
 export function FeedGridHeader({ resultCount, loading }: FeedGridHeaderProps) {
-  const activeSubCategoryId = useFeedStore((s) => s.activeSubCategoryId);
-  const activeSubCategoryLabel = useFeedStore((s) => s.activeSubCategoryLabel);
+  const activeCategory = useFeedStore((s) => s.activeCategory);
 
   return (
     <div className="mb-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h2 className="font-switzer text-xl font-bold text-[#1A1A1A] sm:text-2xl">
-          {activeSubCategoryId === "" ? "All Listings" : activeSubCategoryLabel}
+          {activeCategory.id === "" ? "All Listings" : activeCategory.label}
         </h2>
 
         <p className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
           {loading ? (
             <span className="flex items-center gap-1">
               <Spinner />
-              loading...
+              Loading...
             </span>
           ) : (
             `${resultCount <= 0 ? "No" : resultCount} listing${resultCount !== 1 ? "s" : ""} available`

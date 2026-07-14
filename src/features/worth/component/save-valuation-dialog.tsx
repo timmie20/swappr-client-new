@@ -50,7 +50,7 @@ export function SaveValuationDialog({
           <Button
             type="button"
             onClick={() => {
-              router.push("/auth/sign-in");
+              router.push("/sign-in");
             }}
           >
             Save Now

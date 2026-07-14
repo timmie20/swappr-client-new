@@ -5,10 +5,12 @@ import { ErrorState } from "@/components/error-state";
 import { Spinner } from "@/components/ui/spinner";
 import { useOrder } from "@/hooks";
 
-export default function CheckoutById({ id }: { id: string }) {
-  console.log("CheckoutById received id:", id); // Debug log to check the received id
-
-  const { data: order, isLoading, isError, error } = useOrder(id);
+export default function CheckoutById({
+  orderNumber,
+}: {
+  orderNumber: string;
+}) {
+  const { data: order, isLoading, isError, error } = useOrder(orderNumber);
 
   if (isLoading) {
     return (

@@ -2,7 +2,6 @@ import PageContainer from "@/components/layout/page-container";
 import { FeedPage } from "@/features/feed";
 import { queryKeys } from "@/lib/api/query-keys";
 import { getProducts } from "@/server-actions/product";
-import { getSubCategories } from "@/server-actions/category";
 import { getCart } from "@/server-actions/cart";
 
 import {
@@ -10,6 +9,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { getPrimaryCategories } from "@/server-actions/category";
 
 export const revalidate = 60;
 
@@ -18,23 +18,25 @@ export default async function page() {
 
   await queryClient.prefetchQuery({
     queryKey: queryKeys.categories.list(),
-    queryFn: () => getSubCategories(),
+    queryFn: () => getPrimaryCategories(),
   });
 
   await queryClient.prefetchQuery({
     queryKey: queryKeys.cart.lists(),
-    queryFn: () => getCart(),
+    // must match the shape useGetCart caches under this key: CartItem[]
+    queryFn: async () => (await getCart()).data.items ?? [],
   });
 
-  await queryClient.prefetchQuery({
-    queryKey: queryKeys.products.list({ page: 1, limit: 20 }),
-    queryFn: () =>
-      getProducts({
-        page: 1,
-        limit: 20,
-      }),
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: queryKeys.products.list({ limit: 20 }), // no page — matches hook's key shape
+    queryFn: ({ pageParam }) => getProducts({ page: pageParam, limit: 20 }),
+    initialPageParam: 1,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getNextPageParam: (lastPage: any) => {
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
+    },
   });
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <PageContainer>

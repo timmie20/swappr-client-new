@@ -5,7 +5,7 @@ import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
 import { Spinner } from "../ui/spinner";
 import { useCart } from "@/features/cart/hooks/use-cart";
-import { useIsAuthenticated } from "@/hooks/use-access-token";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ProductActionsProps {
@@ -25,8 +25,6 @@ export function ProductActions({
   product,
   title,
 }: ProductActionsProps) {
-  // const [bookmarked, setBookmarked] = useState(false);
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -50,11 +48,11 @@ export function ProductActions({
   const needsVariantSelection = hasVariants && !activeVariant;
 
   const handleAddToCart = () => {
+    // null = session still loading; ignore the click rather than
+    // bouncing a possibly logged-in user to sign-in
+    if (isLoggedIn === null) return;
     if (!isLoggedIn) {
-      sessionStorage.setItem("auth_redirect", currentPath);
-
-      router.replace("/auth/sign-in");
-
+      router.replace(`/sign-in?redirect=${encodeURIComponent(currentPath)}`);
       return;
     }
     // For products with variants, require variant selection
@@ -122,32 +120,6 @@ export function ProductActions({
             Swap Device
           </Button>
         )}
-        {/* <Button
-          variant="outline"
-          size="icon-lg"
-          onClick={() => setBookmarked((b) => !b)}
-          aria-label={bookmarked ? "Remove bookmark" : "Bookmark product"}
-        >
-          <AnimatePresence mode="wait">
-            {bookmarked ? (
-              <motion.span
-                key="filled"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-              >
-                <Icons.bookmarkFilled size={20} className="text-primary" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="empty"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-              >
-                <Icons.bookmark size={20} />
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </Button> */}
       </div>
 
       {needsVariantSelection && (
