@@ -56,12 +56,12 @@ export function ProductsPage() {
       <TypographyP className="text-muted-foreground mx-auto max-w-2xl text-center text-balance">
         Browse phones, laptops, wearables and accessories from trusted vendors
         across Nigeria. Use the filters to zero in on the brand, budget or
-        condition that&apos;s right for you — great deals are always in
-        stock, and most listings are open to a swap if you&apos;d rather
-        trade than pay.
+        condition that&apos;s right for you — great deals are always in stock,
+        and most listings are open to a swap if you&apos;d rather trade than
+        pay.
       </TypographyP>
 
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+      {/* <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         {VALUE_PROPS.map((prop) => (
           <Badge
             key={prop.label}
@@ -72,7 +72,7 @@ export function ProductsPage() {
             {prop.label}
           </Badge>
         ))}
-      </div>
+      </div> */}
 
       <div className="mt-10 flex flex-col gap-6 lg:flex-row">
         <ProductFilterSidebar facets={facets} loading={isLoading} />

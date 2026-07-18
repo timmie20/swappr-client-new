@@ -13,6 +13,7 @@ export const PUBLIC_PAGE_ROUTES = [
   "/check-worth", // All check-worth pages (main, model detail, questionnaire, results)
   "/vendor", // Product listing and details (public)
   "/products",
+  "/collections",
   "/sign-in",
   "/sign-up",
   "/reset-password",
@@ -32,6 +33,7 @@ export const PUBLIC_API_ENDPOINTS = [
   "/auth/reset-password",
   "/auth/verify-email",
   "/products", // Public product listing
+  "/collections", // Public collection listing and products
   "/questions", // Questions for check-worth flow (public)
   "/brands", // Brand listings (public)
   "/models", // Model listings (public)

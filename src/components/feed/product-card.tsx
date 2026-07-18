@@ -14,6 +14,7 @@ import { VendorDialog } from "./vendor-dialog";
 import { formatStorage } from "@/lib/utils/product-helpers";
 import { TypographyH3 } from "../typography/h3";
 import { useIsAuthenticated } from "@/lib/auth/session-client";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 interface ProductCardProps {
   product: Product;
@@ -38,6 +39,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [imgHovered, setImgHovered] = useState(false);
 
   const isAuth = useIsAuthenticated();
+  const openSignIn = useAuthModalStore((s) => s.open);
 
   const handleNavigate = () => {
     router.push(`/products/${product.slug}`);
@@ -49,8 +51,7 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
 
     if (!isAuth) {
-      const currentUrl = window.location.href;
-      router.push(`/auth/sign-in?redirect=${encodeURIComponent(currentUrl)}`);
+      openSignIn(window.location.pathname + window.location.search);
       return;
     }
 
@@ -58,24 +59,6 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
-
-  // const handleAddToCart = () => {
-  //   if (product.isSoldOut) return;
-
-  //   addItem({
-  //     id: `${product.id}-base`,
-  //     productId: product.id,
-  //     variantId: null,
-  //     title: product.title || product.name,
-  //     price: product.price,
-  //     quantity: 1,
-  //     image: product.imageUrl || product.images?.[0] || "",
-  //     condition: mapCondition(product.condition),
-  //   });
-
-  //   setIsAdded(true);
-  //   setTimeout(() => setIsAdded(false), 2000);
-  // };
 
   return (
     <motion.article
@@ -108,7 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Sold out overlay */}
         {product.isSoldOut && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-            <span className="rounded-lg bg-white/90 px-4 py-2 text-sm font-bold text-[#6B7280] shadow">
+            <span className="text-muted-foreground rounded-full bg-white/90 px-4 py-2 text-sm font-bold shadow">
               SOLD OUT
             </span>
           </div>

@@ -6,6 +6,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { SignInModal } from "@/components/auth/sign-in-modal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -144,6 +145,7 @@ export default function RootLayout({
           <QueryProvider>
             <main className="relative z-10">{children}</main>
             <Toaster position="top-center" />
+            <SignInModal />
           </QueryProvider>
         </NuqsAdapter>
       </body>

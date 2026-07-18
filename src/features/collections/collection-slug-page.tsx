@@ -48,7 +48,7 @@ export function CollectionSlug({ slug }: CollectionViewProps) {
     <section className="mx-auto w-full max-w-screen-2xl px-4 py-6 lg:px-8">
       <TypographyH1 className="text-center">{collection?.name}</TypographyH1>
 
-      <TypographyP className="text-center text-balance">
+      <TypographyP className="text-muted-foreground mx-auto max-w-2xl text-center text-balance">
         {collection?.description}
       </TypographyP>
 

@@ -13,24 +13,24 @@ import { GoogleSignUpButton } from "./google-oauth";
 import { Icons } from "../icons";
 import { cn } from "@/lib/utils";
 import { ASSETS } from "@/constants/assets";
-
-type SignInModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 const PERKS = [
   { icon: Icons.exchange, label: "Swap deals" },
   { icon: Icons.shieldCheck, label: "Verified vendors" },
-  { icon: Icons.package, label: "Order tracking" },
+  { icon: Icons.product, label: "Quality products" },
 ] as const;
 
-export default function SignInModal({ open, onOpenChange }: SignInModalProps) {
-  // Send users back to wherever they opened the modal from after OAuth
+export function SignInModal() {
+  // Send users back to wherever they opened the modal from after OAuth.
+  // Falls back to the current pathname if the trigger didn't set one explicitly.
   const pathname = usePathname();
+  const isOpen = useAuthModalStore((s) => s.isOpen);
+  const redirectTo = useAuthModalStore((s) => s.redirectTo);
+  const close = useAuthModalStore((s) => s.close);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(open) => (open ? undefined : close())}>
       <DialogContent className="gap-0 overflow-hidden p-0">
         {/* Brand header — same grid motif as the full sign-in page */}
         <div className="relative flex h-32 items-center justify-center overflow-hidden border-b bg-gradient-to-b from-[#3b82fd]/10 via-[#3b82fd]/5 to-transparent">
@@ -59,12 +59,12 @@ export default function SignInModal({ open, onOpenChange }: SignInModalProps) {
             </DialogTitle>
             <DialogDescription className="text-balance">
               Your next phone doesn&apos;t have to be new. Buy or swap with
-              vendors who are actually verified — because &quot;trust me
-              bro&quot; isn&apos;t a business model.
+              vendors who are actually verified because &quot;trust me bro&quot;
+              isn&apos;t a business model.
             </DialogDescription>
           </div>
 
-          <GoogleSignUpButton redirect={pathname} />
+          <GoogleSignUpButton redirect={redirectTo ?? pathname} />
 
           <div className="text-muted-foreground flex items-center justify-center gap-5 text-xs">
             {PERKS.map(({ icon: Icon, label }) => (
