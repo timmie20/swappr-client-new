@@ -8,7 +8,7 @@ import type { Order } from "@/types/orders";
 import { useExpiryCountdown } from "@/hooks/use-expiry-countdown";
 import { CountdownTimer } from "./count-down-timer";
 import { OrderAccordion } from "./order-accordian";
-import { PayNowButton, PaystackBadge } from "./payment-actions";
+import { PayNowButton } from "./payment-actions";
 import Nav from "@/components/shared/nav/checkout-nav";
 
 interface OrderCheckoutProps {
