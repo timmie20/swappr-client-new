@@ -17,8 +17,8 @@ interface FeedStore {
 
   // Category
 
-  activeCategory: { id: string; label: string };
-  setActiveCategory: (next: { id: string; label: string }) => void;
+  activeCategory: { slug: string; label: string };
+  setActiveCategory: (next: { slug: string; label: string }) => void;
 
   // Swap offer
   swapOfferProduct: Product | null;
@@ -47,7 +47,7 @@ export const useFeedStore = create<FeedStore>((set) => ({
 
   // Category
 
-  activeCategory: { id: "", label: "All" },
+  activeCategory: { slug: "", label: "All" },
   setActiveCategory: (next) => set({ activeCategory: next }),
 
   // Swap offer

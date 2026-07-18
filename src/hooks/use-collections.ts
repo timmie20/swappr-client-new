@@ -1,7 +1,11 @@
 import { collectionsEndpoints } from "@/endpoints/collections";
 import { queryKeys } from "@/lib/api/query-keys";
 import { CollectionsQueryParams } from "@/types/collections";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 
 import { useMemo } from "react";
 import { mapApiProductToFeedProduct } from "./use-products";
@@ -38,9 +42,12 @@ export function useInfiniteCollectionProducts(
 
     staleTime: 60_000,
     refetchOnReconnect: true,
+    placeholderData: keepPreviousData,
   });
 
   const collection = query.data?.pages[0]?.collection;
+  const total = query.data?.pages[0]?.total;
+  const facets = query.data?.pages[query.data.pages.length - 1]?.facets;
 
   const products = useMemo(
     () =>
@@ -54,5 +61,7 @@ export function useInfiniteCollectionProducts(
     ...query,
     collection,
     products,
+    total,
+    facets,
   };
 }

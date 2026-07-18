@@ -10,6 +10,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getPrimaryCategories } from "@/server-actions/category";
+import { getCollections } from "@/server-actions/collections";
 
 export const revalidate = 60;
 
@@ -19,6 +20,12 @@ export default async function page() {
   await queryClient.prefetchQuery({
     queryKey: queryKeys.categories.list(),
     queryFn: () => getPrimaryCategories(),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.collections.list(),
+    queryFn: () => getCollections(),
+    staleTime: Infinity,
   });
 
   await queryClient.prefetchQuery({

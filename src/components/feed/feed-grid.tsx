@@ -8,6 +8,7 @@ import { useInfiniteProducts } from "@/hooks";
 import { ProductMode } from "@/types/product";
 import { Button } from "../ui/button";
 import { Icons } from "../icons";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 type Props = {
@@ -23,14 +24,21 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
   const {
     products,
     isLoading,
+    isFetching,
     isError,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteProducts({
     limit,
-    ...(activeCategory?.id ? { category_id: activeCategory.id } : undefined),
+    ...(activeCategory?.slug
+      ? { categories: [activeCategory.slug] }
+      : undefined),
   });
+
+  // isLoading only fires on the very first request - keepPreviousData means
+  // filter changes refetch in the background without wiping the grid.
+  const isRefetching = isFetching && !isLoading && !isFetchingNextPage;
 
   const filteredProducts = useMemo(() => {
     if (feedMode === ProductMode.SALE_SWAP) {
@@ -50,18 +58,23 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
       <FeedGridHeader
         resultCount={filteredProducts.length}
         loading={isLoading}
+        isRefetching={isRefetching}
       />
 
-      <FeedGridContent
-        products={filteredProducts}
-        visibleCount={filteredProducts.length}
-        loading={isLoading}
-        isError={isError}
-        canLoadMore={canLoadMore}
-        hasNextPage={hasNextPage}
-        loadingMore={isFetchingNextPage}
-        onLoadMore={fetchNextPage}
-      />
+      <div
+        className={cn("w-full transition-opacity", isRefetching && "opacity-60")}
+      >
+        <FeedGridContent
+          products={filteredProducts}
+          visibleCount={filteredProducts.length}
+          loading={isLoading}
+          isError={isError}
+          canLoadMore={canLoadMore}
+          hasNextPage={hasNextPage}
+          loadingMore={isFetchingNextPage}
+          onLoadMore={fetchNextPage}
+        />
+      </div>
 
       {!canLoadMore && (
         <Link href={navigateTo || "#"} className="w-max">

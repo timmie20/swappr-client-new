@@ -12,26 +12,28 @@ export function CategoryFilterBar() {
   const { activeCategory, setActiveCategory } = useFeedStore();
 
   const categories =
-    data?.categories?.map((sub) => ({
-      label: sub.name,
-      value: sub.id,
-    })) ?? [];
+    data?.categories
+      ?.filter((sub) => sub.slug)
+      .map((sub) => ({
+        label: sub.name,
+        value: sub.slug as string,
+      })) ?? [];
 
   const categoriesToDisplay = [{ label: "All", value: "" }, ...categories];
 
   return (
-    <div className="top-16 z-40 w-full py-3 sm:flex sm:items-center sm:justify-center">
+    <div className="top-16 z-40 w-full min-w-0 py-3">
       <div
         ref={scrollRef}
-        className="no-scrollbar flex items-center gap-4 overflow-x-auto px-4"
+        className="no-scrollbar flex w-full min-w-0 items-center gap-4 overflow-x-auto px-4 sm:justify-center"
       >
         {categoriesToDisplay.map((cat) => {
-          const isActive = activeCategory?.id === cat.value;
+          const isActive = activeCategory?.slug === cat.value;
           return (
             <Button
               key={cat.value || "all"}
               onClick={() =>
-                setActiveCategory({ id: cat.value, label: cat.label })
+                setActiveCategory({ slug: cat.value, label: cat.label })
               }
               variant={isActive ? "default" : "outline"}
               className="shrink-0 cursor-pointer whitespace-nowrap transition-all duration-200"

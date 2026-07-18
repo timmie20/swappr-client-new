@@ -19,8 +19,18 @@ export interface User {
 // ============================================
 
 export interface PaginationParams {
+  /** Brand id - used by model/valuation listings, unrelated to product facet filtering. */
   brand_id?: string;
-  subcategory_id?: string;
+  /** Product facet filters (GET /products, GET /collections/:slug/products): */
+  /** Category slug(s) - the facet's `filter_value`, not its id. */
+  categories?: string[];
+  /** Subcategory slug(s) - the facet's `filter_value`, not its id. */
+  subcategories?: string[];
+  /** Brand name (single-select) - the facet's `filter_value`, not its id. */
+  brand?: string;
+  condition?: string;
+  min_price?: number;
+  max_price?: number;
   page?: number;
   limit?: number;
   search?: string;

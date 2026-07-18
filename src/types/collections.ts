@@ -1,4 +1,5 @@
-import { ProductDetail } from "./product";
+import type { FacetFilterParams } from "@/lib/api/facet-params";
+import { ProductDetail, ProductFacets } from "./product";
 
 export interface Collection {
   id: string;
@@ -24,6 +25,7 @@ export interface CollectionProducts {
   total: number;
   page: number;
   limit: number;
+  facets?: ProductFacets;
 }
 
 export type CollectionsQueryParams = {
@@ -31,4 +33,4 @@ export type CollectionsQueryParams = {
   limit?: number;
   sort_by?: string;
   sort_order?: "ASC" | "DESC";
-};
+} & FacetFilterParams;

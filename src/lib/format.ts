@@ -112,7 +112,7 @@ function formatDayRanges(days: string[]): string {
     .join(", ");
 }
 
-function formatTime12h(time: string): string {
+export function formatTime12h(time: string): string {
   const [hourStr, minuteStr = "00"] = time.split(":");
   const hour = parseInt(hourStr, 10);
 
@@ -122,6 +122,10 @@ function formatTime12h(time: string): string {
   const hour12 = hour % 12 === 0 ? 12 : hour % 12;
 
   return `${hour12}:${minuteStr.padStart(2, "0")} ${period}`;
+}
+
+export function formatTimeRange(from: string, to: string): string {
+  return `${formatTime12h(from)} – ${formatTime12h(to)}`;
 }
 
 export function formatOperatingHours(
@@ -134,7 +138,7 @@ export function formatOperatingHours(
   const dayRanges = formatDayRanges(hours.days);
   if (!dayRanges) return null;
 
-  return `${dayRanges}, ${formatTime12h(hours.open_time)} – ${formatTime12h(hours.close_time)}`;
+  return `${dayRanges}, ${formatTimeRange(hours.open_time, hours.close_time)}`;
 }
 
 export function formatRelativeDate(date: string | Date): string {

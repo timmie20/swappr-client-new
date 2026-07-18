@@ -8,3 +8,11 @@ export function usePrimaryCategories() {
     queryFn: () => categoriesEndpoints.getPrimaryCategories(),
   });
 }
+
+export function useCategories() {
+  return useQuery({
+    queryKey: queryKeys.categories.tree(),
+    queryFn: () => categoriesEndpoints.getCategories(),
+    staleTime: Infinity,
+  });
+}

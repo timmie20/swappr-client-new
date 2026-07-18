@@ -142,6 +142,8 @@ export const queryKeys = {
     lists: () => [...queryKeys.categories.all, "list"] as const,
     list: (params?: PaginationParams) =>
       [...queryKeys.categories.lists(), params] as const,
+    trees: () => [...queryKeys.categories.all, "tree"] as const,
+    tree: () => [...queryKeys.categories.trees()] as const,
     details: () => [...queryKeys.categories.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.categories.details(), id] as const,
   },

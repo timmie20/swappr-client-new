@@ -1,18 +1,18 @@
 import { TrustSignalStrip } from "@/components/feed/trust-signal-strip";
-import { CategoryFilterBar } from "@/components/feed/category-filter-bar";
-import { DealOfWeekSection } from "@/components/feed/deal-of-week-section";
-import { FeedGrid } from "@/components/feed/feed-grid";
+// import { DealOfWeekSection } from "@/components/feed/deal-of-week-section"; // not implemented yet
 import { SwapOfferDrawer } from "@/components/feed/swap-offer-drawer";
 import HeroCarousel from "@/components/feed/hero-carousel";
+import { CollectionsSection } from "@/components/feed/collections-section";
+import { MarketplaceListingsSection } from "@/components/feed/marketplace-listings-section";
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-[#F8F9FA]">
+    <div className="min-h-screen">
       <HeroCarousel />
       <TrustSignalStrip />
-      <DealOfWeekSection />
-      <CategoryFilterBar />
-      <FeedGrid limit={8} canLoadMore={false} navigateTo="/collections" />
+      <CollectionsSection />
+      {/* <DealOfWeekSection /> */}
+      <MarketplaceListingsSection />
       <SwapOfferDrawer />
     </div>
   );

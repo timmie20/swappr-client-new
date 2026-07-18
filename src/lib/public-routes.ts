@@ -35,6 +35,7 @@ export const PUBLIC_API_ENDPOINTS = [
   "/questions", // Questions for check-worth flow (public)
   "/brands", // Brand listings (public)
   "/models", // Model listings (public)
+  "/categories", // Category listings (public, also covers /categories/primary)
 ] as const;
 
 /**
