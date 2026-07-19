@@ -1,26 +1,29 @@
 "use client";
 
+import { IconRefresh, IconShieldCheck, IconTag } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { ProductFilterSidebar } from "@/components/product-filter-sidebar";
 import { FeedGridContent } from "@/components/feed/feed-grid-content";
 import { TypographyH1 } from "@/components/typography/h1";
-import { TypographyH3 } from "@/components/typography/h3";
+import { TypographyP } from "@/components/typography/p";
+import { Badge } from "@/components/ui/badge";
 // import { FeedModeToggle } from "@/components/feed/feed-mode-toggle"; // deprecated for now
 import { Spinner } from "@/components/ui/spinner";
-import { useInfiniteCollectionProducts } from "@/hooks/use-collections";
+import { useInfiniteProducts } from "@/hooks/use-products";
 import { useProductFilters } from "@/hooks/use-product-filters";
-import { TypographyP } from "@/components/typography/p";
+import { TypographyH3 } from "@/components/typography/h3";
 
-interface CollectionViewProps {
-  slug: string;
-}
+const VALUE_PROPS = [
+  { icon: IconShieldCheck, label: "90-point inspected & vendor-verified" },
+  { icon: IconTag, label: "Up to 70% off retail" },
+  { icon: IconRefresh, label: "Swap instead of buy" },
+];
 
-export function CollectionSlug({ slug }: CollectionViewProps) {
+export function ProductsPage() {
   const { categories, subcategories, brand, condition, minPrice, maxPrice } =
     useProductFilters();
 
   const {
-    collection,
     products,
     facets,
     total,
@@ -30,7 +33,7 @@ export function CollectionSlug({ slug }: CollectionViewProps) {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteCollectionProducts(slug, {
+  } = useInfiniteProducts({
     limit: 20,
     categories,
     subcategories,
@@ -46,11 +49,30 @@ export function CollectionSlug({ slug }: CollectionViewProps) {
 
   return (
     <section className="mx-auto w-full max-w-screen-2xl px-4 py-6 lg:px-8">
-      <TypographyH1 className="text-center">{collection?.name}</TypographyH1>
+      <TypographyH1 className="text-center">
+        Every Device, All in One Place
+      </TypographyH1>
 
       <TypographyP className="text-muted-foreground mx-auto max-w-2xl text-center text-balance">
-        {collection?.description}
+        Browse phones, laptops, wearables and accessories from trusted vendors
+        across Nigeria. Use the filters to zero in on the brand, budget or
+        condition that&apos;s right for you — great deals are always in stock,
+        and most listings are open to a swap if you&apos;d rather trade than
+        pay.
       </TypographyP>
+
+      {/* <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        {VALUE_PROPS.map((prop) => (
+          <Badge
+            key={prop.label}
+            variant="outline"
+            className="gap-1.5 px-3 py-1 text-[13px]"
+          >
+            <prop.icon data-icon="inline-start" className="text-primary" />
+            {prop.label}
+          </Badge>
+        ))}
+      </div> */}
 
       <div className="mt-10 flex flex-col gap-6 lg:flex-row">
         <ProductFilterSidebar facets={facets} loading={isLoading} />
@@ -58,7 +80,7 @@ export function CollectionSlug({ slug }: CollectionViewProps) {
         {/* Product grid */}
         <div className="flex flex-1 flex-col items-end gap-6">
           <div className="flex w-full items-center justify-between gap-2">
-            <TypographyH3 className="text-muted-foreground text-xl">
+            <TypographyH3 className="text-muted-foreground text-lg">
               {total != null &&
                 `${total} available listing${total !== 1 ? "s" : ""}`}
             </TypographyH3>

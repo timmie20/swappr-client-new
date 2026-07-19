@@ -30,7 +30,7 @@ export function OrderAccordion({ items, totalAmount }: OrderAccordionProps) {
               <span className="text-sm font-semibold tracking-tight text-slate-800">
                 Your Orders
               </span>
-              <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+              <span className="text-muted-foreground inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium">
                 {items.length} {items.length === 1 ? "item" : "items"}
               </span>
             </div>
@@ -42,7 +42,7 @@ export function OrderAccordion({ items, totalAmount }: OrderAccordionProps) {
               </span>
               <ChevronDown
                 size={15}
-                className="text-slate-400 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                className="text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
               />
             </div>
           </div>
@@ -58,7 +58,7 @@ export function OrderAccordion({ items, totalAmount }: OrderAccordionProps) {
 
           {/* total footer row */}
           <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50 px-5 py-3.5">
-            <span className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+            <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
               Total
             </span>
             <span className="text-sm font-bold text-slate-900">
@@ -84,18 +84,20 @@ function OrderItemRow({ item }: { item: OrderItem }) {
         <p className="truncate text-sm leading-snug font-medium text-slate-800">
           {item.product_name}
         </p>
-        <p className="text-[11px] text-slate-400">
+        <p className="text-muted-foreground text-xs">
           Qty&nbsp;
           <span className="font-semibold text-slate-600">{item.quantity}</span>
           {meta.length > 0 && (
-            <span className="ml-1 text-slate-400">· {meta.join(" · ")}</span>
+            <span className="text-muted-foreground ml-1">
+              · {meta.join(" · ")}
+            </span>
           )}
         </p>
       </div>
 
       {/* pricing */}
       <div className="shrink-0 space-y-0.5 text-right">
-        <p className="text-[11px] text-slate-400">
+        <p className="text-muted-foreground text-xs">
           {formatNaira(Number(item.unit_price))} × {item.quantity}
         </p>
         <p className="text-sm font-semibold text-slate-800">

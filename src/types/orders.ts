@@ -49,7 +49,8 @@ export interface OrderFulfillment {
   fulfillment_type: FulfillmentType;
   pickup_location: string | null;
   pickup_date: string | null;
-  pickup_time_slot: string | null;
+  pickup_time_from: string | null;
+  pickup_time_to: string | null;
   pickup_code: string | null;
   rider_name: string | null;
   rider_phone: string | null;

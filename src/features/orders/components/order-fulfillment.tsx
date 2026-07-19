@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { deslug, formatDate, formatNaira } from "@/lib/format";
+import { deslug, formatDate, formatNaira, formatTimeRange } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Order } from "@/types/orders";
 
@@ -85,8 +85,10 @@ export function OrderFulfillment({ order }: { order: Order }) {
                 icon={<Icons.clock />}
                 label="Pickup date & time slot"
                 value={
-                  fulfillment?.pickup_date && fulfillment?.pickup_time_slot
-                    ? `${formatDate(fulfillment.pickup_date)} · ${fulfillment.pickup_time_slot}`
+                  fulfillment?.pickup_date &&
+                  fulfillment?.pickup_time_from &&
+                  fulfillment?.pickup_time_to
+                    ? `${formatDate(fulfillment.pickup_date)} · ${formatTimeRange(fulfillment.pickup_time_from, fulfillment.pickup_time_to)}`
                     : null
                 }
               />

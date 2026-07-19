@@ -6,7 +6,7 @@ import { Icons } from "../icons";
 import { Spinner } from "../ui/spinner";
 import { useCart } from "@/features/cart/hooks/use-cart";
 import { useIsAuthenticated } from "@/lib/auth/session-client";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 interface ProductActionsProps {
   activeVariant: ProductVariant | null;
@@ -25,17 +25,10 @@ export function ProductActions({
   product,
   title,
 }: ProductActionsProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const { addToCart, isAddingToCart } = useCart();
 
   const isLoggedIn = useIsAuthenticated();
-
-  const currentPath = `${pathname}${
-    searchParams.toString() ? `?${searchParams.toString()}` : ""
-  }`;
+  const openSignIn = useAuthModalStore((s) => s.open);
 
   // Determine stock status based on whether product has variants
   const outOfStock = hasVariants
@@ -52,7 +45,7 @@ export function ProductActions({
     // bouncing a possibly logged-in user to sign-in
     if (isLoggedIn === null) return;
     if (!isLoggedIn) {
-      router.replace(`/sign-in?redirect=${encodeURIComponent(currentPath)}`);
+      openSignIn(window.location.pathname + window.location.search);
       return;
     }
     // For products with variants, require variant selection

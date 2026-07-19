@@ -14,7 +14,8 @@ import {
   type ProductDetailResponse,
 } from "@/types/product";
 import type { Product } from "@/features/feed/types";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import debounce from "lodash/debounce";
 
 export function mapApiProductToFeedProduct(product: ProductDetail): Product {
   const variants = product.variants ?? [];
@@ -113,6 +114,7 @@ export function useInfiniteProducts(
     },
     staleTime: 60_000,
     refetchOnReconnect: true,
+    placeholderData: keepPreviousData,
     ...options,
   });
 
@@ -124,9 +126,14 @@ export function useInfiniteProducts(
     [query.data],
   );
 
+  const facets = query.data?.pages[query.data.pages.length - 1]?.facets;
+  const total = query.data?.pages[0]?.total;
+
   return {
     ...query,
     products,
+    facets,
+    total,
   };
 }
 
@@ -147,6 +154,51 @@ export function useProductSearch(
     select: (data) => data.products.map(mapApiProductToFeedProduct), // map to feed product shape
     ...options,
   });
+}
+
+/**
+ * Debounced product search input state, shared by every search surface
+ * (command dialog, inline navbar search, ...) so the debounce/reset
+ * behavior stays in one place.
+ */
+export function useDebouncedProductSearch() {
+  const [inputValue, setInputValueState] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  // Stable debounced setter across renders (lodash keeps internal timer state)
+  const debouncedSetQueryRef = useRef(
+    debounce((value: string) => setDebouncedQuery(value), 500),
+  );
+
+  useEffect(() => {
+    const debounced = debouncedSetQueryRef.current;
+    return () => {
+      debounced.cancel();
+    };
+  }, []);
+
+  const setInputValue = useCallback((value: string) => {
+    setInputValueState(value);
+
+    const trimmed = value.trim();
+    if (trimmed.length < 2) {
+      debouncedSetQueryRef.current.cancel();
+      setDebouncedQuery(trimmed);
+      return;
+    }
+
+    debouncedSetQueryRef.current(trimmed);
+  }, []);
+
+  const reset = useCallback(() => {
+    debouncedSetQueryRef.current.cancel();
+    setInputValueState("");
+    setDebouncedQuery("");
+  }, []);
+
+  const { data: results = [], isLoading } = useProductSearch(debouncedQuery);
+
+  return { inputValue, setInputValue, results, isLoading, reset };
 }
 
 export function useProduct(

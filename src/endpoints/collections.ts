@@ -1,4 +1,5 @@
 import { api } from "@/lib/api/client";
+import { serializeFacetParams } from "@/lib/api/facet-params";
 import {
   CollectionListResponse,
   CollectionsQueryParams,
@@ -22,7 +23,7 @@ export const collectionsEndpoints = {
     const { data } = await api.get<CollectionProducts>(
       `/collections/${slug}/products`,
       {
-        params,
+        params: serializeFacetParams(params),
       },
     );
 

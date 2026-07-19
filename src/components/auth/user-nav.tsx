@@ -1,16 +1,18 @@
 "use client";
-import { useState } from "react";
 import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import { useSession } from "@/lib/auth/session-client";
 import { UserNavMenu } from "./user-nav-menu";
-import SignInModal from "./sign-in-modal";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 export function UserNav() {
   const { user, isLoading } = useSession();
-  const [signInOpen, setSignInOpen] = useState(false);
+  const openSignIn = useAuthModalStore((s) => s.open);
 
   if (isLoading) return null;
+
+  const handleOpenSignIn = () =>
+    openSignIn(window.location.pathname + window.location.search);
 
   if (!user) {
     return (
@@ -18,19 +20,14 @@ export function UserNav() {
         <Button
           variant="outline"
           className="hidden shrink-0 cursor-pointer lg:inline-flex"
-          onClick={() => setSignInOpen(true)}
+          onClick={handleOpenSignIn}
         >
           <Icons.user size={16} />
           Sign in
         </Button>
-        <button
-          onClick={() => setSignInOpen(true)}
-          className="inline-flex lg:hidden"
-        >
+        <button onClick={handleOpenSignIn} className="inline-flex lg:hidden">
           <Icons.user size={20} />
         </button>
-
-        <SignInModal open={signInOpen} onOpenChange={setSignInOpen} />
       </>
     );
   }

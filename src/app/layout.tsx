@@ -5,6 +5,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { QueryProvider } from "@/providers";
 import { Toaster } from "sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { SignInModal } from "@/components/auth/sign-in-modal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -139,10 +141,13 @@ export default function RootLayout({
         {/* Animated background positioned at bottom left */}
         {/* <div className="animated-mesh-gradient-background-reverse pointer-events-none fixed bottom-0 left-0 z-50 hidden size-125 rounded-full opacity-30 blur-3xl md:block" /> */}
 
-        <QueryProvider>
-          <main className="relative z-10">{children}</main>
-          <Toaster position="top-center" />
-        </QueryProvider>
+        <NuqsAdapter>
+          <QueryProvider>
+            <main className="relative z-10">{children}</main>
+            <Toaster position="top-center" />
+            <SignInModal />
+          </QueryProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

@@ -74,11 +74,33 @@ export interface ProductDetailResponse {
   product: ProductDetail;
 }
 
+export interface ProductFacetItem {
+  id: string;
+  name: string;
+  /** The value to send back in the matching query param (e.g. category slug, brand name). */
+  filter_value: string;
+  count: number;
+}
+
+export interface ProductConditionFacetItem {
+  value: string;
+  count: number;
+}
+
+export interface ProductFacets {
+  categories: ProductFacetItem[];
+  subcategories: ProductFacetItem[];
+  brands: ProductFacetItem[];
+  conditions: ProductConditionFacetItem[];
+  price_range: { min: number; max: number } | null;
+}
+
 export interface ProductListResponse {
   products: ProductDetail[];
   total: number;
   page: number;
   limit: number;
+  facets?: ProductFacets;
 }
 
 export interface SelectedVariant {

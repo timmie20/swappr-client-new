@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { MORE_LINKS, NAV_LINKS } from "@/constants/nav-links";
+import { EXTRA_NAV_LINKS, MORE_LINKS } from "@/constants/nav-links";
+import { useCategories } from "@/hooks/use-categories";
+import { categoryToNavItem } from "@/lib/category-nav";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -120,8 +122,15 @@ function NavItemRow({
 
 export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const { data } = useCategories();
 
-  const topLinks = useMemo(() => NAV_LINKS as NavItem[], []);
+  const topLinks = useMemo<NavItem[]>(
+    () => [
+      ...(EXTRA_NAV_LINKS as NavItem[]),
+      ...(data?.categories ?? []).map(categoryToNavItem),
+    ],
+    [data],
+  );
   const moreLinks = useMemo(() => MORE_LINKS as NavItem[], []);
 
   const handleNavigate = () => {

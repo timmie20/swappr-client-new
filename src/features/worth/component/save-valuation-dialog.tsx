@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { clearPendingValuationRef } from "@/lib/pending-valuation";
 import { useRouter } from "next/navigation";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 type SaveValuationDialogProps = {
   open: boolean;
@@ -22,6 +23,7 @@ export function SaveValuationDialog({
   onOpenChange,
 }: SaveValuationDialogProps) {
   const router = useRouter();
+  const openSignIn = useAuthModalStore((s) => s.open);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -50,7 +52,8 @@ export function SaveValuationDialog({
           <Button
             type="button"
             onClick={() => {
-              router.push("/sign-in");
+              onOpenChange(false);
+              openSignIn(window.location.pathname + window.location.search);
             }}
           >
             Save Now

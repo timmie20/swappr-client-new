@@ -10,75 +10,31 @@ import {
   CommandList,
   CommandShortcut,
 } from "@/components/ui/command";
-import { useProductSearch } from "@/hooks";
-import debounce from "lodash/debounce";
+import { useDebouncedProductSearch } from "@/hooks";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./ui/spinner";
 import { useRouter } from "next/navigation";
 import { Badge } from "./ui/badge";
 import Link from "next/link";
+import {
+  SEARCH_COLLECTION_BADGES,
+  formatCollectionLabel,
+} from "@/lib/search-collections";
 
 type DialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
-const CATEGORY_BADGES = [
-  "iphones",
-  "androids",
-  "ipads",
-  "macbooks",
-  "laptops",
-  "tablets",
-  "audios",
-  "gaming-consoles",
-];
-
 export function SearchDialog({ open, onOpenChange }: DialogProps) {
-  const [inputValue, setInputValue] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-
   const router = useRouter();
-
-  // Stable debounced setter across renders (lodash keeps internal timer state)
-  const debouncedSetQueryRef = useRef(
-    debounce((value: string) => {
-      setDebouncedQuery(value);
-    }, 500),
-  );
-
-  // Cancel any pending debounce on unmount
-  useEffect(() => {
-    const debounced = debouncedSetQueryRef.current;
-    return () => {
-      debounced.cancel();
-    };
-  }, []);
-
-  const handleInputChange = (value: string) => {
-    setInputValue(value);
-
-    const trimmed = value.trim();
-    if (trimmed.length < 2) {
-      debouncedSetQueryRef.current.cancel();
-      setDebouncedQuery(trimmed);
-      return;
-    }
-
-    debouncedSetQueryRef.current(trimmed);
-  };
+  const { inputValue, setInputValue, results, isLoading, reset } =
+    useDebouncedProductSearch();
 
   const handleOpenChange = (nextOpen: boolean) => {
     onOpenChange(nextOpen);
-    if (!nextOpen) {
-      debouncedSetQueryRef.current.cancel();
-      setInputValue("");
-      setDebouncedQuery("");
-    }
+    if (!nextOpen) reset();
   };
-
-  const { data: results = [], isLoading } = useProductSearch(debouncedQuery);
 
   return (
     <CommandDialog open={open} onOpenChange={handleOpenChange}>
@@ -87,7 +43,7 @@ export function SearchDialog({ open, onOpenChange }: DialogProps) {
           <CommandInput
             placeholder="Search Product"
             value={inputValue}
-            onValueChange={handleInputChange}
+            onValueChange={setInputValue}
           />
 
           {isLoading && (
@@ -129,25 +85,16 @@ export function SearchDialog({ open, onOpenChange }: DialogProps) {
 
           <CommandGroup heading="Search by Collections">
             <div className="flex flex-wrap items-center gap-2 px-2 py-1">
-              {CATEGORY_BADGES.map((cat) => {
-                const label = cat
-                  .replace(/-/g, " ")
-                  .replace(/^\w/, (c) =>
-                    cat.startsWith("i") ? c : c.toUpperCase(),
-                  )
-                  .replace(/^(i)(\w)/, (_, i, next) => i + next.toUpperCase());
-
-                return (
-                  <Link key={cat} href={`/collections/${cat}`}>
-                    <Badge
-                      variant="outline"
-                      className="cursor-pointer px-3 py-1"
-                    >
-                      {label}
-                    </Badge>
-                  </Link>
-                );
-              })}
+              {SEARCH_COLLECTION_BADGES.map((cat) => (
+                <Link key={cat} href={`/collections/${cat}`}>
+                  <Badge
+                    variant="outline"
+                    className="cursor-pointer px-3 py-1"
+                  >
+                    {formatCollectionLabel(cat)}
+                  </Badge>
+                </Link>
+              ))}
             </div>
           </CommandGroup>
         </CommandList>

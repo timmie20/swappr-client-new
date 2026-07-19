@@ -6,78 +6,11 @@ type NavItem = {
   image?: string;
 };
 
-export const NAV_LINKS: NavItem[] = [
-  { name: "Deals", href: "deals" },
-  {
-    name: "Smartphones",
-    href: "#",
-    subItems: [
-      {
-        name: "Explore all iPhones",
-        href: "/collections/iphones",
-        description: "Browse our full range of iPhones.",
-      },
-      {
-        name: "Explore all Androids",
-        href: "/collections/androids",
-        description: "Browse our full range of Androids",
-      },
-      {
-        name: "iPhone 17 & Air",
-        href: "/collections/iPhone-17",
-        description:
-          "Discover the latest iPhone 17 with cutting-edge features.",
-      },
-      {
-        name: "iPhone SE",
-        href: "/collections/iPhone-se",
-        description:
-          "Get the latest iPhone SE (2nd and 3rd gen) in a compact design.",
-      },
-      {
-        name: "iPhone 16",
-        href: "/collections/iPhone-16",
-        description:
-          "Explore the powerful iPhone 16 with enhanced performance.",
-      },
-    ],
-  },
-  {
-    name: "Laptops",
-    href: "#",
-    subItems: [
-      {
-        name: "Explore all MacBooks",
-        href: "/collections/macbooks",
-        description: "Browse our various collection of MacBooks",
-      },
-      {
-        name: "Explore Windows",
-        href: "/collections/macbooks",
-        description: "Browse our various collection of Windows laptops",
-      },
-    ],
-  },
-  {
-    name: "Tablets & iPads",
-    href: "#",
-    subItems: [
-      {
-        name: "Explore all iPads",
-        href: "/collections/iPads",
-        description: "Browse our various collection of iPads",
-      },
-      {
-        name: "Android Tablets",
-        href: "/collections/androids-tablets",
-        description: "Browse our various collection of android tablets",
-      },
-    ],
-  },
-  { name: " Watches", href: "/collections/watches" },
-  { name: " Audio", href: "/collections/audios" },
-  { name: " Accessories", href: "/collections/accessories" },
-];
+/**
+ * Non-category static links shown alongside the dynamic category nav
+ * (categories/subcategories are fetched from the API - see @/lib/category-nav).
+ */
+export const EXTRA_NAV_LINKS: NavItem[] = [{ name: "Deals", href: "deals" }];
 
 export const MORE_LINKS: NavItem[] = [
   {

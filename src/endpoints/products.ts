@@ -1,4 +1,5 @@
 import { api } from "@/lib/api/client";
+import { serializeFacetParams } from "@/lib/api/facet-params";
 import type { PaginationParams } from "@/types/api";
 import type {
   ProductDetailResponse,
@@ -8,7 +9,7 @@ import type {
 export const productEndpoints = {
   async getAll(params?: PaginationParams): Promise<ProductListResponse> {
     const { data } = await api.get<ProductListResponse>("/products", {
-      params,
+      params: serializeFacetParams(params),
     });
     return data;
   },
