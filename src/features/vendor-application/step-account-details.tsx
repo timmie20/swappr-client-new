@@ -9,6 +9,7 @@ import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/forms/form-input";
 import { ApplicationFormData, ACCOUNT_FIELDS } from "./types";
+import { Spinner } from "@/components/ui/spinner";
 
 interface StepAccountDetailsProps {
   form: UseFormReturn<ApplicationFormData>;
@@ -141,6 +142,7 @@ export function StepAccountDetails({
               className="flex-1 gap-2 rounded-full"
               disabled={isSubmitting}
             >
+              {isSubmitting && <Spinner />}
               {isSubmitting ? "Creating account…" : "Create Account"}
               {!isSubmitting && <ArrowRight size={16} />}
             </Button>
