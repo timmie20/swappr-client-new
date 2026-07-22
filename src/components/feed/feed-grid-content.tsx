@@ -1,9 +1,14 @@
 "use client";
+
+import { IconArrowRight } from "@tabler/icons-react";
+
+import { EmptyState } from "@/components/empty-state";
+import { ErrorState } from "../error-state";
 import { ProductCard } from "./product-card";
 import { SkeletonGrid } from "./skeleton-card";
-import { EmptyState } from "@/components/empty-state";
+import { Button } from "../ui/button";
+import { Spinner } from "../ui/spinner";
 import type { Product } from "@/features/feed/types";
-import { ErrorState } from "../error-state";
 
 type Cols = 2 | 3 | 4;
 
@@ -19,6 +24,7 @@ interface FeedGridContentProps {
   loading: boolean;
   loadingMore?: boolean;
   canLoadMore?: boolean;
+  hasNextPage?: boolean;
   isError?: boolean;
   onLoadMore?: () => void;
   onProductClick?: (product: Product) => void;
@@ -29,10 +35,11 @@ export function FeedGridContent({
   products,
   visibleCount,
   loading,
-  // loadingMore = false,
-  // canLoadMore = false,
+  hasNextPage = false,
+  loadingMore = false,
+  canLoadMore = false,
   isError = false,
-  // onLoadMore,
+  onLoadMore,
   cols = 4,
 }: FeedGridContentProps) {
   const visibleProducts = products.slice(0, visibleCount);
@@ -74,23 +81,30 @@ export function FeedGridContent({
         ))}
       </div>
 
-      {/* {canLoadMore && (
+      {canLoadMore && (
         <div className="mt-10 flex cursor-pointer justify-center">
-          <Button
-            onClick={onLoadMore}
-            variant="outline"
-            disabled={loadingMore}
-            size="lg"
-          >
-            {loadingMore ? "Loading..." : "Load More"}
-            {loadingMore ? (
-              <Spinner className="size-6" />
-            ) : (
-              <IconArrowRight size={15} />
-            )}
-          </Button>
+          {!hasNextPage ? (
+            <p className="text-muted-foreground text-center">
+              That’s all we’ve got (for now 👀)
+            </p>
+          ) : (
+            <Button
+              onClick={onLoadMore}
+              variant="outline"
+              disabled={loadingMore}
+              size="lg"
+            >
+              {loadingMore ? "Loading..." : "Load More"}
+
+              {loadingMore ? (
+                <Spinner className="size-6" />
+              ) : (
+                <IconArrowRight size={15} />
+              )}
+            </Button>
+          )}
         </div>
-      )} */}
+      )}
     </>
   );
 }

@@ -1,3 +1,5 @@
+import type { OperatingHours } from "./checkout";
+
 export interface ProductVariant {
   id: string;
   created_at?: string;
@@ -27,9 +29,12 @@ export interface ProductSubcategory {
 
 export interface ProductVendor {
   id: string;
+  trading_name: string | null;
   business_name: string;
   is_verified: boolean;
   rating: number;
+  pickup_enabled?: boolean;
+  operating_hours?: OperatingHours | null;
 }
 
 export type ProductCondition =
@@ -55,7 +60,7 @@ export interface ProductDetail {
   status?: string;
   is_active?: boolean;
   images: string[];
-  specifications: Record<string, string>;
+  specifications: { key: string; value: string }[];
   brand: ProductBrand;
   category: ProductCategory;
   subcategory?: ProductSubcategory;
@@ -69,11 +74,33 @@ export interface ProductDetailResponse {
   product: ProductDetail;
 }
 
+export interface ProductFacetItem {
+  id: string;
+  name: string;
+  /** The value to send back in the matching query param (e.g. category slug, brand name). */
+  filter_value: string;
+  count: number;
+}
+
+export interface ProductConditionFacetItem {
+  value: string;
+  count: number;
+}
+
+export interface ProductFacets {
+  categories: ProductFacetItem[];
+  subcategories: ProductFacetItem[];
+  brands: ProductFacetItem[];
+  conditions: ProductConditionFacetItem[];
+  price_range: { min: number; max: number } | null;
+}
+
 export interface ProductListResponse {
   products: ProductDetail[];
   total: number;
   page: number;
   limit: number;
+  facets?: ProductFacets;
 }
 
 export interface SelectedVariant {

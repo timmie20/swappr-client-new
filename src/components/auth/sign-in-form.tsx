@@ -11,7 +11,7 @@ import { GoogleSignUpButton } from "./google-oauth";
 // import { useLogin } from "@/hooks/use-auth";
 import Image from "next/image";
 import { TypographyH1 } from "../typography/h1";
-// import Link from "next/link";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 // import {
 //   clearPendingValuationRef,
@@ -124,7 +124,7 @@ export default function SignInForm() {
 
           <div className="flex justify-end">
             <Link
-              href="/auth/reset-password"
+              href="/reset-password"
               className="text-primary hover:text-primary/80 text-sm font-medium hover:cursor-pointer"
             >
               Forgot password?

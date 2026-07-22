@@ -3,18 +3,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { ProductVendor } from "@/types/product";
+import { getInitials } from "@/lib/format";
 
 interface VendorInfoCardProps {
   vendor: ProductVendor;
 }
 
 export function VendorInfoCard({ vendor }: VendorInfoCardProps) {
-  const initials = vendor.business_name
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
-
+  const initials = getInitials(
+    vendor.trading_name || vendor.business_name || "",
+  );
   return (
     <Card className="rounded-2xl shadow-sm">
       <CardContent className="p-4">
@@ -31,7 +29,7 @@ export function VendorInfoCard({ vendor }: VendorInfoCardProps) {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
               <span className="truncate font-semibold text-[#1A1A1A]">
-                {vendor.business_name}
+                {vendor.trading_name || vendor.business_name}
               </span>
               {vendor.is_verified && (
                 <IconShieldCheckFilled

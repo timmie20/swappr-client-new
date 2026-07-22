@@ -13,8 +13,7 @@ export function GoogleSignUpButton({ redirect }: GoogleSignUpButtonProps = {}) {
     try {
       setInitiate(true);
       // Redirect to backend Google OAuth endpoint
-      const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const url = new URL(`${apiUrl}/auth/google`);
       if (redirect) url.searchParams.set("redirect", redirect);
       window.location.href = url.toString();

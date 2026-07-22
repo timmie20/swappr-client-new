@@ -7,7 +7,9 @@ import { Icons } from "../icons";
 import { TypographyMuted } from "../typography/muted";
 import { TypographyH2 } from "../typography/h2";
 import { Button } from "../ui/button";
-import { ErrorState } from "../error-state";
+// import { ErrorState } from "../error-state";
+
+import { EmptyState } from "../empty-state";
 
 export function DealOfWeekSection() {
   // const openSwapOffer = useFeedStore((s) => s.openSwapOffer);
@@ -42,19 +44,27 @@ export function DealOfWeekSection() {
 
         {/* Deals grid */}
         <div className="flex w-full items-center justify-center">
-          <ErrorState
-            title="Could not load deals"
+          {/* <ErrorState
+            title="Deals feature coming soon!"
             description="We encountered an issue while fetching the deals. Please try again later."
+          /> */}
+
+          <EmptyState
+            variant="lottie"
+            lottieType="comingSoon"
+            size="large"
+            title="Deals feature coming soon"
+            description="When this is released you would be able to find quick cheap deals weekly."
           />
         </div>
 
         {/* Mobile view all */}
-        <div className="mt-4 flex justify-center sm:hidden">
+        {/* <div className="mt-4 flex justify-center sm:hidden">
           <Button variant="link">
             View All Deals
             <Icons.arrowRight size={14} />
           </Button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

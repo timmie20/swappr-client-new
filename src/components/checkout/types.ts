@@ -21,6 +21,8 @@ export const checkoutDeliverySchema = z.object({
 
   contact_phone: nigerianPhoneSchema,
 
+  fulfillment_type: z.enum(["pickup", "delivery"]),
+
   save_for_next_time: z.boolean().optional(),
 });
 

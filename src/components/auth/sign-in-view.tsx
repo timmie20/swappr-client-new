@@ -43,7 +43,7 @@ export default function SignUpViewPage() {
           {/* <p className="text-muted-foreground text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link
-              href="/auth/sign-up"
+              href="/sign-up"
               className="hover:text-primary font-medium underline underline-offset-4"
             >
               Sign Up

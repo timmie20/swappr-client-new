@@ -1,10 +1,18 @@
 import { serverFetch } from "@/lib/api/server";
-import type { ProductSubcategory } from "@/types/product";
+import { Category, CategoryTreeNode } from "@/types/categories";
 
-export type SubCategoriesResponse = {
-  subCategories: ProductSubcategory[];
+export type CategoriesResponse = {
+  categories: Category[];
 };
 
-export async function getSubCategories(): Promise<SubCategoriesResponse> {
-  return serverFetch<SubCategoriesResponse>("/categories/subcategories");
+export type CategoriesTreeResponse = {
+  categories: CategoryTreeNode[];
+};
+
+export async function getPrimaryCategories(): Promise<CategoriesResponse> {
+  return serverFetch<CategoriesResponse>("/categories/primary");
+}
+
+export async function getCategories(): Promise<CategoriesTreeResponse> {
+  return serverFetch<CategoriesTreeResponse>("/categories/tree");
 }

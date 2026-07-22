@@ -28,6 +28,8 @@ export const ordersMutationKeys = {
 };
 
 export function useCreateOrder() {
+  const queryClient = useQueryClient();
+
   return useMutation<
     ApiResponse<CreateOrderResponseData>,
     Error,
@@ -39,6 +41,18 @@ export function useCreateOrder() {
       const res = await ordersEndpoints.createOrder(payload);
 
       return res;
+    },
+
+    onSuccess: (res) => {
+      toast.success(res.message || "Order created");
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.lists(),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.cart.lists(),
+      });
     },
   });
 }
@@ -94,21 +108,21 @@ export function useInfiniteOrders(
   });
 }
 
-export function useOrder(orderId: string | null | undefined) {
+export function useOrder(orderNumber: string) {
   return useQuery<ApiResponse<Order>>({
-    queryKey: queryKeys.orders.detail(orderId ?? ""),
-
-    enabled: !!orderId,
+    queryKey: queryKeys.orders.detail(orderNumber),
 
     queryFn: async () => {
-      if (!orderId) {
-        throw new Error("Missing order id");
+      if (!orderNumber) {
+        throw new Error("Missing order number");
       }
 
-      const res = await ordersEndpoints.getOrderById(orderId);
+      const res = await ordersEndpoints.getOrderByNumber(orderNumber);
 
       return res;
     },
+
+    enabled: !!orderNumber,
 
     retry: 0,
   });
@@ -124,22 +138,22 @@ export function useCancelOrder() {
   >({
     mutationKey: ordersMutationKeys.cancel(),
 
+    // note: cancel is the one order endpoint keyed by uuid (order.id),
+    // while reads resolve by order_number
     mutationFn: ({ orderId, cancellation_reason }) =>
       ordersEndpoints.cancelOrder({
         orderId,
         cancellation_reason,
       }),
 
-    onSuccess: (res, variables) => {
+    onSuccess: (res) => {
       toast.success(res.message || "Order cancelled");
 
-      // Refetch updated order state
+      // detail pages are keyed by order_number while the mutation receives
+      // the uuid, so a detail(orderId) invalidation never matches — sweep
+      // the whole orders scope (lists + any mounted detail) instead
       queryClient.invalidateQueries({
-        queryKey: queryKeys.orders.lists(),
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.orders.detail(variables.orderId),
+        queryKey: queryKeys.orders.all,
       });
     },
 

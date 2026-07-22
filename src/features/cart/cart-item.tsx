@@ -3,10 +3,10 @@ import { Icons } from "@/components/icons";
 import { SafeImage } from "@/components/safe-image";
 import { TypographyH3 } from "@/components/typography/h3";
 import { Button } from "@/components/ui/button";
-import { useIsAuthenticated } from "@/hooks/use-access-token";
 import { useCart } from "@/features/cart/hooks/use-cart";
 import { mutationKeys } from "@/hooks/use-cart-queries";
-import { formatNaira, formatStorageCapacity } from "@/lib/format";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
+import { deslug, formatNaira, formatStorageCapacity } from "@/lib/format";
 import { LocalCartItem } from "@/types/cart";
 import { useMutationState } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -24,7 +24,7 @@ import { toast } from "sonner";
 export default function Item({ item }: { item: LocalCartItem }) {
   const { updateQuantity, removeItem } = useCart();
 
-  const isLoggedIn = useIsAuthenticated();
+  const isAuth = useIsAuthenticated(); // null while loading, then true/false
 
   const pendingMutations = useMutationState({
     filters: {
@@ -46,7 +46,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
   );
 
   const handleIncrement = () => {
-    if (!isLoggedIn) toast.error("Please log in to update your cart");
+    if (!isAuth) toast.error("Please log in to update your cart");
     updateQuantity({
       itemId: item.id,
       increment: 1,
@@ -54,7 +54,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
   };
 
   const handleDecrement = () => {
-    if (!isLoggedIn) toast.error("Please log in to update your cart");
+    if (!isAuth) toast.error("Please log in to update your cart");
     if (item.quantity <= 1) return;
 
     updateQuantity({
@@ -64,7 +64,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
   };
 
   const handleRemove = () => {
-    if (!isLoggedIn) toast.error("Please log in to update your cart");
+    if (!isAuth) toast.error("Please log in to update your cart");
     removeItem(item.id);
   };
 
@@ -92,7 +92,7 @@ export default function Item({ item }: { item: LocalCartItem }) {
         <p className="text-muted-foreground text-xs sm:text-sm">
           Qty {item.quantity}
           {item.color ? ` | ${item.color}` : ""}
-          {item.condition ? ` | ${item.condition}` : ""}
+          {item.condition ? ` | ${deslug(item.condition)}` : ""}
           {item.storage ? ` | ${formatStorageCapacity(item.storage)}` : ""}
         </p>
 

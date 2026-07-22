@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { MORE_LINKS, NAV_LINKS } from "@/constants/nav-links";
+import { EXTRA_NAV_LINKS, MORE_LINKS } from "@/constants/nav-links";
+import { useCategories } from "@/hooks/use-categories";
+import { categoryToNavItem } from "@/lib/category-nav";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -14,7 +16,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import Logo from "../logo";
+import Image from "next/image";
+import { ASSETS } from "@/constants/assets";
 
 type MobileNavMenuProps = {
   open: boolean;
@@ -119,8 +122,15 @@ function NavItemRow({
 
 export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const { data } = useCategories();
 
-  const topLinks = useMemo(() => NAV_LINKS as NavItem[], []);
+  const topLinks = useMemo<NavItem[]>(
+    () => [
+      ...(EXTRA_NAV_LINKS as NavItem[]),
+      ...(data?.categories ?? []).map(categoryToNavItem),
+    ],
+    [data],
+  );
   const moreLinks = useMemo(() => MORE_LINKS as NavItem[], []);
 
   const handleNavigate = () => {
@@ -145,7 +155,14 @@ export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
       >
         <SheetHeader className="border-border border-b p-5">
           <SheetTitle>
-            <Logo variant="dark" priority />
+            <Image
+              src={ASSETS.LOGO_DARK}
+              alt="Swappr logo"
+              width={120}
+              height={40}
+              priority
+              className="h-auto w-auto cursor-pointer"
+            />
           </SheetTitle>
           <SheetDescription className="sr-only">
             Mobile navigation menu
@@ -205,7 +222,7 @@ export default function MobileNavMenu({ open, setOpen }: MobileNavMenuProps) {
 
         <div className="border-border border-t p-5">
           <Button asChild className="w-full">
-            <Link href="/auth/sign-in" onClick={handleNavigate}>
+            <Link href="/sign-in" onClick={handleNavigate}>
               <Icons.user size={18} />
               Sign In
             </Link>

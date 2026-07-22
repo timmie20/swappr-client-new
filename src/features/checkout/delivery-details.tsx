@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput } from "@/components/forms/form-input";
-import { useUserAccount } from "@/hooks/use-auth";
+import { useSession } from "@/lib/auth/session-client";
 import {
   checkoutDeliverySchema,
   type CheckoutDeliveryFormValues,
@@ -15,6 +15,7 @@ import { TypographyP } from "../../components/typography/p";
 import { TypographyMuted } from "../../components/typography/muted";
 import { Separator } from "../../components/ui/separator";
 import { Spinner } from "../../components/ui/spinner";
+import { FulfillmentTypeField } from "./fulfillment-type-field";
 
 const DELIVERY_INFO_STORAGE_KEY = "swappr.delivery-info";
 
@@ -52,6 +53,8 @@ export type DeliveryDetailsProps = {
   isSubmitting?: boolean;
   submitDisabled?: boolean;
   hasItems?: boolean; // new prop to indicate if there are items in the cart
+  pickupEnabled?: boolean;
+  operationHours?: string | null;
   onSubmit: (data: CheckoutDeliveryFormValues) => void | Promise<void>;
 };
 
@@ -59,9 +62,11 @@ export default function DeliveryDetails({
   submitLabel,
   isSubmitting,
   submitDisabled,
+  pickupEnabled,
+  operationHours,
   onSubmit,
 }: DeliveryDetailsProps) {
-  const { data: user } = useUserAccount();
+  const { user } = useSession();
   const [saveDeliveryInfo, setSaveDeliveryInfo] = useState(false);
   const [savedDeliveryInfo, setSavedDeliveryInfo] =
     useState<StoredDeliveryInfo | null>(() => loadSavedDeliveryInfo());
@@ -80,6 +85,7 @@ export default function DeliveryDetails({
         postal_code: "",
       },
       contact_phone: "",
+      fulfillment_type: "delivery",
       save_for_next_time: false,
     },
   });
@@ -95,6 +101,11 @@ export default function DeliveryDetails({
     const el = document.getElementById("delivery_address.full_address");
     el?.focus();
   }, []);
+
+  const fulfillmentType = useWatch({
+    control: form.control,
+    name: "fulfillment_type",
+  });
 
   const isBusy = isSubmitting ?? false;
   const isDisabled = submitDisabled ?? false;
@@ -254,7 +265,23 @@ export default function DeliveryDetails({
               label="Postal Code (optional)"
               placeholder="Postal code"
             />
+
+            {pickupEnabled && (
+              <FulfillmentTypeField
+                control={form.control}
+                name="fulfillment_type"
+                operationHours={operationHours}
+              />
+            )}
           </FieldGroup>
+
+          {fulfillmentType !== "pickup" && (
+            <TypographyMuted className="text-sm text-yellow-700">
+              Delivery fee is calculated by the vendor based on your delivery
+              location and confirmed once your order is ready to ship. Paid
+              directly to them, not through Swappr.
+            </TypographyMuted>
+          )}
 
           <div className="mt-4 flex items-center gap-2">
             <input

@@ -1,7 +1,6 @@
 "use client";
 
 import { TypographyH1 } from "@/components/typography/h1";
-import { useUnitAnimation } from "@/hooks/use-expiry-countdown";
 
 interface CountdownUnitProps {
   value: number;
@@ -14,17 +13,12 @@ function pad2(n: number) {
 }
 
 function CountdownUnit({ value, label, isLast }: CountdownUnitProps) {
-  const ref = useUnitAnimation(value);
-
   return (
     <div className="flex items-center gap-3 sm:gap-4">
       <div className="flex flex-col items-center gap-1">
         {/* digit block */}
-        <div className="relative h-18 sm:h-24 sm:w-28">
-          <TypographyH1
-            ref={ref}
-            className="absolute inset-0 flex items-center justify-center font-mono text-2xl tabular-nums"
-          >
+        <div className="flex h-18 items-center justify-center sm:h-24 sm:w-28">
+          <TypographyH1 className="font-mono text-2xl tabular-nums">
             {pad2(value)}
           </TypographyH1>
         </div>

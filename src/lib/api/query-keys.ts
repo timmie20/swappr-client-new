@@ -14,6 +14,7 @@
  * ['brands', 'detail', 'brand-id-123']
  */
 
+import { CollectionsQueryParams } from "@/types/collections";
 import type { PaginationParams } from "./types";
 
 export const queryKeys = {
@@ -141,8 +142,23 @@ export const queryKeys = {
     lists: () => [...queryKeys.categories.all, "list"] as const,
     list: (params?: PaginationParams) =>
       [...queryKeys.categories.lists(), params] as const,
+    trees: () => [...queryKeys.categories.all, "tree"] as const,
+    tree: () => [...queryKeys.categories.trees()] as const,
     details: () => [...queryKeys.categories.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.categories.details(), id] as const,
+  },
+
+  collections: {
+    all: ["collections"] as const,
+
+    list: (params?: CollectionsQueryParams) =>
+      [...queryKeys.collections.all, "list", params] as const,
+
+    detail: (slug: string) =>
+      [...queryKeys.collections.all, "detail", slug] as const,
+
+    products: (slug: string, params?: Omit<CollectionsQueryParams, "page">) =>
+      [...queryKeys.collections.all, "products", slug, params] as const,
   },
 
   // ============================================

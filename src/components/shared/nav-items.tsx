@@ -10,75 +10,40 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { usePathname } from "next/navigation";
-import { MORE_LINKS, NAV_LINKS } from "@/constants/nav-links";
+import { MORE_LINKS } from "@/constants/nav-links";
+import { CategoryNavMenu } from "@/components/shared/nav/category-nav-menu";
 
 export function NavigationLinks() {
   const pathname = usePathname();
 
   return (
-    <NavigationMenu
-      viewport={false}
-      className="hidden w-full flex-auto flex-wrap items-center justify-center lg:flex"
-    >
-      <NavigationMenuList className="flex-wrap">
-        {...NAV_LINKS.map((link) =>
-          link.subItems ? (
-            <NavigationMenuItem key={link.name}>
-              <NavigationMenuTrigger>{link.name}</NavigationMenuTrigger>
-              <NavigationMenuContent className="">
-                <ul className="grid w-125 md:grid-cols-2 lg:w-150">
-                  {link.subItems.map((sub) => (
-                    <ListItem
-                      key={sub.name}
-                      title={sub.name}
-                      href={sub.href!}
-                      active={sub.href === pathname}
-                    >
-                      {sub.description}
-                    </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          ) : (
-            <NavigationMenuItem key={link.name}>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-                active={link.href === pathname}
-              >
-                <Link
-                  href={link.href!}
-                  className={`${link.href === pathname ? "bg-primary/90 text-white" : ""} text-sm`}
-                >
-                  {link.name}
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          ),
-        )}
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>More on Swappr</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="w-96">
-              {MORE_LINKS.map((link) => (
-                <ListItem
-                  key={link.name}
-                  title={link.name}
-                  href={link.href!}
-                  active={link.href === pathname}
-                >
-                  {link.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+    <div className="hidden shrink-0 items-center gap-1 lg:flex">
+      <CategoryNavMenu />
+
+      <NavigationMenu viewport={false} className="items-center">
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>More on Swappr</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="w-96">
+                {MORE_LINKS.map((link) => (
+                  <ListItem
+                    key={link.name}
+                    title={link.name}
+                    href={link.href!}
+                    active={link.href === pathname}
+                  >
+                    {link.description}
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
   );
 }
 

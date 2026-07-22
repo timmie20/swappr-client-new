@@ -8,12 +8,13 @@ import {
 } from "../ui/card";
 import { TypographyH3 } from "../typography/h3";
 import { TypographyMuted } from "../typography/muted";
-import { CollectionCards } from "@/constants/ui";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
+import { Collection } from "@/types/collections";
+import Link from "next/link";
 
 type CardType = {
-  item: CollectionCards;
+  item: Collection;
 };
 
 export default function CollectionCard({ item }: CardType) {
@@ -24,21 +25,23 @@ export default function CollectionCard({ item }: CardType) {
           {item.badge}
         </Badge>
         <CardTitle>
-          <TypographyH3>{item.title}</TypographyH3>
+          <TypographyH3>{item.name}</TypographyH3>
         </CardTitle>
         <CardDescription>
           <TypographyMuted>{item.description}</TypographyMuted>
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
-        <button className="text-yellow-dark cursor-pointer text-base font-medium underline">
-          Shop All {item.id}
-        </button>
+        <Link href={`/collections/${item.slug}`}>
+          <button className="text-yellow-dark cursor-pointer text-base font-medium underline">
+            View Collection
+          </button>
+        </Link>
 
         <div className="mt-4 flex justify-end">
           <Image
             src={item.image}
-            alt={item.title}
+            alt={item.name}
             width={400}
             height={400}
             className="translate-y-6 object-contain"

@@ -3,41 +3,52 @@
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import {
-  CheckCircle2,
-  LayoutDashboard,
+  MailCheck,
   ShieldCheck,
   Building2,
-  Camera,
+  Store,
+  Rocket,
+  LogIn,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-interface SuccessScreenProps {
-  applicationId?: string;
-}
+import { Lottie } from "@/components/lottie";
+import successCheckAnimation from "@/lottie/success-check.json";
 
 const nextSteps = [
   {
-    icon: Building2,
-    label: "Verify your business CAC",
+    icon: MailCheck,
+    label: "Verify your email, then log in",
     description:
-      "To confirm your business registration, we will use your CAC details (RC Number) to validate your legitimacy and ensure compliance with our platform standards.",
+      "We've sent a verification link to your email. Verify it, then log in to unlock your vendor dashboard — the rest of your onboarding happens there.",
+  },
+  {
+    icon: Building2,
+    label: "Verify your business",
+    description:
+      "Enter your CAC registration number (RC, BN, or IT) and we'll confirm it against the CAC registry in real time. Your registered address, state and city are pulled in automatically.",
   },
   {
     icon: ShieldCheck,
-    label: "Verify your government ID",
+    label: "Verify your identity",
     description:
-      "Submit a valid NIN, Driver's License, Voter's Card, or International Passport.",
+      "Provide your BVN or NIN — whichever you have. The name on it must match the first and last name on your Swappr account.",
   },
   {
-    icon: Camera,
-    label: "Upload store photos",
+    icon: Store,
+    label: "Complete your store profile",
     description:
-      "Add 2–5 clear photos of your store or business premises to complete your profile.",
+      "Add a store description, confirm your address, add a nearby landmark, set your operating hours and optionally upload a logo. Store photos can be added any time after you go live.",
+  },
+  {
+    icon: Rocket,
+    label: "Go live",
+    description:
+      "Approval is instant once your profile is submitted. You can start listing products, managing inventory, receiving orders and taking swap offers right away.",
   },
 ];
 
-export function SuccessScreen({ applicationId }: SuccessScreenProps) {
+export function SuccessScreen() {
   const router = useRouter();
 
   return (
@@ -48,27 +59,21 @@ export function SuccessScreen({ applicationId }: SuccessScreenProps) {
       className="flex flex-col items-center gap-6 text-center"
     >
       {/* Animated checkmark */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 18,
-          delay: 0.1,
-        }}
-        className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100"
-      >
-        <CheckCircle2 className="text-green-600" size={44} strokeWidth={1.5} />
-      </motion.div>
+      <Lottie
+        animationData={successCheckAnimation}
+        loop
+        autoplay
+        className="size-24"
+      />
 
       <div>
         <h2 className="text-2xl font-bold text-gray-900">
           Vendor Account Created!
         </h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-gray-500">
-          Your account is ready. Complete the steps below to verify your
-          business and activate your vendor profile on Swappr.
+          You&apos;re not logged in yet — check your inbox for a verification
+          email first. Once verified, log in and finish setting up from your
+          vendor dashboard.
         </p>
       </div>
 
@@ -76,11 +81,11 @@ export function SuccessScreen({ applicationId }: SuccessScreenProps) {
       <Card className="w-full text-left">
         <CardContent className="flex flex-col gap-4 pt-2">
           <h3 className="text-sm font-semibold text-gray-800">
-            Complete your onboarding — next steps
+            What happens next
           </h3>
           <p className="text-xs text-gray-500">
-            These are required to activate your vendor account and start selling
-            on Swappr.
+            Onboarding takes just a few minutes and happens inside your vendor
+            dashboard. Here&apos;s what Swappr will ask of you:
           </p>
           <ol className="flex flex-col gap-4">
             {nextSteps.map((step, i) => (
@@ -105,26 +110,16 @@ export function SuccessScreen({ applicationId }: SuccessScreenProps) {
               </motion.li>
             ))}
           </ol>
-
-          {/* Application ID */}
-          {applicationId && (
-            <div className="mt-1 rounded-lg bg-gray-50 px-4 py-2.5 text-xs text-gray-500">
-              Application ID:{" "}
-              <span className="font-mono font-medium text-gray-700">
-                #{applicationId}
-              </span>
-            </div>
-          )}
         </CardContent>
       </Card>
 
       <Button
         size="lg"
-        onClick={() => router.push("/account")}
+        onClick={() => router.push("/sign-in")}
         className="w-full gap-2 rounded-full"
       >
-        <LayoutDashboard size={16} />
-        Go to Vendor Dashboard
+        <LogIn size={16} />
+        Continue to Sign In
       </Button>
     </motion.div>
   );

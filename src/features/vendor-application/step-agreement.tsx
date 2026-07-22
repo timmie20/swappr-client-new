@@ -4,29 +4,29 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { CheckSquare, Square, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface StepAgreementProps {
   onNext: () => void;
 }
 
 const requirements = [
-  "Valid CAC (Corporate Affairs Commission) business registration",
+  "Valid CAC (Corporate Affairs Commission) business registration — RC, BN, or IT",
   "Sell tech gadgets only — phones, tablets, accessories, etc.",
   "Business must be located in Lagos, Nigeria",
   "Must have a physical store or verifiable business address",
 ];
 
 const whatYouNeed = [
-  "Your CAC-registered business name and RC number",
-  "Your business address, contact number and other relevant details",
-  "A valid email address and secure password for your vendor account",
+  "Your personal details — first name, last name, email and a secure password",
 ];
 
 const nextSteps = [
-  "Verify your business CAC (Corporate Affairs Commission) certificate",
-  "Verify your government-issued ID (NIN, Driver's License, Voter's Card, or Passport)",
-  "Upload 2–5 clear photos of your store or business premises",
+  "Verify your email address, then log in to your vendor dashboard",
+  "Verify your business — enter your CAC registration number (RC, BN, or IT) and we'll confirm it against the CAC registry in real time. Your registered address is pulled in automatically",
+  "Verify your identity with your BVN or NIN — the name on it must match the name on your Swappr account",
+  "Complete your store profile — description, address, a nearby landmark, operating hours and an optional logo",
+  "Go live — approval is instant once your profile is submitted, and you can start listing right away",
 ];
 
 const terms = [
@@ -52,7 +52,7 @@ function Section({ title, items, accent = "blue" }: SectionProps) {
         {items.map((item) => (
           <li
             key={item}
-            className="flex items-center gap-2 text-sm text-gray-700"
+            className="flex items-start gap-2 text-sm text-gray-700"
           >
             <span
               className={`mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full ${
@@ -77,7 +77,7 @@ export function StepAgreement({ onNext }: StepAgreementProps) {
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
     >
-      <Card>
+      <div>
         <CardHeader>
           <CardTitle className="text-base font-semibold text-gray-900">
             Please read through the requirements before continuing
@@ -90,7 +90,7 @@ export function StepAgreement({ onNext }: StepAgreementProps) {
             <Section title="Eligibility Requirements" items={requirements} />
             <Section title="What You'll Need to Apply" items={whatYouNeed} />
             <Section
-              title="After Your Application — Next Steps"
+              title="After Signup — Onboarding in Your Vendor Dashboard"
               items={nextSteps}
               accent="orange"
             />
@@ -132,7 +132,7 @@ export function StepAgreement({ onNext }: StepAgreementProps) {
             <ArrowRight size={16} />
           </Button>
         </CardContent>
-      </Card>
+      </div>
     </motion.div>
   );
 }

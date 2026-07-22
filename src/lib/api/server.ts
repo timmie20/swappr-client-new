@@ -1,43 +1,37 @@
+// lib/api/server.ts
+// ⚠️ Server only — never import in a Client Component
+
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
-/**
- * Get authorization headers with custom auth token for server-side API requests
- * Use this in Server Components and Server Actions ONLY
- *
- * @example
- * ```ts
- * // In a Server Component or Server Action
- * const headers = await getAuthHeaders();
- * const response = await fetch('/api/brands', { headers });
- * ```
- */
-export async function getAuthHeaders() {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("swappr_access_token")?.value;
-
-  if (!accessToken) {
-    redirect("/auth/sign-in");
-  }
-
-  return {
-    Authorization: `Bearer ${accessToken}`,
-  };
-}
-
-// lib/api/server.ts
-// ⚠️ Never import this in a client component
+import { COOKIE_NAMES } from "../auth/cookies";
+import { isPublicApiEndpoint } from "../public-routes";
 
 const BASE_URL = process.env.API_BASE_URL!;
-// const SERVICE_KEY = process.env.API_SERVICE_KEY!; // backend service-to-service key
+
+interface ServerFetchOptions {
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  body?: unknown;
+  params?: Record<string, string>;
+  revalidate?: number | false;
+  tags?: string[];
+}
 
 export async function serverFetch<T>(
   endpoint: string,
-  params?: Record<string, string>,
-  options?: {
-    revalidate?: number | false;
-  },
+  options: ServerFetchOptions = {},
 ): Promise<T> {
+  const { method = "GET", body, params, revalidate = 60, tags } = options;
+
+  // Public endpoints (PUBLIC_API_ENDPOINTS) are fetchable without a session —
+  // viewing is public, only acting requires auth
+  const isPublic = isPublicApiEndpoint(endpoint);
+
+  // Read access token from HttpOnly cookie
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
+
+  if (!accessToken && !isPublic) redirect("/sign-in");
+
   const url = new URL(`${BASE_URL}${endpoint}`);
 
   if (params) {
@@ -45,14 +39,24 @@ export async function serverFetch<T>(
   }
 
   const res = await fetch(url.toString(), {
+    method,
     headers: {
-      // Authorization: `Bearer ${SERVICE_KEY}`,
       "Content-Type": "application/json",
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
-    next: { revalidate: options?.revalidate ?? 60 }, // Default 60s, customizable
+    ...(body ? { body: JSON.stringify(body) } : {}),
+    next: {
+      revalidate,
+      ...(tags ? { tags } : {}),
+    },
   });
 
-  if (!res.ok) throw new Error(`Server fetch failed: ${res.status}`);
+  if (res.status === 401 && !isPublic) redirect("/sign-in");
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.message || `Request failed: ${res.status}`);
+  }
 
   return res.json();
 }

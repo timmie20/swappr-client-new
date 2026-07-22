@@ -13,10 +13,13 @@ export const PUBLIC_PAGE_ROUTES = [
   "/check-worth", // All check-worth pages (main, model detail, questionnaire, results)
   "/vendor", // Product listing and details (public)
   "/products",
-  "/auth/callback",
-  "/auth/reset-password",
-  "/auth/verify-email",
+  "/collections",
+  "/sign-in",
+  "/sign-up",
+  "/reset-password",
+  "/verify-email",
   "/api/public",
+  "/api/auth", // Auth infra routes (session, refresh, logout, google callback) manage their own auth checks
 ] as const;
 
 /**
@@ -30,21 +33,23 @@ export const PUBLIC_API_ENDPOINTS = [
   "/auth/reset-password",
   "/auth/verify-email",
   "/products", // Public product listing
+  "/collections", // Public collection listing and products
   "/questions", // Questions for check-worth flow (public)
   "/brands", // Brand listings (public)
   "/models", // Model listings (public)
+  "/categories", // Category listings (public, also covers /categories/primary)
 ] as const;
 
 /**
  * Auth routes - sign-in and sign-up pages
  * Used by middleware for redirect logic
  */
-export const AUTH_ROUTES = ["/auth/sign-in", "/auth/sign-up"] as const;
+export const AUTH_ROUTES = ["/sign-in", "/sign-up"] as const;
 
 /**
  * Check if a pathname is a public page route
  */
-export function isPublicPageRoute(pathname: string): boolean {
+export function isPublicRoute(pathname: string): boolean {
   // Homepage is always public
   if (pathname === "/") return true;
 

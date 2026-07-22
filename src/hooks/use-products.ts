@@ -2,8 +2,6 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  type InfiniteData,
-  type UseInfiniteQueryOptions,
   type UseQueryOptions,
 } from "@tanstack/react-query";
 import { productEndpoints } from "@/endpoints";
@@ -16,6 +14,8 @@ import {
   type ProductDetailResponse,
 } from "@/types/product";
 import type { Product } from "@/features/feed/types";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import debounce from "lodash/debounce";
 
 export function mapApiProductToFeedProduct(product: ProductDetail): Product {
   const variants = product.variants ?? [];
@@ -58,13 +58,18 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
     subCategory: product.subcategory ? product.subcategory.name : undefined,
     seller: {
       id: product.vendor?.id ?? "",
-      username: product.vendor?.business_name ?? "vendor",
+      username:
+        product.vendor.trading_name ??
+        product.vendor?.business_name ??
+        "vendor",
       rating: Number(product.vendor?.rating ?? 0),
       verified: !!product.vendor?.is_verified,
       totalSales: 0,
     },
     listed_at: product.created_at,
-    specs: product.specifications,
+    specs: Object.fromEntries(
+      (product.specifications ?? []).map((spec) => [spec.key, spec.value]),
+    ),
     isSoldOut: product.total_stock <= 0 && product.status === "out_of_stock",
   };
 }
@@ -89,36 +94,47 @@ export function useProducts(
 
 export function useInfiniteProducts(
   params?: Omit<PaginationParams, "page">,
-  options?: Omit<
-    UseInfiniteQueryOptions<
-      ProductListResponse,
-      Error,
-      InfiniteData<ProductListResponse>,
-      readonly ["products", "list", PaginationParams?],
-      number
-    >,
-    "queryKey" | "queryFn" | "initialPageParam" | "getNextPageParam"
-  >,
+  options?: Parameters<typeof useInfiniteQuery<ProductListResponse>>[0],
 ) {
-  return useInfiniteQuery({
+  const query = useInfiniteQuery({
     queryKey: queryKeys.products.list(params),
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
       productEndpoints.getAll({
         ...params,
-        page: pageParam,
+        // pageParam is typed unknown because the options param widens the
+        // TPageParam generic; initialPageParam and getNextPageParam only
+        // ever produce numbers
+        page: pageParam as number,
         limit: params?.limit ?? 20,
       }),
-
     getNextPageParam: (lastPage) => {
-      const { page, total } = lastPage;
-      const totalPages = Math.ceil(total / lastPage.limit);
-      return page < totalPages ? page + 1 : undefined;
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
     },
-    staleTime: 60_000, // 1 minute
+    staleTime: 60_000,
     refetchOnReconnect: true,
+    placeholderData: keepPreviousData,
     ...options,
   });
+
+  const products = useMemo(
+    () =>
+      query.data?.pages.flatMap((page) =>
+        page.products.map(mapApiProductToFeedProduct),
+      ) ?? [],
+    [query.data],
+  );
+
+  const facets = query.data?.pages[query.data.pages.length - 1]?.facets;
+  const total = query.data?.pages[0]?.total;
+
+  return {
+    ...query,
+    products,
+    facets,
+    total,
+  };
 }
 
 export function useProductSearch(
@@ -138,6 +154,51 @@ export function useProductSearch(
     select: (data) => data.products.map(mapApiProductToFeedProduct), // map to feed product shape
     ...options,
   });
+}
+
+/**
+ * Debounced product search input state, shared by every search surface
+ * (command dialog, inline navbar search, ...) so the debounce/reset
+ * behavior stays in one place.
+ */
+export function useDebouncedProductSearch() {
+  const [inputValue, setInputValueState] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  // Stable debounced setter across renders (lodash keeps internal timer state)
+  const debouncedSetQueryRef = useRef(
+    debounce((value: string) => setDebouncedQuery(value), 500),
+  );
+
+  useEffect(() => {
+    const debounced = debouncedSetQueryRef.current;
+    return () => {
+      debounced.cancel();
+    };
+  }, []);
+
+  const setInputValue = useCallback((value: string) => {
+    setInputValueState(value);
+
+    const trimmed = value.trim();
+    if (trimmed.length < 2) {
+      debouncedSetQueryRef.current.cancel();
+      setDebouncedQuery(trimmed);
+      return;
+    }
+
+    debouncedSetQueryRef.current(trimmed);
+  }, []);
+
+  const reset = useCallback(() => {
+    debouncedSetQueryRef.current.cancel();
+    setInputValueState("");
+    setDebouncedQuery("");
+  }, []);
+
+  const { data: results = [], isLoading } = useProductSearch(debouncedQuery);
+
+  return { inputValue, setInputValue, results, isLoading, reset };
 }
 
 export function useProduct(

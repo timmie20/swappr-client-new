@@ -26,7 +26,7 @@ useCartHydrate checks → items.length === 0 → enabled: true → fetches ✅
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCartStore } from "@/store/cart-store";
-import { useIsAuthenticated } from "@/hooks/use-access-token";
+import { useIsAuthenticated } from "@/lib/auth/session-client";
 import { cartEndpoints } from "@/endpoints/cart";
 import { mapServerCartToLocal } from "@/lib/cart";
 
@@ -50,7 +50,10 @@ export function useCartHydrate() {
     },
     // only fetch if logged in AND local store is empty
     enabled:
-      isAuthenticated && hasHydrated && syncCompleted && items.length === 0,
+      isAuthenticated === true &&
+      hasHydrated &&
+      syncCompleted &&
+      items.length === 0,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
