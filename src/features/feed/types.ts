@@ -17,8 +17,12 @@ export interface Seller {
   id: string;
   username: string;
   avatarUrl?: string;
+  storePhotos?: string[];
+  city?: string | null;
+  state?: string | null;
   rating: number;
   verified: boolean;
+  inspectionVerified?: boolean;
   totalSales: number;
 }
 

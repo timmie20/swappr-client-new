@@ -62,8 +62,13 @@ export function mapApiProductToFeedProduct(product: ProductDetail): Product {
         product.vendor.trading_name ??
         product.vendor?.business_name ??
         "vendor",
+      avatarUrl: product.vendor?.logo_url ?? undefined,
+      storePhotos: product.vendor?.store_photos ?? [],
+      city: product.vendor?.city ?? null,
+      state: product.vendor?.state ?? null,
       rating: Number(product.vendor?.rating ?? 0),
       verified: !!product.vendor?.is_verified,
+      inspectionVerified: !!product.vendor?.is_inspection_verified,
       totalSales: 0,
     },
     listed_at: product.created_at,

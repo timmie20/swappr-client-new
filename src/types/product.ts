@@ -31,7 +31,12 @@ export interface ProductVendor {
   id: string;
   trading_name: string | null;
   business_name: string;
+  logo_url?: string | null;
+  store_photos?: string[];
+  city?: string | null;
+  state?: string | null;
   is_verified: boolean;
+  is_inspection_verified?: boolean;
   rating: number;
   pickup_enabled?: boolean;
   operating_hours?: OperatingHours | null;
