@@ -78,7 +78,6 @@ export function CollectionSlug({ slug }: CollectionViewProps) {
               products={products}
               visibleCount={products.length}
               loading={isLoading}
-              cols={3}
               isError={isError}
               canLoadMore={true}
               hasNextPage={hasNextPage}

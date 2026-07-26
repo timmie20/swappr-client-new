@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { formatNaira, formatRelativeDate } from "@/lib/format";
+import { formatNaira } from "@/lib/format";
+// import { formatRelativeDate } from "@/lib/format"; // unused while upload timestamp is hidden
 import { useFeedStore } from "@/store/feed-store";
 import type { Product } from "@/features/feed/types";
 import { cn } from "@/lib/utils";
@@ -41,7 +42,14 @@ export function ProductCard({ product }: ProductCardProps) {
   const isAuth = useIsAuthenticated();
   const openSignIn = useAuthModalStore((s) => s.open);
 
-  const handleNavigate = () => {
+  const handleNavigate = (e: React.MouseEvent<HTMLDivElement>) => {
+    // VendorDialog's content/overlay render into a portal, so a click inside
+    // it still bubbles through React's *component* tree to this handler even
+    // though it isn't a DOM descendant of the card. Filter those out by
+    // checking real DOM containment instead of calling stopPropagation
+    // (which would also block the native event from reaching `document`,
+    // breaking Radix's own touch-outside-dismiss listener on the dialog).
+    if (!e.currentTarget.contains(e.target as Node)) return;
     router.push(`/products/${product.slug}`);
   };
   const handleSwapTrigger = (
@@ -159,9 +167,11 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Seller info */}
         <div className="flex items-center gap-1.5 pt-0.5">
           <VendorDialog product={product} />
+          {/* Upload timestamp hidden — not useful to buyers
           <span className="text-muted-foreground ml-auto shrink-0 text-sm">
             {formatRelativeDate(product.listed_at)}
           </span>
+          */}
         </div>
 
         {/* CTAs */}
