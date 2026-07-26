@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import type { ProductDetail, ProductVariant } from "@/types/product";
 import { Icons } from "../icons";
@@ -26,7 +30,9 @@ export function ProductActions({
   title,
 }: ProductActionsProps) {
   const { addToCart, isAddingToCart } = useCart();
+  const [isBuyingNow, setIsBuyingNow] = useState(false);
 
+  const router = useRouter();
   const isLoggedIn = useIsAuthenticated();
   const openSignIn = useAuthModalStore((s) => s.open);
 
@@ -40,26 +46,24 @@ export function ProductActions({
   // Only show "Select Variant" if product HAS variants but none is selected
   const needsVariantSelection = hasVariants && !activeVariant;
 
-  const handleAddToCart = () => {
+  const canProceed = () => {
     // null = session still loading; ignore the click rather than
     // bouncing a possibly logged-in user to sign-in
-    if (isLoggedIn === null) return;
+    if (isLoggedIn === null) return false;
     if (!isLoggedIn) {
       openSignIn(window.location.pathname + window.location.search);
-      return;
+      return false;
     }
     // For products with variants, require variant selection
-    if (hasVariants && !activeVariant) return;
+    if (hasVariants && !activeVariant) return false;
     // Don't allow if out of stock
-    if (outOfStock) return;
-    if (isAddingToCart) return;
+    if (outOfStock) return false;
+    return true;
+  };
 
-    // const itemToAdd = mapApiProductToCartItem({
-    //   product,
-    //   title: title,
-    //   activeVariant: activeVariant,
-    //   quantity: 1,
-    // });
+  const handleAddToCart = () => {
+    if (!canProceed()) return;
+    if (isAddingToCart || isBuyingNow) return;
 
     addToCart({
       product_id: product.id,
@@ -70,13 +74,43 @@ export function ProductActions({
     });
   };
 
+  const handleBuyNow = () => {
+    if (!canProceed()) return;
+    if (isAddingToCart || isBuyingNow) return;
+
+    setIsBuyingNow(true);
+    addToCart(
+      {
+        product_id: product.id,
+        variant_id: activeVariant ? activeVariant.id : null,
+        quantity: 1,
+        title: title,
+        vendor_id: product.vendor.id,
+      },
+      {
+        // skip the cart view entirely and land straight on the
+        // delivery-details/checkout step, scoped to this vendor
+        onSuccess: () => {
+          router.push(`/cart?vendor=${product.vendor.id}`);
+        },
+        onError: (err) => {
+          setIsBuyingNow(false);
+          toast.error(err.message || "Unable to buy now");
+        },
+      },
+    );
+  };
+
+  const actionsDisabled =
+    needsVariantSelection || outOfStock || isAddingToCart || isBuyingNow;
+
   return (
     <div className="flex flex-col space-y-3 sm:flex-row sm:space-x-3">
       {/* Primary CTA */}
       <Button
         size="lg"
         onClick={handleAddToCart}
-        disabled={needsVariantSelection || outOfStock || isAddingToCart}
+        disabled={actionsDisabled}
         className="w-full flex-auto cursor-pointer py-6 text-base font-semibold disabled:cursor-not-allowed disabled:opacity-50"
         aria-label={
           needsVariantSelection
@@ -99,6 +133,23 @@ export function ProductActions({
                 : "Add to Cart"}
         </span>
       </Button>
+
+      {/* Buy Now: skips the cart, straight to checkout for this one item */}
+      {!outOfStock && (
+        <Button
+          size="lg"
+          variant="outline"
+          onClick={handleBuyNow}
+          disabled={actionsDisabled}
+          className="w-full flex-auto cursor-pointer py-6 text-base font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+          aria-label={isBuyingNow ? "Processing" : "Buy now"}
+        >
+          <span className="flex items-center gap-2">
+            {isBuyingNow && <Spinner />}
+            {isBuyingNow ? "Processing" : "Buy Now"}
+          </span>
+        </Button>
+      )}
 
       {/* Secondary row: Swap + Bookmark */}
       <div className="flex gap-3">
