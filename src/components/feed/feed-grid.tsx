@@ -6,10 +6,10 @@ import { FeedGridContent } from "./feed-grid-content";
 import { useFeedStore } from "@/store/feed-store";
 import { useInfiniteProducts } from "@/hooks";
 import { ProductMode } from "@/types/product";
-import { Button } from "../ui/button";
 import { Icons } from "../icons";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { IconArrowRight } from "@tabler/icons-react";
 
 type Props = {
   limit: number;
@@ -62,7 +62,10 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
       />
 
       <div
-        className={cn("w-full transition-opacity", isRefetching && "opacity-60")}
+        className={cn(
+          "w-full transition-opacity",
+          isRefetching && "opacity-60",
+        )}
       >
         <FeedGridContent
           products={filteredProducts}
@@ -77,13 +80,11 @@ export function FeedGrid({ limit, canLoadMore, navigateTo }: Props) {
       </div>
 
       {!canLoadMore && (
-        <Link href={navigateTo || "#"} className="w-max">
-          <Button
-            className="mt-10 inline-flex cursor-pointer"
-            variant="outline"
-          >
-            View More <Icons.arrowRight />
-          </Button>
+        <Link
+          href={navigateTo || "#"}
+          className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-semibold hover:underline"
+        >
+          View More <Icons.arrowRight size={14} />
         </Link>
       )}
     </section>

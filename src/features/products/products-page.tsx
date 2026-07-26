@@ -99,7 +99,6 @@ export function ProductsPage() {
               products={products}
               visibleCount={products.length}
               loading={isLoading}
-              cols={3}
               isError={isError}
               canLoadMore={true}
               hasNextPage={hasNextPage}
