@@ -18,6 +18,12 @@ export const PUBLIC_PAGE_ROUTES = [
   "/sign-up",
   "/reset-password",
   "/verify-email",
+  "/about",
+  "/how-it-works",
+  "/swap",
+  "/trust-safety",
+  "/faq",
+  "/contact",
   "/api/public",
   "/api/auth", // Auth infra routes (session, refresh, logout, google callback) manage their own auth checks
 ] as const;

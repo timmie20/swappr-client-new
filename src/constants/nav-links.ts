@@ -15,7 +15,7 @@ export const EXTRA_NAV_LINKS: NavItem[] = [{ name: "Deals", href: "deals" }];
 export const MORE_LINKS: NavItem[] = [
   {
     name: "About Swappr",
-    href: "/docs",
+    href: "/about",
     description: "Learn about our mission and values.",
   },
   // {
@@ -30,7 +30,7 @@ export const MORE_LINKS: NavItem[] = [
   },
   {
     name: "How it works",
-    href: "/docs/selling",
+    href: "/how-it-works",
     description: "Understand our simple selling process.",
   },
   // {
