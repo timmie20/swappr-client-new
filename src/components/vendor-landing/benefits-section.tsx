@@ -23,7 +23,7 @@ const benefits: Benefit[] = [
     icon: BadgeDollarSign,
     title: "Zero Listing Fees",
     description:
-      "List unlimited products at absolutely no cost. Pay only a small 7% commission on completed sales.",
+      "List unlimited products at absolutely no cost. Pay only a small 3% commission on completed sales.",
     accent: "text-emerald-600",
     bg: "bg-emerald-50",
   },
@@ -31,7 +31,7 @@ const benefits: Benefit[] = [
     icon: Users,
     title: "Access to Active Buyers",
     description:
-      "Reach 10,000+ verified buyers across Nigeria who are actively searching for quality tech devices.",
+      "Reach a wide audience of buyers across Nigeria who are actively searching for quality tech devices.",
     accent: "text-app-primary",
     bg: "bg-blue-50",
   },

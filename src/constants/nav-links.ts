@@ -18,11 +18,11 @@ export const MORE_LINKS: NavItem[] = [
     href: "/docs",
     description: "Learn about our mission and values.",
   },
-  {
-    name: "Check your iPhone's value",
-    href: "/check-worth",
-    description: "Find out how much your iPhone is worth.",
-  },
+  // {
+  //   name: "Check your iPhone's value",
+  //   href: "/check-worth",
+  //   description: "Find out how much your iPhone is worth.",
+  // },
   {
     name: "Become a Vendor",
     href: "/vendor",
@@ -33,9 +33,9 @@ export const MORE_LINKS: NavItem[] = [
     href: "/docs/selling",
     description: "Understand our simple selling process.",
   },
-  {
-    name: "Privacy & Data Security",
-    href: "/docs/selling",
-    description: "Learn about our commitment to your privacy.",
-  },
+  // {
+  //   name: "Privacy & Data Security",
+  //   href: "/docs/selling",
+  //   description: "Learn about our commitment to your privacy.",
+  // },
 ];

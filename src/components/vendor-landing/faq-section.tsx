@@ -20,19 +20,19 @@ const faqs = [
     id: "faq-1",
     question: "What documents do I need to apply?",
     answer:
-      "You'll need your CAC (Corporate Affairs Commission) certificate, a valid government-issued ID (e.g., NIN slip, international passport, or driver's license), proof of your business address (utility bill or lease agreement), and clear photos of your store or business premises.",
+      "You'll need your CAC (Corporate Affairs Commission) registration documents, valid identification (like a BVN or national ID), and details about your store locations. Having these ready will speed up the application process.",
   },
   {
     id: "faq-2",
     question: "How long does approval take?",
     answer:
-      "Our vendor review team processes applications within 48 hours of submission. You'll receive an email notification with the outcome. If additional information is needed, we'll reach out to you directly.",
+      "Approval to use Swappr as a vendor is instant, After completing the application and verification process, you can start listing your products and reaching buyers across Nigeria.",
   },
   {
     id: "faq-3",
     question: "Are there any fees to join?",
     answer:
-      "There are absolutely no listing fees or monthly charges. Swappr only earns a 7% commission on successfully completed sales. If a transaction doesn't complete, you pay nothing.",
+      "There are absolutely no listing fees or monthly charges. Swappr only earns a 3% commission on successfully completed sales. If a transaction doesn't complete, you pay nothing.",
   },
   {
     id: "faq-4",
@@ -54,9 +54,9 @@ const faqs = [
   },
   {
     id: "faq-7",
-    question: "What if I'm not approved?",
-    answer:
-      "If your application is unsuccessful, you'll receive an email explaining which requirements weren't met. You're welcome to address those concerns and reapply. Our team is always happy to guide you on what's needed.",
+    question:
+      "What should I do if my onboarding is halted because of CAC or ID verification?",
+    answer: `If your onboarding is paused due to CAC or ID verification, first confirm that you've entered the correct CAC registration number or ID number. Also, ensure that the name on your ID exactly matches the name you used when creating your Swappr account. If your details are correct and your verification is still unsuccessful, please contact our support team at support@swappr.com. We'll review your application and guide you through the next steps to complete your verification.`,
   },
 ];
 
@@ -97,28 +97,19 @@ export function FaqSection({ className }: FaqSectionProps) {
         </motion.div>
 
         {/* Accordion */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : undefined}
-          transition={{
-            duration: 0.6,
-            ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-            delay: 0.15,
-          }}
-        >
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq) => (
-              <AccordionItem key={faq.id} value={faq.id}>
-                <AccordionTrigger className="text-tertiary text-left text-base font-medium">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-gray-500">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </motion.div>
+
+        <Accordion type="single" collapsible className="h-full w-full sm:h-fit">
+          {faqs.map((faq) => (
+            <AccordionItem key={faq.id} value={faq.id}>
+              <AccordionTrigger className="text-tertiary text-left text-base font-medium">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm text-gray-500">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </section>
   );

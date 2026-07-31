@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Twitter, Instagram, Facebook, Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { ASSETS } from "@/constants/assets";
 
 interface FooterSectionProps {
   className?: string;
@@ -44,8 +45,8 @@ export function FooterSection({ className }: FooterSectionProps) {
           {/* Logo + tagline */}
           <div className="flex flex-col gap-3">
             <Image
-              src="/assets/images/logo.png"
-              alt="Swapp-logor"
+              src={ASSETS.LOGO_LIGHT}
+              alt="Swapp-logo"
               width={120}
               height={40}
               priority
