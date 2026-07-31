@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Lottie } from "../lottie";
+import stepAnimation from "@/lottie/precomp.json";
 
 interface FinalCtaProps {
   className?: string;
@@ -21,9 +23,7 @@ export function FinalCta({ className }: FinalCtaProps) {
     router.push("/vendor/apply");
   }
 
-  function handleSignIn() {
-    router.push("/sign-in");
-  }
+  const VENDOR_APP_URL = process.env.NEXT_PUBLIC_VENDOR_APP_URL;
 
   return (
     <section
@@ -90,13 +90,14 @@ export function FinalCta({ className }: FinalCtaProps) {
             </Button>
           </div>
 
-          <button
-            onClick={handleSignIn}
+          <a
+            href={VENDOR_APP_URL}
+            target="_blank"
             className="w-fit text-sm text-white/50 underline-offset-4 hover:text-white/80 hover:underline focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
             aria-label="Sign in to an existing account"
           >
             Already have an account? Sign in
-          </button>
+          </a>
         </motion.div>
 
         {/* Image placeholder */}
@@ -115,9 +116,7 @@ export function FinalCta({ className }: FinalCtaProps) {
             className="flex aspect-4/3 w-full max-w-md items-center justify-center rounded-2xl border border-white/10 bg-white/5"
             aria-label="Success illustration placeholder"
           >
-            <span className="text-sm font-medium text-white/30">
-              Image Placeholder
-            </span>
+            <Lottie animationData={stepAnimation} loop autoplay />
           </div>
         </motion.div>
       </div>

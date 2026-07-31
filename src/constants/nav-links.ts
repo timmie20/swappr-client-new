@@ -15,14 +15,14 @@ export const EXTRA_NAV_LINKS: NavItem[] = [{ name: "Deals", href: "deals" }];
 export const MORE_LINKS: NavItem[] = [
   {
     name: "About Swappr",
-    href: "/docs",
+    href: "/about",
     description: "Learn about our mission and values.",
   },
-  {
-    name: "Check your iPhone's value",
-    href: "/check-worth",
-    description: "Find out how much your iPhone is worth.",
-  },
+  // {
+  //   name: "Check your iPhone's value",
+  //   href: "/check-worth",
+  //   description: "Find out how much your iPhone is worth.",
+  // },
   {
     name: "Become a Vendor",
     href: "/vendor",
@@ -30,12 +30,12 @@ export const MORE_LINKS: NavItem[] = [
   },
   {
     name: "How it works",
-    href: "/docs/selling",
+    href: "/how-it-works",
     description: "Understand our simple selling process.",
   },
-  {
-    name: "Privacy & Data Security",
-    href: "/docs/selling",
-    description: "Learn about our commitment to your privacy.",
-  },
+  // {
+  //   name: "Privacy & Data Security",
+  //   href: "/docs/selling",
+  //   description: "Learn about our commitment to your privacy.",
+  // },
 ];

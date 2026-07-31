@@ -7,8 +7,8 @@ import { ApplicationProcess } from "@/components/vendor-landing/application-proc
 import { FeaturesCarousel } from "@/components/vendor-landing/features-carousel";
 import { FaqSection } from "@/components/vendor-landing/faq-section";
 import { FinalCta } from "@/components/vendor-landing/final-cta";
-import { FooterSection } from "@/components/vendor-landing/footer-section";
 import { AppNavbar } from "@/components/shared/nav/app-navbar";
+import { FeedFooter } from "@/components/shared/feed-footer";
 
 export default function LandingPage() {
   return (
@@ -21,7 +21,7 @@ export default function LandingPage() {
       <FeaturesCarousel />
       <FaqSection />
       <FinalCta />
-      <FooterSection />
+      <FeedFooter />
     </main>
   );
 }
