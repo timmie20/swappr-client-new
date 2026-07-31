@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { UseFormReturn } from "react-hook-form";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, TriangleAlert } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -67,8 +67,7 @@ export function StepAccountDetails({
           </CardTitle>
           <p className="text-sm text-gray-500">
             You&apos;ll use these credentials to log in to your vendor
-            dashboard. Use your real name — it must match the BVN or NIN
-            you&apos;ll verify your identity with later.
+            dashboard.
           </p>
         </CardHeader>
 
@@ -90,6 +89,16 @@ export function StepAccountDetails({
                 placeholder="Doe"
                 required
               />
+            </div>
+
+            <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
+              <TriangleAlert className="mt-0.5 size-4 shrink-0 text-amber-500" />
+              <p className="text-xs text-amber-800">
+                Use the exact first and last name on your NIN or BVN — whichever
+                you will use to verify your identity. It will be
+                cross-referenced during onboarding, and a mismatch can delay
+                your dashboard access.
+              </p>
             </div>
 
             <FormInput

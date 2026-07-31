@@ -18,7 +18,7 @@ const requirements = [
 ];
 
 const whatYouNeed = [
-  "Your personal details — first name, last name, email and a secure password",
+  "Your personal details — first name, last name, email and a secure password. Make sure your email is valid, as you'll need to verify it before you can log in",
 ];
 
 const nextSteps = [
@@ -30,7 +30,7 @@ const nextSteps = [
 ];
 
 const terms = [
-  "7% commission is charged only on successfully completed sales",
+  "3% commission is charged only on successfully completed sales",
   "All payments are processed through Swappr's secure escrow system",
   "You must maintain accurate, up-to-date product listings at all times",
   "Swappr reserves the right to suspend accounts that violate platform policies",
