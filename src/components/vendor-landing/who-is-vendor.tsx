@@ -23,7 +23,7 @@ const eligibilityCriteria = [
     icon: Smartphone,
     title: "Tech Gadgets Only",
     description:
-      "Sell smartphones, tablets, accessories, and other tech products — no other product categories.",
+      "Sell smartphones, tablets, accessories, and other tech products no other product categories.",
   },
   {
     icon: MapPin,
@@ -92,7 +92,7 @@ export function WhoIsVendor({ className }: WhoIsVendorProps) {
             Who Can Become a Vendor?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-gray-500">
-            Swappr partners with verified tech businesses across Nigeria.
+            Individuals with verified tech businesses across Nigeria.
             Here&apos;s what you need to qualify and get started on the
             platform.
           </p>

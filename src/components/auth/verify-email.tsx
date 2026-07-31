@@ -20,8 +20,7 @@ import Link from "next/link";
 import { Lottie } from "@/components/lottie";
 import successCheckAnimation from "@/lottie/success-check.json";
 
-const VENDOR_APP_URL =
-  process.env.NEXT_PUBLIC_VENDOR_APP_URL || "https://vendor.swappr.com.ng";
+const VENDOR_APP_URL = process.env.NEXT_PUBLIC_VENDOR_APP_URL;
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
@@ -135,9 +134,8 @@ export default function VerifyEmail() {
             </div>
             <CardDescription>
               Your email has been successfully verified. Head over to your
-              vendor dashboard to log in and continue your onboarding —
-              business verification, identity check and store profile all
-              happen there.
+              vendor dashboard to log in and continue your onboarding — business
+              verification, identity check and store profile all happen there.
             </CardDescription>
           </CardHeader>
           <CardFooter>

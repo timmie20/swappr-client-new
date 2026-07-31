@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useInView } from "motion/react";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface FeaturesCarouselProps {
@@ -15,36 +16,45 @@ interface CarouselSlide {
   title: string;
   description: string;
   badge: string;
+  image: string;
 }
 
 const slides: CarouselSlide[] = [
   {
     id: "product-management",
-    title: "Product Management Interface",
+    title: "Inventory Management",
     description:
       "Easily add, edit, and manage all your product listings from one clean dashboard. Bulk uploads, pricing controls, and inventory tracking — all in one place.",
     badge: "Products",
+    image:
+      "https://res.cloudinary.com/doi4zvlbi/image/upload/v1785496508/Screenshot_2026-07-31_at_11.51.44_jpsnev.webp",
   },
   {
     id: "order-tracking",
-    title: "Real-Time Order Tracking",
+    title: "Orders Dashboard",
     description:
       "Monitor every order from placement to delivery. Get instant notifications on new orders, payment confirmations, and buyer messages.",
     badge: "Orders",
+    image:
+      "https://res.cloudinary.com/doi4zvlbi/image/upload/v1785496509/Screenshot_2026-07-31_at_11.51.59_bvh6pn.webp",
   },
   {
     id: "analytics",
-    title: "Analytics Dashboard",
+    title: "Real-Time Overview",
     description:
       "Understand your store's performance with intuitive charts. Track revenue, best-selling products, and buyer trends at a glance.",
     badge: "Analytics",
+    image:
+      "https://res.cloudinary.com/doi4zvlbi/image/upload/v1785496508/Screenshot_2026-07-31_at_11.50.39_ar5ids.webp",
   },
   {
-    id: "communication",
-    title: "Customer Communication Tools",
+    id: "account-management",
+    title: "Account Management",
     description:
-      "Chat directly with buyers, resolve queries quickly, and build a reputation for excellent customer service — all within the platform.",
-    badge: "Messages",
+      "Manage your business profile, payout details, and verification status. Keep your store information accurate and up to date at all times.",
+    badge: "Account",
+    image:
+      "https://res.cloudinary.com/doi4zvlbi/image/upload/v1785496508/Screenshot_2026-07-31_at_11.52.58_fzqu4l.webp",
   },
 ];
 
@@ -148,7 +158,7 @@ export function FeaturesCarousel({ className }: FeaturesCarouselProps) {
           className="relative"
         >
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
-            {/* Image placeholder */}
+            {/* Screenshot */}
             <div className="relative overflow-hidden rounded-2xl">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
@@ -158,16 +168,16 @@ export function FeaturesCarousel({ className }: FeaturesCarouselProps) {
                   initial="enter"
                   animate="center"
                   exit="exit"
+                  className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5"
                 >
-                  {/* TODO: Replace with actual dashboard screenshot */}
-                  <div
-                    className="flex aspect-video w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5"
-                    aria-label={`${slide.title} screenshot placeholder`}
-                  >
-                    <span className="text-sm font-medium text-white/30">
-                      Image Placeholder
-                    </span>
-                  </div>
+                  <Image
+                    src={slide.image}
+                    alt={`${slide.title} screenshot`}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover object-top"
+                    priority={current === 0}
+                  />
                 </motion.div>
               </AnimatePresence>
             </div>

@@ -22,6 +22,8 @@ const fadeUpVariant = {
   }),
 };
 
+const VENDOR_APP_URL = process.env.NEXT_PUBLIC_VENDOR_APP_URL;
+
 export function HeroSection({ className }: HeroSectionProps) {
   const router = useRouter();
 
@@ -58,7 +60,8 @@ export function HeroSection({ className }: HeroSectionProps) {
             custom={0}
             className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-blue-400 backdrop-blur-sm"
           >
-            🚀 Now accepting vendor applications
+            <span className="size-2.5 animate-pulse rounded-full bg-green-600"></span>
+            Now accepting vendor applications
           </motion.span>
 
           <motion.h1
@@ -116,6 +119,19 @@ export function HeroSection({ className }: HeroSectionProps) {
             </Button>
           </motion.div>
 
+          <motion.a
+            href={VENDOR_APP_URL}
+            target="_blank"
+            variants={fadeUpVariant}
+            initial="hidden"
+            animate="visible"
+            custom={0.35}
+            className="w-fit text-sm text-white/50 underline-offset-4 hover:text-white/80 hover:underline focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+            aria-label="Sign in to your vendor dashboard"
+          >
+            Already a vendor? Sign in to your dashboard
+          </motion.a>
+
           <motion.div
             variants={fadeUpVariant}
             initial="hidden"
@@ -124,7 +140,7 @@ export function HeroSection({ className }: HeroSectionProps) {
             className="flex items-center gap-6 border-t border-white/10 pt-6 text-sm text-white/50"
           >
             <span>✅ No listing fees</span>
-            <span>✅ 48-hour approval</span>
+            <span>✅ Instant approval</span>
             <span>✅ Nigeria-wide reach</span>
           </motion.div>
         </div>
@@ -157,14 +173,14 @@ export function HeroSection({ className }: HeroSectionProps) {
               </span> */}
             </div>
             {/* Floating stat cards */}
-            <div className="absolute -bottom-4 -left-4 rounded-xl border border-white/10 bg-[#0e2233] px-4 py-3 shadow-xl">
+            {/* <div className="absolute -bottom-4 -left-4 rounded-xl border border-white/10 bg-[#0e2233] px-4 py-3 shadow-xl">
               <p className="text-xs text-white/50">Active Buyers</p>
               <p className="text-xl font-bold text-white">10,000+</p>
             </div>
             <div className="absolute -top-10 -right-4 rounded-xl border border-white/10 bg-[#0e2233] px-4 py-3 shadow-xl lg:top-50">
               <p className="text-xs text-white/50">Avg. Approval</p>
               <p className="text-xl font-bold text-white">48hrs</p>
-            </div>
+            </div> */}
           </div>
         </motion.div>
       </div>

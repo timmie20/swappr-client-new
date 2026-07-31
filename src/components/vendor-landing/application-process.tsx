@@ -27,17 +27,17 @@ const steps: Step[] = [
   },
   {
     step: 2,
-    icon: FileText,
-    title: "Submit Application",
+    icon: ClipboardCheck,
+    title: "Verification",
     description:
-      "Fill out the vendor application form with your business details, CAC registration, and store information.",
+      "A verification mail will be sent to your email. Click the link to verify your account and gain access to the vendor dashboard.",
   },
   {
     step: 3,
     icon: ClipboardCheck,
-    title: "Verification",
+    title: "Go through Onboarding",
     description:
-      "Our team carefully reviews your application. You'll hear back within 48 hours with a decision or clarifications.",
+      "Complete the onboarding process by providing your business and identity details, provide details about your store locations and operation system.",
   },
   {
     step: 4,
@@ -96,7 +96,7 @@ export function ApplicationProcess({ className }: ApplicationProcessProps) {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div className="mx-auto max-w-2xl">
           {/* Steps */}
           <ol className="flex flex-col gap-0" aria-label="Application steps">
             {steps.map((step, i) => {
@@ -142,23 +142,6 @@ export function ApplicationProcess({ className }: ApplicationProcessProps) {
               );
             })}
           </ol>
-
-          {/* Image placeholder */}
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            animate={isInView ? { opacity: 1, x: 0 } : undefined}
-            transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.3 }}
-          >
-            {/* TODO: Replace with actual process illustration */}
-            <div
-              className="flex aspect-square w-full items-center justify-center rounded-2xl border border-gray-100 bg-gray-100"
-              aria-label="Application process illustration placeholder"
-            >
-              <span className="text-sm font-medium text-gray-400">
-                Image Placeholder
-              </span>
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>
