@@ -36,7 +36,7 @@ const FOOTER_LINKS = {
     // { label: "Blog", path: "#" },
     // { label: "Careers", path: "#" },
     // { label: "Press", path: "#" },
-    { label: "Privacy Policy", path: "#" },
+    { label: "Privacy Policy", path: "/privacy-policy" },
     { label: "Terms of Service", path: "#" },
   ],
 };
