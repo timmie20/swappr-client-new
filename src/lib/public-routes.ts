@@ -24,6 +24,8 @@ export const PUBLIC_PAGE_ROUTES = [
   "/trust-safety",
   "/faq",
   "/contact",
+  "/privacy-policy",
+  "/terms",
   "/api/public",
   "/api/auth", // Auth infra routes (session, refresh, logout, google callback) manage their own auth checks
 ] as const;

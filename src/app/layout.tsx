@@ -109,7 +109,7 @@ export default function RootLayout({
     "@type": "Organization",
     name: "Swappr",
     url: "https://swappr.com.ng",
-    logo: "https://swappr.com/logo.png",
+    logo: "https://res.cloudinary.com/doi4zvlbi/image/upload/v1785697267/Frame_6_ysojna.png",
     description:
       "Nigeria's first phone valuation system for trading, buying, and selling devices",
     address: {
